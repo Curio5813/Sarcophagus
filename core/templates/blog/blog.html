@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% extends 'footer.html' %}
+{% load static %}
+{% block content %}
+<!-- Header section end -->
+
+
+	<!-- Latest news section -->
+		{% include 'blog/latest_news.html' %}
+	<!-- Latest news section end -->
+
+
+	<!-- Page info section -->
+		{% include 'blog/info.html' %}
+	<!-- Page info section -->
+
+
+	<!-- Page section -->
+		{% include 'blog/index.html' %}
+	<!-- Page section end -->
+	{% endblock %}

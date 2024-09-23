@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.dll
+*.so
+
+# Distribution / packaging
+.egg-info/
+dist/
+build/
+docs/_build/
+
+# Local configuration
+local.py
+
+# Test stuff
+*.log
+.pytest_cache/
+coverage/
+
+# IDE files
+.idea/
+.vscode/
+
+# Django specific
+db.pgsql
+media/
+
+# Output
+*.out
+*.err
+
+# Misc
+*.swp
+.DS_Store

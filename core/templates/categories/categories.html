@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+	<!-- Header section end -->
+
+
+	<!-- Latest news section -->
+		{% include 'categories/latest_news.html' %}
+	<!-- Latest news section end -->
+
+
+	<!-- Page info section -->
+		{% include 'categories/info.html' %}
+	<!-- Page info section -->
+
+
+	<!-- Page section -->
+		{% include 'categories/index.html' %}
+	<!-- Page section end -->
+
+
+	<!-- Footer top section -->
+		{% include 'footer.html' %}
+	<!-- Footer section end -->
+	{% endblock %}
+
+

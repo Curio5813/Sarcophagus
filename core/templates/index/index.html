@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+	<!-- Header section end -->
+
+
+	<!-- Latest news section -->
+		{% include 'index/latest_news.html' %}
+	<!-- Latest news section end -->
+
+
+	<!-- Hero section -->
+		{% include 'index/hero.html' %}
+	<!-- Hero section end -->
+
+
+	<!-- Feature section -->
+		{% include 'index/feature.html' %}
+	<!-- Feature section end -->
+
+
+	<!-- Tournaments section -->
+		{% include 'index/tournaments.html' %}
+	<!-- Tournaments section bg -->
+
+
+	<!-- Footer top section -->
+		{% include 'footer.html' %}
+	<!-- Footer section end -->
+	{% endblock %}
