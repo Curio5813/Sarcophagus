@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Sarcophagus Old Pc Games - Login</title>
+</head>
+<body>
+    <div class="container">
+        <div class="container background-image-login">
+            <img src="{% static 'img/login-bg.jpg' %}" alt="">
+            <br><br><br>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="custom-button">Login</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

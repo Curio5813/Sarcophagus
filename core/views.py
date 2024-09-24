@@ -3,6 +3,10 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .forms import ContatoForm
 from .models import Games, Membro
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import AuthenticationForm
+
 
 
 class IndexView(TemplateView):
@@ -58,3 +62,39 @@ class BlogView(TemplateView):
 
 class TesteView(TemplateView):
     template_name = '404.html'
+
+
+class LoginView(FormView):
+    template_name = 'registration/login.html'
+    form_class = AuthenticationForm
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(self.request, user)
+            return redirect('index')
+        else:
+            return self.form_invalid(form)
+
+class RegisterView(FormView):
+    template_name = 'registration/register.html'
+    form_class = AuthenticationForm
+
+    def form_valid(self, form):
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(self.request, user)
+            return redirect('index')
+        else:
+            return self.form_invalid(form)
+
+    class RegisterForm(FormView):
+        class Meta:
+            model = Membro
+            field = ['username', 'email', 'password']

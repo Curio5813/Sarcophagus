@@ -1509,3 +1509,32 @@ ol {
 		font-size: 40px;
 	}
 }
+
+.custom-button {
+  background-color: #ffb320;
+  color: #131313;
+  border: none;
+  padding: 8px 22px;
+  font-size: 15px;
+  font-weight: 520;
+  cursor: pointer;
+  border-radius: 30px;
+}
+
+.background-image-login {
+    background-image: url("{% static 'img/login-bg.jpg' %}");
+    background-size: 100%;
+    background-position: span;
+    height: 100%;
+    position: absolute; /* Add this line to position elements over the background */
+}
+
+.background-image-login form {
+    position: absolute; /* Position the form over the background */
+    top: 35%; /* Adjust top position as needed */
+    left: 15%;
+    transform: translate(-50%, -50%); /* Center the form */
+    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background for readability */
+    padding: 20px; /* Add padding to the form */
+    border-radius: 10px; /* Add rounded corners to the form */
+}

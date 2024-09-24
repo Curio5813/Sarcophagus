@@ -42,7 +42,11 @@
 			</a>
 			<br><br>
 				<div class="user-panel">
-					<a href="#">Login</a>  /  <a href="#">Register</a>
+					{% if user.is_authenticated %}
+                		<a href="{% url 'login' %}">Logout</a>
+            		{% else %}
+                		<a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a>
+            		{% endif %}
 				</div>
 			<!-- responsive -->
 			<div class="nav-switch">
