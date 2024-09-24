@@ -1536,5 +1536,5 @@ ol {
     transform: translate(-50%, -50%); /* Center the form */
     background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background for readability */
     padding: 20px; /* Add padding to the form */
-    border-radius: 10px; /* Add rounded corners to the form */
+    border-radius: 30px; /* Add rounded corners to the form */
 }
