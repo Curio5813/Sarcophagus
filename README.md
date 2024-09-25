@@ -2,9 +2,9 @@
 
 ![](logo1.png)
 
-**Resumo:** Website para preservar e compartilhar jogos clássicos de computador. 
+**Summary: Website for preserving and sharing classic computer games.
 
-# Tecnologias usadas:
+# Technologies used:
 - Python;
 - Django;
 - PostgreSQL;
