@@ -1523,10 +1523,11 @@ ol {
 
 .background-image-login {
     background-image: url("{% static 'img/login-bg.jpg' %}");
-    background-size: 100%;
-    background-position: span;
-    height: 100%;
-    position: absolute; /* Add this line to position elements over the background */
+    height: 499px;
+    position: relative;
+    width: 100%; /* Define a largura como 100% do elemento pai */
+    background-size: cover; /* Faz a imagem cobrir toda a área, mantendo as proporções */
+    background-position: span; /* Centraliza a imagem horizontal e verticalmente */
 }
 
 .background-image-login form {
@@ -1536,5 +1537,5 @@ ol {
     transform: translate(-50%, -50%); /* Center the form */
     background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background for readability */
     padding: 20px; /* Add padding to the form */
-    border-radius: 30px; /* Add rounded corners to the form */
+    border-radius: 35px; /* Add rounded corners to the form */
 }

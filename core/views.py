@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .forms import ContatoForm
+from .forms import ContatoForm, BlogForm
 from .models import Games, Membro
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -58,6 +58,34 @@ class GamesView(TemplateView):
 
 class BlogView(TemplateView):
     template_name = 'blog/blog.html'
+    form_class = BlogForm
+    success_url = reverse_lazy('blog')
+
+    def get_context_data(self, **kwargs):
+        context = super(BlogView, self).get_context_data(**kwargs)
+        context ['membros'] = Membro.objects.all()
+        return context
+
+
+class BlogViewForm(FormView):
+    template_name = 'blog/blog.html'
+    form_class = BlogForm
+    success_url = reverse_lazy('blog')
+
+    def form_valid(self, form, *args, **kwargs):
+        try:
+            form.send_mail()
+            messages.success(self.request, 'E-mail enviado com sucesso.')
+        except Exception as e:
+            messages.error(self.request, f'Erro ao enviar e-mail: {str(e)}')
+        return super(BlogViewForm, self).form_valid(form, *args, **kwargs)
+
+    def form_invalid(self, form, *args, **kwargs):
+        try:
+            messages.success(self.request, 'E-mail enviado com sucesso.')
+        except Exception as e:
+            messages.error(self.request, f'Erro ao enviar e-mail: {str(e)}')
+        return super(BlogViewForm, self).form_invalid(form)
 
 
 class TesteView(TemplateView):
