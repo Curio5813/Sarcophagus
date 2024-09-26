@@ -1,12 +1,13 @@
 from django import forms
 from django.core.mail.message import EmailMessage
+from django.utils.translation import gettext_lazy as _
 
 
 class ContatoForm(forms.Form):
-    nome = forms.CharField(label='Nome', max_length=100)
-    email = forms.EmailField(label='E-mail', max_length=100)
-    subject = forms.CharField(label='Subject', max_length=100)
-    message = forms.CharField(label='Message', max_length=500)
+    nome = forms.CharField(label=_('Nome'), max_length=100)
+    email = forms.EmailField(label=_('E-mail'), max_length=100)
+    subject = forms.CharField(label=_('Subject'), max_length=100)
+    message = forms.CharField(label=_('Message'), max_length=500)
 
     def send_mail(self):
         nome = self.cleaned_data['nome']
@@ -14,7 +15,12 @@ class ContatoForm(forms.Form):
         subject = self.cleaned_data['subject']
         message = self.cleaned_data['message']
 
-        conteudo = f'Nome: {nome}\nE-mail: {email}\nSubject: {subject}\nMessage: {message}'
+        n = _('Nome')
+        e = _('E-mail')
+        s = _('Subjetc')
+        m = _('Message')
+
+        conteudo = f'{n}: {nome}\n{e}: {email}\n{s}: {subject}\n{m}: {message}'
 
         mail = EmailMessage(
             subject=subject,
@@ -27,10 +33,10 @@ class ContatoForm(forms.Form):
 
 
 class BlogForm(forms.Form):
-    nome = forms.CharField(label='Nome', max_length=100)
-    email = forms.EmailField(label='E-mail', max_length=100)
-    subject = forms.CharField(label='Subject', max_length=100)
-    message = forms.CharField(label='Message', max_length=500)
+    nome = forms.CharField(label=_('Nome'), max_length=100)
+    email = forms.EmailField(label=_('E-mail'), max_length=100)
+    subject = forms.CharField(label=_('Subject'), max_length=100)
+    message = forms.CharField(label=_('Message'), max_length=500)
 
     def send_mail(self):
         nome = self.cleaned_data['nome']
@@ -38,7 +44,12 @@ class BlogForm(forms.Form):
         subject = self.cleaned_data['subject']
         message = self.cleaned_data['message']
 
-        conteudo = f'Nome: {nome}\nE-mail: {email}\nSubject: {subject}\nMessage: {message}'
+        n = _('Nome')
+        e = _('E-mail')
+        s = _('Subjetc')
+        m = _('Message')
+
+        conteudo = f'{n}: {nome}\n{e}: {email}\n{s}: {subject}\n{m}: {message}'
 
         mail = EmailMessage(
             subject=subject,

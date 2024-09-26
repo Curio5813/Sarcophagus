@@ -6,6 +6,8 @@ from .models import Games, Membro
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
+from django.utils.translation import gettext as _
+from django.utils import translation
 
 
 
@@ -30,6 +32,14 @@ class ContactView(FormView):
     template_name = 'contact/contact.html'
     form_class = ContatoForm
     success_url = reverse_lazy('contact')
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ContactView, self).get_context_data(**kwargs)
+        lang = translation.get_language()
+        context['lang'] = lang
+        translation.activate(lang)
+        return context
 
     def form_valid(self, form, *args, **kwargs):
         try:
@@ -71,20 +81,22 @@ class BlogViewForm(FormView):
     template_name = 'blog/blog.html'
     form_class = BlogForm
     success_url = reverse_lazy('blog')
+    lang = translation.get_language()
+    translation.activate(lang)
 
     def form_valid(self, form, *args, **kwargs):
         try:
             form.send_mail()
-            messages.success(self.request, 'E-mail enviado com sucesso.')
+            messages.success(self.request, _('E-mail enviado com sucesso.'))
         except Exception as e:
-            messages.error(self.request, f'Erro ao enviar e-mail: {str(e)}')
+            messages.error(self.request, _(f'Erro ao enviar e-mail: {str(e)}'))
         return super(BlogViewForm, self).form_valid(form, *args, **kwargs)
 
     def form_invalid(self, form, *args, **kwargs):
         try:
-            messages.success(self.request, 'E-mail enviado com sucesso.')
+            messages.success(self.request, _('E-mail enviado com sucesso.'))
         except Exception as e:
-            messages.error(self.request, f'Erro ao enviar e-mail: {str(e)}')
+            messages.error(self.request, _(f'Erro ao enviar e-mail: {str(e)}'))
         return super(BlogViewForm, self).form_invalid(form)
 
 
