@@ -1,4 +1,4 @@
-## Projeto: Sarcophagus
+## Project: Sarcophagus
 
 ![](logo1.png)
 
