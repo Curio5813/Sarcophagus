@@ -1536,10 +1536,9 @@ ol {
 
 .background-image-login form {
     position: absolute; /* Position the form over the background */
-    top: 45%; /* Adjust top position as needed */
-    left: 15%;
+    top: 55%; /* Adjust top position as needed */
+    left: 65%;
     transform: translate(-50%, -50%); /* Center the form */
-    background-color: rgba(0, 0, 0, 0.5); /* Add a semi-transparent background for readability */
-    padding: 20px; /* Add padding to the form */
+    background-color: rgba(0, 0, 0, 0.0); /* Add a semi-transparent background for readability */
     border-radius: 35px; /* Add rounded corners to the form */
 }
