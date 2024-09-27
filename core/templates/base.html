@@ -57,7 +57,7 @@
 				<ul>
 					<li><a href="{% url 'index' %}">Home</a></li>
 					<li><a href="{% url 'games' %}">Reviews</a></li>
-					<li><a href="">Download</a><li>
+					<li><a href="{% url 'categories' %}">Download</a><li>
 					<li><a href="{% url 'community' %}">Community</a></li>
 					<li><a href="{% url 'blog' %}">Blog</a></li>
 					<li><a href="{% url 'contact' %}">Contact</a></li>
@@ -74,5 +74,18 @@
 	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
 	<script src="{% static 'js/jquery.marquee.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
+	<script>
+		const currentUrl = window.location.href;
+
+		// Encontra todos os links de menu
+		const navLinks = document.querySelectorAll('.main-menu ul li a');
+
+		// Percorre cada link e verifica se o href coincide com a URL atual
+		navLinks.forEach(link => {
+		  if (link.href === currentUrl) {
+			link.parentNode.classList.add('active'); // Adiciona a classe "active" ao elemento <li>
+		  }
+		});
+	</script>
     </body>
 </html>
