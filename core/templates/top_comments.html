@@ -1,0 +1,18 @@
+{% load static %}
+<h4>Top Comments</h4>
+<br><br>
+{% for m in membros|slice:"0:5" %}
+    <div>
+       <div class="top-comment">
+           <div class="tc-item">
+               <div class="tc-thumb set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
+               <div class="tc-content">
+                   <p>{{ m.first_name }} {{ m.last_name }}</p>
+                   <p><a href="#">{{ m.membros }}</a> <span>on</span>  Lorem ipsum dolor sit amet, co</p>
+                   <div class="tc-date">June 21, 2018</div>
+               </div>
+           </div>
+       </div>
+    </div>
+{% endfor %}
+<br><br>

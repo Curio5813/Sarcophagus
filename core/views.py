@@ -15,9 +15,17 @@ class IndexView(TemplateView):
     template_name = 'index/index.html'
 
 
-class CategoriesView(TemplateView):
-    template_name = 'categories/categories.html'
+class GameDetailView(TemplateView):
+    template_name = 'game_details/game_details.html'
 
+
+class DownloadView(TemplateView):
+    template_name = 'download/download.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(DownloadView, self).get_context_data(**kwargs)
+        context ['membros'] = Membro.objects.all()
+        return context
 
 class CommunityView(TemplateView):
     template_name = 'community/community.html'
@@ -65,16 +73,29 @@ class GamesView(TemplateView):
         context ['games'] = Games.objects.all()
         return context
 
+    def search(request):
+        query = request.GET.get('q', '')  # Get the search query from the URL parameter
+        if query:
+            # Perform the search using Haystack's search manager or database filtering
+            # (consider using Haystack for more advanced search capabilities)
+            games = Games.search_objects.filter(content=query).order_by('game')  # Haystack search
+            # or
+            # games = Games.objects.filter(Q(game__icontains=query) | Q(descricao__icontains=query))  # Database filtering
+        else:
+            games = Games.objects.all().order_by('game')  # Display all games if no query
+
+        context = {'games': games, 'query': query}
+        return render(request, 'blog/index.html', context)
+
 
 class BlogView(TemplateView):
     template_name = 'blog/blog.html'
     form_class = BlogForm
     success_url = reverse_lazy('blog')
 
-    def get_context_data(self, **kwargs):
-        context = super(BlogView, self).get_context_data(**kwargs)
-        context ['membros'] = Membro.objects.all()
-        return context
+    def lista_membros(request):
+        membros = Membro.objects.all()
+        return render(request, 'blog/blog.html', {'membros': membros})
 
 
 class BlogViewForm(FormView):
@@ -138,3 +159,10 @@ class RegisterView(FormView):
         class Meta:
             model = Membro
             field = ['username', 'email', 'password']
+
+class GamesDetailView(TemplateView):
+    template_name = 'game_detail.html'
+
+
+
+

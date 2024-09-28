@@ -1,7 +1,8 @@
-from django.db import models
 from stdimage.models import StdImageField
 import uuid
 from django.utils.translation import gettext_lazy as _
+from django.db import models
+
 
 def get_file_path(_instance, filename):
     ext = filename.split('.')[-1]

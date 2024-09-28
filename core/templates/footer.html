@@ -43,7 +43,7 @@
 				<div class="col-lg-4 col-md-6">
 					<div class="footer-widget">
 						<h4 class="fw-title">Top Comments</h4>
-						{% for m in membros %}
+						{% for m in membros|slice:"0:5" %}
 						<ul>
 							<li>
 								<div class="top-comment">
@@ -72,8 +72,9 @@
 			<ul class="footer-menu">
 				<li><a href="{% url 'index' %}">Home</a></li>
 				<li><a href="{% url 'games' %}">Reviews</a></li>
+				<li><a href="{% url 'download' %}">Download</a></li>
+				<li><a href="{% url 'community' %}">Community</a></li>
 				<li><a href="{% url 'blog' %}">Blog</a></li>
-				<li><a href="{% url 'community' %}">Forums</a></li>
 				<li><a href="{% url 'contact' %}">Contact</a></li>
 			</ul>
 			<p class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->

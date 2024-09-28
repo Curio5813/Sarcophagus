@@ -15,23 +15,6 @@
 						<a href="" class="meta-comment">3 comment</a>
 						<p>Shadow Warrior, a first-person shooter originally released in 1997 for PC, has been ported to other systems in several ways. Recently, a free version of the game, called Shadow Warrior Classic, was released on Steam. This version contains the same gameplay as before, with slight changes to the controls but no changes to the visuals. Check out our review of this classic game.</p>
 					</div>
-					<div class="comment-warp">
-						<h4 class="comment-title">Top Coments</h4>
-						{% for m in membors %}
-						<ul class="comment-list">
-							<li>
-								<div class="comment">
-									<div class="comment-avator set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
-									<div class="comment-content">
-										<h5>{{ m.membro }} <span>June 21, 2018</span></h5>
-										<p>Donec venenatis at eros sit amet aliquam. Donec vel orci efficitur, dictum nisl vitae, scelerisque nibh. Curabitur eget ipsum pulvinar nunc gravida interdum. </p>
-										<a href="" class="reply">Reply</a>
-									</div>
-								</div>
-							</li>
-						</ul>
-						{% endfor %}
-					</div>
 					<div class="comment-form-warp">
 						<h4 class="comment-title">Leave Your Comment</h4>
 						<form class="comment-form" method="post" action="{% url 'blog' %}">
@@ -56,11 +39,23 @@
 				<div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
 					<!-- widget -->
 					<div class="widget-item">
-						<form class="search-widget">
-							<input type="text" placeholder="Search">
-							<button><i class="fa fa-search"></i></button>
+						<form action="{% url 'game_details' %}" method="get" class="search-widget">
+							<input type="text" name="q" value="{{ query }}" placeholder="Search games">
+							<button type="submit"><i class="fa fa-search"></i></button>
 						</form>
 					</div>
+					{% if games %}
+						<h2>Search Results</h2>
+							{% for g in games %}
+								<a href="{% url 'game_details' g.game %}">
+									<img src="{{ g.imagem.url }}" alt="">
+									<h3>{{ g.game }}</h3>
+									<p>{{ g.descricao|truncatechars:50 }}</p>
+								</a>
+							{% endfor %}
+					{% else %}
+						<p>No games found for your search.</p>
+					{% endif %}
 					<!-- widget -->
 					<div class="widget-item">
 						<h4 class="widget-title">Latest Posts</h4>
@@ -92,20 +87,9 @@
 						</div>
 					</div>
 					<!-- widget -->
-					<div class="widget-item">
-						<h4 class="widget-title">Top Comments</h4>
-						{% for m in membors %}
-						<div class="top-comment">
-							<div class="tc-item">
-								<div class="tc-thumb set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
-								<div class="tc-content">
-									<p><a href="#">{{ m.membros }}</a> <span>on</span> Lorem consec ipsum dolor sit amet, co</p>
-									<div class="tc-date">June 21, 2018</div>
-								</div>
-							</div>
-						</div>
-						{% endfor %}
-					</div>
+					{% block content %}
+					{% include 'top_comments.html' %}
+					{% endblock %}
 					<!-- widget -->
 					<div class="widget-item">
 						<div class="feature-item set-bg" data-setbg="{% static 'img/features/1.jpg' %}">

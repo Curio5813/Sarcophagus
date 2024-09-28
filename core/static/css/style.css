@@ -787,13 +787,8 @@ ol {
 	opacity: 0.45;
 }
 
-.top-comment {
-	overflow: hidden;
-}
-
 .top-comment .tc-item {
 	margin-bottom: 23px;
-	overflow: hidden;
 }
 
 .top-comment .tc-item .tc-thumb {
@@ -1041,12 +1036,8 @@ ol {
 }
 
 .comment-list {
-	list-style: none;
-}
-
-.comment-list li {
+	list-style: ul;
 	margin-bottom: 40px;
-	overflow: hidden;
 }
 
 .comment-list .comment .comment-avator {
@@ -1548,3 +1539,4 @@ ol {
     background-color: rgba(0, 0, 0, 0.0); /* Add a semi-transparent background for readability */
     border-radius: 35px; /* Add rounded corners to the form */
 }
+

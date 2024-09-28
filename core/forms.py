@@ -36,7 +36,7 @@ class BlogForm(forms.Form):
     nome = forms.CharField(label=_('Nome'), max_length=100)
     email = forms.EmailField(label=_('E-mail'), max_length=100)
     subject = forms.CharField(label=_('Subject'), max_length=100)
-    message = forms.CharField(label=_('Message'), max_length=500)
+    message = forms.CharField(label=_('Message'), max_length=1500)
 
     def send_mail(self):
         nome = self.cleaned_data['nome']
