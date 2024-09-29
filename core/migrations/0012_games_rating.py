@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='games',
+            model_name='reviews',
             name='rating',
             field=models.DecimalField(decimal_places=1, default=9.3, max_digits=2, verbose_name='Rating'),
             preserve_default=False,

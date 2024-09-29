@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('ativo', models.BooleanField(default=True, verbose_name='Ativo?')),
                 ('game', models.CharField(max_length=100, verbose_name='Nome')),
                 ('descricao', models.TextField(max_length=300, verbose_name='Descrição')),
-                ('imagem', stdimage.models.StdImageField(force_min_size=False, upload_to='games', variations={'thumb': {'crop': True, 'height': 347, 'width': 560}}, verbose_name='Imagem')),
+                ('imagem', stdimage.models.StdImageField(force_min_size=False, upload_to='reviews', variations={'thumb': {'crop': True, 'height': 347, 'width': 560}}, verbose_name='Imagem')),
             ],
             options={
                 'verbose_name': 'Game',

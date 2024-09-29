@@ -1,4 +1,4 @@
-#!/home/marcos/Computacao/Python/sarcophagus/bin/python
+#!/index/marcos/Computacao/Python/sarcophagus/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

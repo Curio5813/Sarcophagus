@@ -1,6 +1,6 @@
 /* =================================
 ------------------------------------
-  Game Warrior Template
+  Sarcophagus Template
   Version: 1.0
  ------------------------------------ 
  ====================================*/
@@ -1513,7 +1513,7 @@ ol {
 
 .background-image-login {
   background-image: url("{% static 'img/login-bg.jpg' %}");
-  background-size: span;
+  background-size: 100%;
   background-position: center;
   width: 100%;
   height: 100%;
@@ -1539,4 +1539,3 @@ ol {
     background-color: rgba(0, 0, 0, 0.0); /* Add a semi-transparent background for readability */
     border-radius: 35px; /* Add rounded corners to the form */
 }
-

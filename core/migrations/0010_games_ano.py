@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='games',
+            model_name='reviews',
             name='ano',
             field=models.IntegerField(default=1980, verbose_name='Ano'),
             preserve_default=False,

@@ -11,12 +11,8 @@ from django.utils import translation
 
 
 
-class IndexView(TemplateView):
+class HomeView(TemplateView):
     template_name = 'index/index.html'
-
-
-class GameDetailView(TemplateView):
-    template_name = 'game_details/game_details.html'
 
 
 class DownloadView(TemplateView):
@@ -65,27 +61,13 @@ class ContactView(FormView):
         return super(ContactView, self).form_invalid(form)
 
 
-class GamesView(TemplateView):
-    template_name = 'games/games.html'
+class ReviewView(TemplateView):
+    template_name = 'reviews/reviews.html'
 
     def get_context_data(self, **kwargs):
-        context = super(GamesView, self).get_context_data(**kwargs)
-        context ['games'] = Games.objects.all()
+        context = super(ReviewView, self).get_context_data(**kwargs)
+        context ['reviews'] = Games.objects.all()
         return context
-
-    def search(request):
-        query = request.GET.get('q', '')  # Get the search query from the URL parameter
-        if query:
-            # Perform the search using Haystack's search manager or database filtering
-            # (consider using Haystack for more advanced search capabilities)
-            games = Games.search_objects.filter(content=query).order_by('game')  # Haystack search
-            # or
-            # games = Games.objects.filter(Q(game__icontains=query) | Q(descricao__icontains=query))  # Database filtering
-        else:
-            games = Games.objects.all().order_by('game')  # Display all games if no query
-
-        context = {'games': games, 'query': query}
-        return render(request, 'blog/index.html', context)
 
 
 class BlogView(TemplateView):
@@ -96,6 +78,25 @@ class BlogView(TemplateView):
     def lista_membros(request):
         membros = Membro.objects.all()
         return render(request, 'blog/blog.html', {'membros': membros})
+
+
+class GameSearchView(TemplateView):
+    template_name = 'game-details.html'  # Assuming this displays search results
+
+    def get_context_data(self, **kwargs):
+        context = super(GameSearchView, self).get_context_data(**kwargs)
+        query = self.request.GET.get('q', '')  # Get the search query from URL parameter
+        if query:
+            games = Games.objects.filter(game__icontains=query).order_by('game')  # Filter by game name
+        else:
+            games = Games.objects.all().order_by('game')  # Display all games if no query
+        context['game'] = games  # Add games to context
+        context['query'] = query  # Add search query to context (optional)
+        return context
+
+    def get(self, request, *args, **kwargs):  # Override the default GET method
+        context = self.get_context_data(**kwargs)
+        return render(request, self.template_name, context)
 
 
 class BlogViewForm(FormView):
@@ -155,14 +156,8 @@ class RegisterView(FormView):
         else:
             return self.form_invalid(form)
 
-    class RegisterForm(FormView):
-        class Meta:
-            model = Membro
-            field = ['username', 'email', 'password']
+class RegisterForm(FormView):
 
-class GamesDetailView(TemplateView):
-    template_name = 'game_detail.html'
-
-
-
-
+    class Meta:
+        model = Membro
+        field = ['username', 'email', 'password']

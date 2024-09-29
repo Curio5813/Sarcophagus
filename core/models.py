@@ -21,7 +21,7 @@ class Base(models.Model):
 
 class Games(Base):
     game = models.CharField(_('Nome'), max_length=100)
-    descricao = models.TextField(_('Descrição'), max_length=300)
+    descricao = models.TextField(_('Descrição'), max_length=1500)
     genero = models.CharField(_('Genero'), max_length=100)
     rating = models.DecimalField(_('Rating'), max_digits=2, decimal_places=1)
     ano = models.IntegerField(_('Ano'))

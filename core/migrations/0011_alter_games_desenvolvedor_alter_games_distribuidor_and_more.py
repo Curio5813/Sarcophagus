@@ -11,17 +11,17 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='games',
+            model_name='reviews',
             name='desenvolvedor',
             field=models.CharField(max_length=100, verbose_name='Desenvolvedor'),
         ),
         migrations.AlterField(
-            model_name='games',
+            model_name='reviews',
             name='distribuidor',
             field=models.CharField(max_length=100, verbose_name='Distribuído'),
         ),
         migrations.AlterField(
-            model_name='games',
+            model_name='reviews',
             name='genero',
             field=models.CharField(max_length=100, verbose_name='Genero'),
         ),

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='games',
+            model_name='reviews',
             name='imagem',
             field=stdimage.models.StdImageField(force_min_size=False, upload_to=core.models.get_file_path, variations={'thumb': {'crop': True, 'height': 347, 'width': 560}}, verbose_name='Imagem'),
         ),

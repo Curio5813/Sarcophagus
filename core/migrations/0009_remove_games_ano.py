@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RemoveField(
-            model_name='games',
+            model_name='reviews',
             name='ano',
         ),
     ]

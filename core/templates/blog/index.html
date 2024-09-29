@@ -39,23 +39,10 @@
 				<div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
 					<!-- widget -->
 					<div class="widget-item">
-						<form action="{% url 'game_details' %}" method="get" class="search-widget">
-							<input type="text" name="q" value="{{ query }}" placeholder="Search games">
-							<button type="submit"><i class="fa fa-search"></i></button>
+							<form action="{% url 'game-details' %}" method="get" class="search-widget">  <input type="text" name="q" value="{{ query }}" placeholder="Search">
+						   <button type="submit"><i class="fa fa-search"></i></button>
 						</form>
 					</div>
-					{% if games %}
-						<h2>Search Results</h2>
-							{% for g in games %}
-								<a href="{% url 'game_details' g.game %}">
-									<img src="{{ g.imagem.url }}" alt="">
-									<h3>{{ g.game }}</h3>
-									<p>{{ g.descricao|truncatechars:50 }}</p>
-								</a>
-							{% endfor %}
-					{% else %}
-						<p>No games found for your search.</p>
-					{% endif %}
 					<!-- widget -->
 					<div class="widget-item">
 						<h4 class="widget-title">Latest Posts</h4>

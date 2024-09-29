@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search for "{{ query }}"</h1>
+    {% if game %}
+        <ul>
+            {% for g in games %}
+                <li>
+                    <h3>{{ g.game }}</h3>
+                    <img src="{{ g.imagem.thumb.url }}" alt="{{ g.game }}">
+                    <p>{{ g.descricao }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No games found for your search.</p>
+    {% endif %}
+    {% block content %}
+    {% include 'footer.html' %}
+    {% endblock %}
+</body>
+</html>

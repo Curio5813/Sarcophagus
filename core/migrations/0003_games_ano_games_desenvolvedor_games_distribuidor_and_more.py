@@ -11,22 +11,22 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='games',
+            model_name='reviews',
             name='ano',
             field=models.IntegerField(default=None, verbose_name='Ano'),
         ),
         migrations.AddField(
-            model_name='games',
+            model_name='reviews',
             name='desenvolvedor',
             field=models.CharField(default=None, max_length=100, verbose_name='Desenvolvedor'),
         ),
         migrations.AddField(
-            model_name='games',
+            model_name='reviews',
             name='distribuidor',
             field=models.CharField(default=None, max_length=100, verbose_name='Distribuído'),
         ),
         migrations.AddField(
-            model_name='games',
+            model_name='reviews',
             name='genero',
             field=models.CharField(default=None, max_length=100, verbose_name='Genero'),
         ),
