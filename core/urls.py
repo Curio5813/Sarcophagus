@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from .views import (HomeView, DownloadView, CommunityView, ContactView, ReviewView,
                     GameSearchView, BlogView, TesteView, LoginView, RegisterView, BlogViewForm)
@@ -14,4 +16,4 @@ urlpatterns = [
     path('teste/', TesteView.as_view(), name='teste'),
     path('registration/', LoginView.as_view(), name='login'),
     path('registration/', RegisterView.as_view(), name='register'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

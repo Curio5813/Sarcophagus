@@ -26,7 +26,6 @@ coverage/
 
 # Django specific
 db.pgsql
-media/
 
 # Output
 *.out
