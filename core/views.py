@@ -65,8 +65,18 @@ class ReviewView(TemplateView):
     template_name = 'reviews/reviews.html'
 
     def get_context_data(self, **kwargs):
-        context = super(ReviewView, self).get_context_data(**kwargs)
-        context ['reviews'] = Games.objects.all().order_by('-rating')
+        # Chama o método da superclasse para obter o contexto padrão
+        context = super().get_context_data(**kwargs)
+
+        # Obtém todos os jogos, ordenados pelo rating
+        reviews = Games.objects.all().order_by('-rating')
+
+        # Adiciona um novo campo que contém a metade do rating
+        for r in reviews:
+            r.half_rating = float(r.rating) // 2
+
+        # Adiciona a lista de reviews ao contexto
+        context['reviews'] = reviews
         return context
 
 

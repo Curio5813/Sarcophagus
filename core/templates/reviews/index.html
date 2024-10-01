@@ -1,81 +1,81 @@
-{% load static %}
-<section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/3.jpg' %}">
-    <div class="pi-content">
+    {% load static %}
+    <section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/3.jpg' %}">
+        <div class="pi-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-6 text-white">
+                        <h2>Myst The Best Old PC Games</h2>
+                        <p>A landmark in adventure games, Myst transported players to a mysterious and intriguing world filled with puzzles and stunning landscapes. The gameplay focused on exploration and puzzle-solving.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Page info section -->
+
+    <!-- Page section -->
+    <section class="page-section review-page spad">
         <div class="container">
             <div class="row">
-                <div class="col-xl-5 col-lg-6 text-white">
-                    <h2>Myst The Best Old PC Games</h2>
-                    <p>A landmark in adventure games, Myst transported players to a mysterious and intriguing world filled with puzzles and stunning landscapes. The gameplay focused on exploration and puzzle-solving.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- Page info section -->
-
-<!-- Page section -->
-<section class="page-section review-page spad">
-    <div class="container">
-        <div class="row">
-            {% for g in reviews %}
-            <div class="col-md-6 review-item-wrapper"> <!-- Adicionei a classe "review-item-wrapper" -->
-                <div class="review-item">
-                    <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
-                        <div class="score yellow">{{ g.rating }}</div>
-                    </div>
-                    <div class="review-text">
-                        <h4>{{ g.game }}</h4>
-                       <div class="rating">
-                            {% for i in "0123456789" %}
-                                {% if i|add:0 <= g.rating %}
-                                    <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
-                                {% else %}
-                                      <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->  <!-- Estrela apagada -->
-                                {% endif %}
-                            {% endfor %}
+                {% for g in reviews %}
+                <div class="col-md-6 review-item-wrapper"> <!-- Adicionei a classe "review-item-wrapper" -->
+                    <div class="review-item">
+                        <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
+                            <div class="score yellow">{{ g.rating }}</div>
                         </div>
-                        <p>{{ g.descricao }}</p>
+                        <div class="review-text">
+                            <h4>{{ g.game }}</h4>
+                               <div class="rating">
+                                    {% for i in "01234" %}
+                                        {% if i|add:0 < g.half_rating %}
+                                            <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
+                                        {% else %}
+                                              <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->  <!-- Estrela apagada -->
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            <p>{{ g.descricao }}</p>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+            <div class="text-center pt-4" id="load-more-container" style="display: flex; justify-content: center;">
+                <button class="site-btn btn-sm" id="load-more-btn">Load More</button>
+            </div>
         </div>
-        <div class="text-center pt-4" id="load-more-container" style="display: flex; justify-content: center;">
-    		<button class="site-btn btn-sm" id="load-more-btn">Load More</button>
-		</div>
-    </div>
-</section>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const reviews = document.querySelectorAll(".review-item-wrapper"); // Todos os reviews
-    const loadMoreBtn = document.getElementById("load-more-btn");
-    let itemsToShow = 4; // Quantidade inicial a ser mostrada
+    </section>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const reviews = document.querySelectorAll(".review-item-wrapper"); // Todos os reviews
+        const loadMoreBtn = document.getElementById("load-more-btn");
+        let itemsToShow = 4; // Quantidade inicial a ser mostrada
 
-    // Função para esconder todos os itens e mostrar só os primeiros 'itemsToShow'
-    function showItems() {
-        reviews.forEach((review, index) => {
-            if (index < itemsToShow) {
-                review.style.display = "block"; // Mostra o review
+        // Função para esconder todos os itens e mostrar só os primeiros 'itemsToShow'
+        function showItems() {
+            reviews.forEach((review, index) => {
+                if (index < itemsToShow) {
+                    review.style.display = "block"; // Mostra o review
+                } else {
+                    review.style.display = "none"; // Esconde o review
+                }
+            });
+
+            // Esconde o botão "Load More" se todos os itens forem exibidos
+            if (itemsToShow >= reviews.length) {
+                loadMoreBtn.style.display = "none"; // Oculta o botão quando não há mais itens
             } else {
-                review.style.display = "none"; // Esconde o review
+                loadMoreBtn.style.display = "block"; // Mantém o botão visível
             }
-        });
-
-        // Esconde o botão "Load More" se todos os itens forem exibidos
-        if (itemsToShow >= reviews.length) {
-            loadMoreBtn.style.display = "none"; // Oculta o botão quando não há mais itens
-        } else {
-            loadMoreBtn.style.display = "block"; // Mantém o botão visível
         }
-    }
 
-    // Exibe os itens iniciais ao carregar a página
-    showItems();
-
-    // Evento de clique para o botão "Load More"
-    loadMoreBtn.addEventListener("click", function () {
-        itemsToShow += 4; // Exibe mais 4 itens
+        // Exibe os itens iniciais ao carregar a página
         showItems();
+
+        // Evento de clique para o botão "Load More"
+        loadMoreBtn.addEventListener("click", function () {
+            itemsToShow += 4; // Exibe mais 4 itens
+            showItems();
+        });
     });
-});
-</script>
+    </script>
