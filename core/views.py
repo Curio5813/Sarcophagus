@@ -66,7 +66,7 @@ class ReviewView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(ReviewView, self).get_context_data(**kwargs)
-        context ['reviews'] = Games.objects.all()
+        context ['reviews'] = Games.objects.all().order_by('-rating')
         return context
 
 
@@ -87,7 +87,7 @@ class GameSearchView(TemplateView):
         context = super(GameSearchView, self).get_context_data(**kwargs)
         query = self.request.GET.get('q', '')  # Get the search query from URL parameter
         if query:
-            games = Games.objects.filter(game__icontains=query).order_by('game')  # Filter by game name
+            games = Games.objects.filter(game__icontains=query).order_by('-rating')  # Filter by game name
         else:
             games = Games.objects.all().order_by('game')  # Display all games if no query
         context['game'] = games  # Add games to context

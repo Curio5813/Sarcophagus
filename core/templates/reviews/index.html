@@ -1,5 +1,4 @@
 {% load static %}
-
 <section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/3.jpg' %}">
     <div class="pi-content">
         <div class="container">
@@ -26,12 +25,14 @@
                     </div>
                     <div class="review-text">
                         <h4>{{ g.game }}</h4>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star is-fade"></i>
+                       <div class="rating">
+                            {% for i in "0123456789" %}
+                                {% if i|add:0 <= g.rating %}
+                                    <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
+                                {% else %}
+                                      <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->  <!-- Estrela apagada -->
+                                {% endif %}
+                            {% endfor %}
                         </div>
                         <p>{{ g.descricao }}</p>
                     </div>
@@ -44,7 +45,6 @@
 		</div>
     </div>
 </section>
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const reviews = document.querySelectorAll(".review-item-wrapper"); // Todos os reviews

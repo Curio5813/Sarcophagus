@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'usuarios',
     'core',
+    'django_elasticsearch_dsl',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -152,3 +153,9 @@ LOGOUT_REDIRECT_URL = 'index'
 LOCALE_PATH = (
     os.path.join(BASE_DIR, 'locale'),
 )
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://localhost:9200'  # Esquema (http), host (localhost) e porta (9200)
+    },
+}
