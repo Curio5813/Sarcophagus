@@ -29,11 +29,16 @@
                                     {% for i in "01234" %}
                                         {% if i|add:0 < g.half_rating %}
                                             <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
+                                        {% elif i|add:0 == g.half_rating %}
+                                            <i class="fa fa-star-half-alt" style="color: yellow;"></i>  <!-- Estrela meia -->
                                         {% else %}
-                                              <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->  <!-- Estrela apagada -->
+                                            <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->
                                         {% endif %}
                                     {% endfor %}
                                 </div>
+                            <p>{{ g.ano }}</p>
+                            <p>{{ g.genero }}</p>
+                            <p>{{ g.desenvolvedor }}</p>
                             <p>{{ g.descricao }}</p>
                         </div>
                     </div>

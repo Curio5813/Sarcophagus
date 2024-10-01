@@ -653,70 +653,72 @@ ol {
 	color: #ffb320;
 }
 
-/*----------------------
-  Review Section
-------------------------*/
+    /*----------------------
+      Review Section
+    ------------------------*/
 
-.review-section {
-	background-position: right top;
-}
+    .review-section {
+        background-position: right top;
+    }
 
-.review-item .review-cover {
-	position: relative;
-	margin-bottom: 30px;
-	height: 345px;
-}
+    .review-item .review-cover {
+        position: relative;
+        margin-bottom: 30px;
+        height: 345px;
+    }
 
-.review-item .review-cover .score {
-	position: absolute;
-	width: 54px;
-	height: 54px;
-	top: -27px;
-	left: 26px;
-	padding-top: 15px;
-	font-size: 18px;
-	font-weight: 500;
-	color: #fff;
-	text-align: center;
-	border-radius: 50%;
-	z-index: 1;
-}
+    .review-item .review-cover .score {
+        position: absolute;
+        width: 54px;
+        height: 54px;
+        top: -27px;
+        left: 26px;
+        padding-top: 15px;
+        font-size: 18px;
+        font-weight: 500;
+        color: #fff;
+        text-align: center;
+        border-radius: 50%;
+        z-index: 1;
+    }
 
-.review-item .review-cover .score.yellow {
-	background: #ffb320;
-}
+    .review-item .review-cover .score.yellow {
+        background: #ffb320;
+    }
 
-.review-item .review-cover .score.purple {
-	background: #694eae;
-}
+    .review-item .review-cover .score.purple {
+        background: #694eae;
+    }
 
-.review-item .review-cover .score.pink {
-	background: #ff20ae;
-}
+    .review-item .review-cover .score.pink {
+        background: #ff20ae;
+    }
 
-.review-item .review-cover .score.green {
-	background: #4eae60;
-}
+    .review-item .review-cover .score.green {
+        background: #4eae60;
+    }
 
-.review-item .review-text {
-	text-align: center;
-}
+    .review-item .review-text {
+        text-align: center;
+    }
 
-.review-item .review-text h5 {
-	margin-bottom: 20px;
-}
+    .review-item .review-text h5 {
+        margin-bottom: 20px;
+    }
 
-.review-item .review-text p {
-	margin-bottom: 0;
-}
+    .review-item .review-text p {
+        margin-bottom: 0;
+    }
 
-.review-item .rating {
-	margin-bottom: 20px;
-}
+    .review-item .rating {
+        margin-bottom: 20px;
+        color: #ffb320; /* Cor das estrelas */
+    }
 
-.review-item .rating i {
-	font-size: 12px;
-}
+    .review-item .rating i {
+        font-size: 12px; /* Tamanho das estrelas */
+        margin-right: 2px; /* Espaçamento entre estrelas */
+    }
 
 
 /*----------------------
