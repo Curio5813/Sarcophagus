@@ -21,7 +21,35 @@ class DownloadView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DownloadView, self).get_context_data(**kwargs)
-        context ['membros'] = Membro.objects.all()
+
+        # Obter parâmetros de busca da solicitação
+        game = self.request.GET.get('game')
+        descricao = self.request.GET.get('descricao')
+        genero = self.request.GET.get('genero')
+        ano = self.request.GET.get('ano')
+        desenvolvedor = self.request.GET.get('desenvolvedor')
+        distribuidor = self.request.GET.get('distribuidor')
+
+        # Inicializar o queryset como vazio
+        queryset = Games.objects.none()
+
+        # Verificar se algum campo de busca foi preenchido
+        if any([game, descricao, genero, ano, desenvolvedor, distribuidor]):
+            queryset = Games.objects.all()
+            if game:
+                queryset = queryset.filter(game__icontains=game)
+            if descricao:
+                queryset = queryset.filter(descricao__icontains=descricao)
+            if genero:
+                queryset = queryset.filter(genero__icontains=genero)
+            if ano:
+                queryset = queryset.filter(ano=ano)
+            if desenvolvedor:
+                queryset = queryset.filter(desenvolvedor__icontains=desenvolvedor)
+            if distribuidor:
+                queryset = queryset.filter(distribuidor__icontains=distribuidor)
+
+        context['games'] = queryset
         return context
 
 class CommunityView(TemplateView):
@@ -30,6 +58,7 @@ class CommunityView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CommunityView, self).get_context_data(**kwargs)
         context ['membros'] = Membro.objects.all()
+        context['membros_count'] = context['membros'].count()  # Contagem dos membros
         return context
 
 

@@ -1564,3 +1564,28 @@ ol {
     background-color: rgba(0, 0, 0, 0.0); /* Add a semi-transparent background for readability */
     border-radius: 35px; /* Add rounded corners to the form */
 }
+
+.recent-game-row {
+    display: flex; /* Alinha os jogos lado a lado */
+    flex-wrap: wrap; /* Permite que os jogos se movam para a linha seguinte se não houver espaço */
+    justify-content: center; /* Centraliza os jogos na linha */
+}
+
+.recent-game-item {
+    flex: 0 0 30%; /* Define a largura dos itens em 30% para 3 por linha */
+    max-width: 200px; /* Define uma largura máxima para os itens dos jogos */
+    margin: 15px; /* Espaçamento entre os itens dos jogos */
+    text-align: center; /* Centraliza o texto dentro de cada item */
+}
+
+@media (max-width: 768px) {
+    .recent-game-item {
+        flex: 0 0 45%; /* 2 por linha em telas menores */
+    }
+}
+
+@media (max-width: 480px) {
+    .recent-game-item {
+        flex: 0 0 100%; /* 1 por linha em telas pequenas */
+    }
+}
