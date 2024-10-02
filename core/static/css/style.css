@@ -10,24 +10,43 @@
 /*---------------------------*/
 
 html,
+
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('../fonts/PressStart2P-Regular.woff') format('woff');
+    src: url('../fonts/PressStart2P-Regular.woff2') format('woff2');
+    src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
 	height: 100%;
-	font-family: 'Roboto', sans-serif;
+	font-family: sans-serif;
 	-webkit-font-smoothing: antialiased;
 	font-smoothing: antialiased;
 	background-color: #465975;
 }
 
+
 h1,
 h2,
 h3,
-h4,
+h4 {
+	margin: 0;
+	font-weight: 500;
+	color: #131313;
+    font-family: 'Press Start 2P', sans-serif; /* Use a fonte para cabeçalhos */
+}
+
 h5,
 h6 {
 	margin: 0;
 	font-weight: 500;
 	color: #131313;
+    font-family: sans-serif; /* Use a fonte para cabeçalhos */
 }
+
 
 h1 {
 	font-size: 70px;
@@ -82,6 +101,9 @@ ol {
 	margin: 0;
 }
 
+.nostalgia-text {
+    font-family: 'Press Start 2P', cursive; /* Aplica a fonte Press Start 2P ao parágrafo */
+}
 /*---------------------
   Helper CSS
 -----------------------*/

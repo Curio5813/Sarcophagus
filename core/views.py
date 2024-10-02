@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext as _
 from django.utils import translation
+from math import floor, ceil
 
 
 
@@ -73,7 +74,7 @@ class ReviewView(TemplateView):
 
         # Adiciona um novo campo que contém a metade do rating
         for r in reviews:
-            r.half_rating = float(r.rating) // 2
+            r.half_rating = float(floor(r.rating / 2))
 
         # Adiciona a lista de reviews ao contexto
         context['reviews'] = reviews
