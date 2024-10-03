@@ -2,7 +2,7 @@
 <section class="page-section recent-game-page spad">
     <div class="container">
         <div class="row">
-            <se class="col-lg-12">
+            <div class="col-lg-12">
 
                 <!-- Formulário de busca -->
                 <h4 style="text-align: center;">Find Your Game!</h4>
@@ -17,37 +17,41 @@
                     <button type="submit"><i class="fa fa-search"></i></button>
                 </form>
                 <br><br>
+
                 <!-- Resultados da busca -->
-                <div class="recent-game-row">
-    {% if games %}
-        {% for game in games %}
-        <div class="recent-game-item">
-            <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
-                <div class="cata">{{ game.genero }}</div>
+            <div class="recent-game-row">
+                {% if games %}
+                    {% for game in games %}
+                    <div class="recent-game-item" style="background-color: #FFDAB9;">
+                        <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
+                            <div class="cata">{{ game.genero }}</div>
+                        </div>
+                        <div class="rgi-content">
+                            <h5>{{ game.game }}</h5>
+                            <p><strong>{{ game.ano }}</strong></p>
+                            <p>Genre: <strong>{{ game.genero }}</strong></p>
+                            <p>Rating: <strong>{{ game.rating }}</strong></p>
+                            <p>Developer: <strong>{{ game.desenvolvedor }}</strong></p>
+                            <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
+                            <p>Review:</p>
+                            <p>{{ game.descricao }}</p>
+                            <div class="rgi-extra">
+                                <div class="rgi-star">
+                                    <img src="{% static 'img/icons/star.png' %}" alt="Star Icon">
+                                </div>
+                                <div class="rgi-heart">
+                                    <img src="{% static 'img/icons/heart.png' %}" alt="Heart Icon">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="text-align: center;">No results found.</p>
+                    <br>
+                {% endif %}
             </div>
-            <div class="rgi-content">
-                <h5>{{ game.game }}</h5>
-                <p>{{ game.ano }}</p>
-                <p>Genre: {{ game.genero }}</p>
-                <p>Rating: {{ game.rating }}</p>
-                <p>Developer: {{ game.desenvolvedor }}</p>
-                <p>Publisher: {{ game.distribuidor }}  </p>
-                <p>Review:</p>
-                <p>{{ game.descricao }}</p>
-                <div class="rgi-extra">
-                    <div class="rgi-star">
-                        <img src="{% static 'img/icons/star.png' %}" alt="Star Icon">
-                    </div>
-                    <div class="rgi-heart">
-                        <img src="{% static 'img/icons/heart.png' %}" alt="Heart Icon">
-                    </div>
-                </div>
             </div>
         </div>
-        {% endfor %}
-    {% else %}
-        <p style="text-align: center;">No results found.</p>
-        <br><br>
-    {% endif %}
     </div>
 </section>

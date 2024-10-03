@@ -52,6 +52,7 @@ class Games(Base):
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
     imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 560, 'height': 347, 'crop': True}})
 
+
     class Meta:
         verbose_name = _('Game')
         verbose_name_plural = _('Games')

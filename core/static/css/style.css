@@ -1128,6 +1128,31 @@ ol {
 	background-position: center top;
 }
 
+.recent-game-item .rgi-content .rgi-extra {
+    position: absolute; /* Mantenha a posição absoluta se quiser que os ícones fiquem em um local específico */
+    right: 0;
+    bottom: 0;
+    display: flex; /* Alinha os ícones lado a lado */
+    align-items: center; /* Centraliza verticalmente os ícones */
+    gap: 5px; /* Espaçamento entre os ícones */
+}
+
+.recent-game-item .rgi-content .rgi-extra .rgi-star,
+.recent-game-item .rgi-content .rgi-extra .rgi-heart {
+    height: 35px;
+    width: 35px;
+    display: block; /* Mantém o bloco, mas remove o float */
+    padding: 6px 8px 0;
+}
+
+.recent-game-item .rgi-extra .rgi-star {
+    background: #ffb320; /* Cor da estrela */
+}
+
+.recent-game-item .rgi-extra .rgi-heart {
+    background-color: #c71f2d; /* Cor rubro para o coração */
+}
+
 /*-----------------
   Community page
 --------------------*/
