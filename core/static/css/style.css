@@ -544,57 +544,44 @@ ol {
   Recent Game Section
 ------------------------*/
 
-.recent-game-section {
-	background-color: #eef2f6;
-	border-top: 1px solid #d6dee7;
-	border-bottom: 1px solid #d6dee7;
+.recent-game-row {
+    display: flex; /* Flexbox para alinhamento */
+    flex-direction: column; /* Coloca os jogos um abaixo do outro */
+    width: 100%; /* Ocupa a largura total da seção */
 }
 
-.recent-game-item .rgi-thumb {
-	height: 204px;
-	padding: 25px 28px;
+.recent-game-item {
+    display: flex; /* Exibe a imagem e o conteúdo lado a lado */
+    margin-bottom: 20px; /* Espaço entre os itens */
+    background-color: #fff; /* Cor de fundo dos itens */
+    border: 1px solid #d6dee7; /* Borda dos itens */
+    padding: 20px; /* Padding interno */
 }
 
-.recent-game-item .rgi-content {
-	padding: 34px 22px 20px;
-	background: #fff;
-	border: 1px solid #d6dee7;
-	border-top: none;
-	position: relative;
+.rgi-thumb {
+    width: 30%; /* Imagem ocupa 30% da largura do item */
+    height: 204px; /* Altura fixa da imagem */
+    background-size: cover; /* Ajusta o tamanho da imagem */
+    background-position: center; /* Centraliza a imagem */
+    margin-right: 20px; /* Espaço à direita da imagem */
 }
 
-.recent-game-item .rgi-content h5 {
-	margin-bottom: 20px;
-	line-height: 1.5;
+.rgi-content {
+    width: 65%; /* O conteúdo ocupa 65% da largura do item */
+    padding: 0; /* Remove padding */
+    text-align: left; /* Alinha texto à esquerda */
 }
 
-.recent-game-item .rgi-content .comment {
-	font-size: 12px;
-	color: #737373;
+.rgi-extra {
+    margin-top: 10px; /* Espaço acima dos ícones extras */
 }
 
-.recent-game-item .rgi-extra {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	width: 70px;
-}
-
-.recent-game-item .rgi-extra .rgi-star,
-.recent-game-item .rgi-extra .rgi-heart {
-	height: 35px;
-	width: 35px;
-	float: left;
-	display: block;
-	padding: 6px 8px 0;
-}
-
-.recent-game-item .rgi-extra .rgi-star {
-	background: #ffb320;
-}
-
-.recent-game-item .rgi-extra .rgi-heart {
-	background: #ff205f;
+.rgi-extra .rgi-star,
+.rgi-extra .rgi-heart {
+    height: 35px; /* Altura dos ícones */
+    width: 35px; /* Largura dos ícones */
+    display: inline-block; /* Os ícones são exibidos em linha */
+    margin-right: 10px; /* Espaçamento à direita dos ícones */
 }
 
 /*----------------------
@@ -1565,27 +1552,38 @@ ol {
     border-radius: 35px; /* Add rounded corners to the form */
 }
 
-.recent-game-row {
-    display: flex; /* Alinha os jogos lado a lado */
-    flex-wrap: wrap; /* Permite que os jogos se movam para a linha seguinte se não houver espaço */
-    justify-content: center; /* Centraliza os jogos na linha */
+/* -------------------------------
+   Download page | Search section
+---------------------------------*/
+
+.search-widget {
+    display: flex; /* Altera para flexbox para permitir alinhamento horizontal */
+    justify-content: center; /* Centraliza os itens dentro do widget */
+    flex-wrap: wrap; /* Permite que os itens que não cabem na linha atual se movam para a linha seguinte */
+    margin-bottom: 20px;
 }
 
-.recent-game-item {
-    flex: 0 0 30%; /* Define a largura dos itens em 30% para 3 por linha */
-    max-width: 200px; /* Define uma largura máxima para os itens dos jogos */
-    margin: 15px; /* Espaçamento entre os itens dos jogos */
-    text-align: center; /* Centraliza o texto dentro de cada item */
+.search-widget input {
+    margin: 0 5px; /* Margem entre os inputs */
+    border-radius: 30px; /* Bordas arredondadas */
+    padding: 10px;
+    border: none;
+    background-color: #ffb320;
+    width: 150px; /* Largura fixa ou ajustável conforme necessário */
 }
 
-@media (max-width: 768px) {
-    .recent-game-item {
-        flex: 0 0 45%; /* 2 por linha em telas menores */
-    }
+.search-widget button {
+    margin: 0 5px;
+    border-radius: 30px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #ffb320; /* Cor do botão */
+    color: white;
+    cursor: pointer;
 }
 
-@media (max-width: 480px) {
-    .recent-game-item {
-        flex: 0 0 100%; /* 1 por linha em telas pequenas */
-    }
+.search-widget button:hover {
+    background-color: #0056b3; /* Cor do botão ao passar o mouse */
 }
+
+
