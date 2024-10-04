@@ -3,7 +3,6 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-
                 <!-- Formulário de busca -->
                 <h4 style="text-align: center;">Find Your Game!</h4>
                 <br><br><br>
@@ -18,40 +17,205 @@
                 </form>
                 <br><br>
 
-                <!-- Resultados da busca -->
-            <div class="recent-game-row">
-                {% if games %}
-                    {% for game in games %}
-                    <div class="recent-game-item" style="background-color: #FFDAB9;">
-                        <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
-                            <div class="cata">{{ game.genero }}</div>
-                        </div>
-                        <div class="rgi-content">
-                            <h5>{{ game.game }}</h5>
-                            <p><strong>{{ game.ano }}</strong></p>
-                            <p>Genre: <strong>{{ game.genero }}</strong></p>
-                            <p>Rating: <strong>{{ game.rating }}</strong></p>
-                            <p>Developer: <strong>{{ game.desenvolvedor }}</strong></p>
-                            <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
-                            <p>Review:</p>
-                            <p>{{ game.descricao }}</p>
-                            <div class="rgi-extra">
-                                <div class="rgi-star">
-                                    <img src="{% static 'img/icons/star.png' %}" alt="Star Icon">
-                                </div>
-                                <div class="rgi-heart">
-                                    <img src="{% static 'img/icons/heart.png' %}" alt="Heart Icon">
-                                </div>
+                <!-- Jogos Favoritados pelo Membro -->
+                {% if jogos_favoritos %}
+                    <h4>Your Favorite Games:</h4>
+                    <div class="recent-game-row">
+                        {% for game in jogos_favoritos %}
+                        <div class="recent-game-item" style="background-color: transparent; border: none;">
+                            <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
+                                <!-- Apenas a imagem do jogo favorito -->
+                            </div>
+                            <div class="rgi-content">
+                                <h5>{{ game.game }}</h5>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
                 {% else %}
-                    <p style="text-align: center;">No results found.</p>
+                    <p style="text-align: center;">Você ainda não favoritou nenhum jogo.</p>
                     <br>
                 {% endif %}
-            </div>
+
+                <!-- Resultados da busca -->
+                <div class="recent-game-row">
+                    {% if games %}
+                        {% for game in games %}
+                        <div class="recent-game-item" style="background-color: #FFDAB9;">
+                            <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
+                                <div class="cata">{{ game.genero }}</div>
+                            </div>
+                            <div class="rgi-content">
+                                <h5>{{ game.game }}</h5>
+                                <p><strong>{{ game.ano }}</strong></p>
+                                <p>Genre: <strong>{{ game.genero }}</strong></p>
+                                <p>Rating: <strong>{{ game.rating }}</strong></p>
+                                <p>Developer: <strong>{{ game.desenvolvedor }}</strong></p>
+                                <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
+                                <p>Review:</p>
+                                <p>{{ game.descricao }}</p>
+
+
+                                <!-- Avaliação de 5 estrelas -->
+                                <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.gamerating_set.first.rating|default:0 }}">
+                                    {% for i in "12345" %}
+                                        <span class="star {% if game.gamerating_set.first.rating|default:0 == i|add:"0" %}active{% endif %}" data-value="{{ i }}">&#9733;</span>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- Botão de favorito -->
+                                <span class="favorite-btn" data-game-id="{{ game.id }}">
+                                    <i class="fa fa-heart-o" aria-hidden="true"></i> <!-- Coração vazio -->
+                                </span>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="text-align: center;">No results found.</p>
+                        <br>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+    // Função para enviar a avaliação do jogo via AJAX
+document.querySelectorAll('.star-rating .star').forEach(star => {
+    star.addEventListener('mouseover', function() {
+        const rating = this.getAttribute('data-value');
+        const stars = this.parentNode.querySelectorAll('.star');
+
+        stars.forEach(s => {
+            s.classList.remove('selected'); // Remove a seleção anterior
+            if (s.getAttribute('data-value') <= rating) {
+                s.classList.add('selected'); // Adiciona a seleção
+            }
+        });
+    });
+
+    star.addEventListener('mouseout', function() {
+        const stars = this.parentNode.querySelectorAll('.star');
+        stars.forEach(s => {
+            s.classList.remove('selected'); // Remove a seleção ao sair
+        });
+    });
+
+    // Aqui é onde você adiciona o stopPropagation
+    star.addEventListener('click', function(event) {
+        event.stopPropagation(); // Impede que o clique no coração seja afetado
+        const gameId = this.parentNode.getAttribute('data-game-id');
+        const ratingValue = this.getAttribute('data-value');
+
+        // Mapear a quantidade de estrelas para a nota
+        let nota;
+        switch (ratingValue) {
+            case '1':
+                nota = 2;
+                break;
+            case '2':
+                nota = 4;
+                break;
+            case '3':
+                nota = 6;
+                break;
+            case '4':
+                nota = 8;
+                break;
+            case '5':
+                nota = 10;
+                break;
+            default:
+                nota = 0; // caso não se encaixe em nenhuma das opções
+        }
+
+        // Enviar a avaliação via AJAX
+        fetch("/avaliar_jogo/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                "game_id": gameId,
+                "rating": nota // Envia a nota calculada
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Avaliação salva com sucesso!");
+                // Atualiza as estrelas para mostrar que a avaliação foi registrada
+                const stars = this.parentNode.querySelectorAll('.star');
+                stars.forEach(s => {
+                    s.classList.remove('selected');
+                    if (s.getAttribute('data-value') <= ratingValue) {
+                        s.classList.add('selected');
+                    }
+                });
+            }
+        })
+        .catch(error => console.error("Erro ao salvar a avaliação:", error));
+    });
+});
+
+// Função para favoritar o jogo
+document.querySelectorAll('.favorite-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const gameId = this.getAttribute('data-game-id');
+        const isActive = this.classList.contains('active');
+
+        // Enviar a requisição AJAX para adicionar ou remover o favorito
+        fetch("/favoritar_jogo/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                "game_id": gameId,
+                "favorito": !isActive // Muda o estado do favorito
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Alterna a classe 'active' do coração
+                this.classList.toggle('active'); // Alterna o estado do favorito
+            } else {
+                alert("Erro ao favoritar o jogo.");
+            }
+        })
+        .catch(error => console.error("Erro ao favoritar o jogo:", error));
+    });
+});
+</script>
+
+
+<style>
+   .star {
+    cursor: pointer;
+    font-size: 24px; /* Tamanho da estrela */
+    color: lightgray; /* Cor padrão das estrelas */
+    }
+
+    .star.active {
+        color: gold; /* Cor das estrelas ativas */
+    }
+
+    .star.selected {
+        color: gold; /* Cor das estrelas selecionadas durante o hover */
+    }
+
+    .favorite-btn {
+        font-size: 24px; /* Ajuste o tamanho conforme necessário */
+        cursor: pointer;
+        color: #131313; /* Cor padrão do coração (vazio) */
+    }
+
+    .favorite-btn.active {
+        color: red; /* Cor do coração quando favoritado */
+    }
+</style>

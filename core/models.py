@@ -19,6 +19,7 @@ class Base(models.Model):
     class Meta:
         abstract = True
 
+
 class Membro(Base):
     first_name = models.CharField(_('Nome'), max_length=50)
     last_name = models.CharField(_('Sobrenome'), max_length=100)
@@ -46,7 +47,7 @@ class Games(Base):
     game = models.CharField(_('Nome'), max_length=100)
     descricao = models.TextField(_('Descrição'), max_length=1500)
     genero = models.CharField(_('Genero'), max_length=100)
-    rating = models.DecimalField(_('Rating'), max_digits=2, decimal_places=1)
+    rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=1)
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
@@ -59,3 +60,19 @@ class Games(Base):
 
     def __str__(self):
         return self.game
+
+
+class GameRating(Base):
+    membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
+    game = models.ForeignKey(Games, on_delete=models.CASCADE)
+    rating = models.DecimalField(_('Nota'), max_digits=3, decimal_places=1, validators=[MinValueValidator(0), MaxValueValidator(10)])
+    favorito = models.BooleanField(_('Favorito?'), default=False)
+
+    class Meta:
+        verbose_name = _('Avaliação de Jogo')
+        verbose_name_plural = _('Avaliações de Jogos')
+        unique_together = ('membro', 'game')  # Garante que o membro avalie um jogo uma única vez
+
+    def __str__(self):
+        return f'{self.membro} - {self.game} - Nota: {self.rating}'
+

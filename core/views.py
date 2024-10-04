@@ -2,14 +2,18 @@ from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .forms import ContatoForm, BlogForm
-from .models import Games, Membro
+from .models import Games, Membro, GameRating
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext as _
 from django.utils import translation
-from math import floor, ceil
-
+from math import floor
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+import json
 
 
 class HomeView(TemplateView):
@@ -35,7 +39,7 @@ class DownloadView(TemplateView):
 
         # Verificar se algum campo de busca foi preenchido
         if any([game, descricao, genero, ano, desenvolvedor, distribuidor]):
-            queryset = Games.objects.all()
+            queryset = Games.objects.all().order_by('ano')
             if game:
                 queryset = queryset.filter(game__icontains=game)
             if descricao:
@@ -50,7 +54,41 @@ class DownloadView(TemplateView):
                 queryset = queryset.filter(distribuidor__icontains=distribuidor)
 
         context['games'] = queryset
+
+        # Verificar se o usuário está logado
+        if self.request.user.is_authenticated:
+            membro = Membro.objects.get(email=self.request.user.email)
+            jogos_favoritos = Games.objects.filter(gamerating__membro=membro, gamerating__favorito=True)
+            context['jogos_favoritos'] = jogos_favoritos
+
         return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'Você precisa estar logado para avaliar.'}, status=403)
+
+        membro = Membro.objects.get(email=request.user.email)
+        game_id = request.POST.get('game_id')
+        rating = request.POST.get('rating')
+        favorito = request.POST.get('favorito', 'false') == 'true'
+
+        try:
+            game = Games.objects.get(id=game_id)
+            game_rating, created = GameRating.objects.get_or_create(membro=membro, game=game)
+
+            if rating:
+                game_rating.rating = rating
+            game_rating.favorito = favorito
+            game_rating.save()
+
+            return JsonResponse({'success': 'Avaliação salva com sucesso!'})
+
+        except Games.DoesNotExist:
+            return JsonResponse({'error': 'Jogo não encontrado.'}, status=404)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
 
 class CommunityView(TemplateView):
     template_name = 'community/community.html'
@@ -201,3 +239,45 @@ class RegisterForm(FormView):
     class Meta:
         model = Membro
         field = ['username', 'email', 'password']
+
+
+@method_decorator(login_required, name='dispatch')
+class AvaliarJogoView(TemplateView):
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        game_id = data.get('game_id')
+        rating_value = data.get('rating')
+
+        game = get_object_or_404(Games, id=game_id)
+        membro = Membro.objects.get(email=request.user.email)
+
+        # Verifica se já existe uma avaliação para o membro e jogo
+        game_rating, created = GameRating.objects.update_or_create(
+            membro=membro,
+            game=game,
+            defaults={'rating': rating_value}
+        )
+
+        return JsonResponse({'success': True})
+
+
+class FavoritarJogoView(TemplateView):
+    def post(self, request):
+        data = json.loads(request.body)
+        game_id = data.get('game_id')
+        favorito = data.get('favorito')
+
+        # Obtém o membro logado
+        membro = Membro.objects.get(email=request.user.email)
+
+        # Obtém o jogo
+        game = Games.objects.get(id=game_id)
+
+        # Verifica se já existe uma avaliação
+        rating, created = GameRating.objects.get_or_create(membro=membro, game=game)
+
+        # Atualiza o status de favorito
+        rating.favorito = favorito
+        rating.save()
+
+        return JsonResponse({"success": True})
