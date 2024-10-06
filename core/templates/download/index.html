@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <section class="page-section recent-game-page spad">
     <div class="container">
         <div class="row">
@@ -56,13 +57,11 @@
                                 <p>{{ game.descricao }}</p>
 
                                 {% if game.video %}
-                                    <video width="320" height="240" controls>
-                                        <source src="{{ game.video.url }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                {% else %}
-                                    <p>No video available for this game.</p>
+                                    <iframe width="560" height="315" src="{{ game.video_embed_url|safe }}" frameborder="0" allowfullscreen></iframe>
+                                   {% else %}
+                                    <p>Vídeo não disponível.</p>
                                 {% endif %}
+
 
                                 <!-- Avaliação de 5 estrelas -->
                                 <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.gamerating_set.first.rating|default:0 }}">
