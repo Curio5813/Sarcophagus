@@ -55,6 +55,14 @@
                                 <p>Review:</p>
                                 <p>{{ game.descricao }}</p>
 
+                                {% if game.video %}
+                                    <video width="320" height="240" controls>
+                                        <source src="{{ game.video.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                {% else %}
+                                    <p>No video available for this game.</p>
+                                {% endif %}
 
                                 <!-- Avaliação de 5 estrelas -->
                                 <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.gamerating_set.first.rating|default:0 }}">

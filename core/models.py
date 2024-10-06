@@ -52,6 +52,7 @@ class Games(Base):
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
     imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 560, 'height': 347, 'crop': True}})
+    video = models.FileField(_('Video'), upload_to='videos/', blank=True, null=True)
 
 
     class Meta:
