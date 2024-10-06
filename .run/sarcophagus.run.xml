@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="sarcophagus" type="PythonConfigurationType" factoryName="Python">
     <module name="Sarcophagus" />
-    <option name="ENV_FILES" value="$PROJECT_DIR$" />
+    <option name="ENV_FILES" value="$PROJECT_DIR$/../.env/Sarcophagus" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
     <envs>
