@@ -46,7 +46,19 @@ class Membro(Base):
 class Games(Base):
     game = models.CharField(_('Nome'), max_length=100)
     descricao = models.TextField(_('Descrição'), max_length=1500)
-    genero = models.CharField(_('Genero'), max_length=100)
+    GENRE_CHOICES = [
+        ('Action', 'Action'),
+        ('Adventure', 'Adventure'),
+        ('Puzzle', 'Puzzle'),
+        ('Racing', 'Racing'),
+        ('RPG', 'RPG'),
+        ('Shooter', 'Shooter'),
+        ('Simulation', 'Simulation'),
+        ('Sports', 'Sports'),
+        ('Strategy', 'Strategy'),
+
+    ]
+    genero = models.CharField(_('Genero'), max_length=100, choices=GENRE_CHOICES)
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=1)
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
