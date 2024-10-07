@@ -10,7 +10,7 @@
                 <form class="search-widget" method="get" action="{% url 'download' %}">
                     <input type="text" name="game" placeholder="Game Name">
                      <input type="number" name="ano" placeholder="Year">
-                    <input type="text" name="genero" placeholder="Genre">
+                    <input type="text" name="generos" placeholder="Genre">
                     <input type="text" name="descricao" placeholder="Theme">
                     <input type="text" name="desenvolvedor" placeholder="Developer">
                     <input type="text" name="distribuidor" placeholder="Publisher">
@@ -49,7 +49,14 @@
                             <div class="rgi-content">
                                 <h5>{{ game.game }}</h5>
                                 <p><strong>{{ game.ano }}</strong></p>
-                                <p>Genre: <strong>{{ game.genero }}</strong></p>
+                              <p>
+                                Genero(s):
+                                <span class="generos-container">
+                                    {% for genero in game.generos.all %}
+                                        {{ genero.nome }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
+                              </p>
                                 <p>Rating: <strong>{{ game.rating }}</strong></p>
                                 <p>Developer: <strong>{{ game.desenvolvedor }}</strong></p>
                                 <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
@@ -58,10 +65,9 @@
 
                                 {% if game.video %}
                                     <iframe width="560" height="315" src="{{ game.video_embed_url|safe }}" frameborder="0" allowfullscreen></iframe>
-                                   {% else %}
+                                {% else %}
                                     <p>Vídeo não disponível.</p>
                                 {% endif %}
-
 
                                 <!-- Avaliação de 5 estrelas -->
                                 <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.gamerating_set.first.rating|default:0 }}">

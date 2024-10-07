@@ -43,10 +43,8 @@ class Membro(Base):
         return self.membro
 
 
-class Games(Base):
-    game = models.CharField(_('Nome'), max_length=100)
-    descricao = models.TextField(_('Descrição'), max_length=1500)
-    GENRE_CHOICES = [
+class Genero(models.Model):
+    GENERO_CHOICES = [
         ('Action', 'Action'),
         ('Adventure', 'Adventure'),
         ('Puzzle', 'Puzzle'),
@@ -56,9 +54,23 @@ class Games(Base):
         ('Simulation', 'Simulation'),
         ('Sports', 'Sports'),
         ('Strategy', 'Strategy'),
-
     ]
-    genero = models.CharField(_('Genero'), max_length=100, choices=GENRE_CHOICES)
+
+    nome = models.CharField(_('Nome'), max_length=100, choices=GENERO_CHOICES, unique=True)
+
+    class Meta:
+        verbose_name = _('Gênero')
+        verbose_name_plural = _('Gêneros')
+
+    def __str__(self):
+        return self.nome
+
+
+
+class Games(Base):
+    game = models.CharField(_('Nome'), max_length=100)
+    descricao = models.TextField(_('Descrição'), max_length=1500)
+    generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))  # Many-to-Many com o modelo Genero
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=1)
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)

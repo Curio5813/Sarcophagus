@@ -29,7 +29,7 @@ class DownloadView(TemplateView):
         # Obter parâmetros de busca da solicitação
         game = self.request.GET.get('game')
         descricao = self.request.GET.get('descricao')
-        genero = self.request.GET.get('genero')
+        genero = self.request.GET.get('generos', None)  # Alteração aqui
         ano = self.request.GET.get('ano')
         desenvolvedor = self.request.GET.get('desenvolvedor')
         distribuidor = self.request.GET.get('distribuidor')
@@ -45,7 +45,7 @@ class DownloadView(TemplateView):
             if descricao:
                 queryset = queryset.filter(descricao__icontains=descricao)
             if genero:
-                queryset = queryset.filter(genero__icontains=genero)
+                queryset = queryset.filter(generos__nome__icontains=genero)  # Alteração aqui
             if ano:
                 queryset = queryset.filter(ano=ano)
             if desenvolvedor:
