@@ -50,7 +50,7 @@
                                 <h5>{{ game.game }}</h5>
                                 <p><strong>{{ game.ano }}</strong></p>
                               <p>
-                                Genero(s):
+                                Genre(s):
                                 <span class="generos-container">
                                     {% for genero in game.generos.all %}
                                         {{ genero.nome }}{% if not forloop.last %}, {% endif %}
