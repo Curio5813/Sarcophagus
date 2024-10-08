@@ -24,29 +24,56 @@
                     <h3 class="community-top-title">All Members ({{ membros_count }})</h3> <!-- Usando a contagem -->
                 </div>
                 <div class="col-md-6 text-lg-right">
-                    <form class="community-filter">
-                        <label for="fdf5">Show</label>
-                        <select id="fdf5">
-                            <option value="#">Everything</option>
-                            <option value="#">Everything</option>
-                        </select>
+                    <form class="community-filter" method="GET">
+                        <label for="membro">Search Member:</label>
+                        <input type="text" name="membro" id="membro" placeholder="Member name"
+                               value="{{ request.GET.membro|default:'' }}" style="margin: 0 5px; border-radius: 30px; padding: 10px; border: 1px solid #ccc; background-color: #fff; width: 150px;">
+                        <button type="submit" style="border-radius: 30px; padding: 10px 15px; border: 1px solid #ccc; background-color: #ffb320; color: white; cursor: pointer;">
+                            Search
+                        </button>
                     </form>
+
                 </div>
+
             </div>
-            <ul class="community-post-list"> <!-- Movido para fora do loop -->
+            <ul class="community-post-list">
                 {% for m in membros %}
                 <li>
                     <div class="community-post">
                         <div class="author-avator set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
                         <div class="post-content">
-                            <h5>{{ m.membro }}<span>posted an update</span></h5>
-                            <div class="post-date">{{ m.nascimento|date:"F j, Y" }}</div> <!-- Exibir a data de nascimento formatada -->
+                            <h5>{{ m.membro }}<span> posted an update</span></h5>
+                            <div class="post-date">{{ m.nascimento|date:"F j, Y" }}</div>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis at eros sit amet aliquam.</p>
                         </div>
                     </div>
                 </li>
                 {% endfor %}
             </ul>
+            <br><br>
+
+            <!-- Seção de jogos favoritados -->
+            {% if jogos_favoritos %}
+            <h3>Jogos Favoritados</h3>
+            <br>
+            <ul class="favorite-games-list">
+                {% for favorito in jogos_favoritos %}
+                <li>
+                    <div class="game-card">
+                        <div class="game-thumb">
+                            <!-- Caminho para a imagem do jogo favoritado -->
+                            <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}">
+                        </div>
+                        <div class="game-info">
+                            <h5>{{ favorito.game.game }}</h5> <!-- Nome do jogo favoritado -->
+                            <p>{{ favorito.game.descricao|truncatewords:20 }}</p> <!-- Descrição do jogo -->
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
             <div class="site-pagination sp-style-2">
                 <span class="active">01.</span>
                 <a href="#">02.</a>

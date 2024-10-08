@@ -1240,6 +1240,35 @@ ol {
 	font-weight: 500;
 }
 
+/* Estilo para a imagem dos jogos favoritados */
+.game-thumb {
+    width: 150px; /* Largura da imagem */
+    height: 150px; /* Altura da imagem */
+    background-size: cover; /* Faz a imagem cobrir totalmente o contêiner */
+    background-position: center; /* Centraliza a imagem dentro do contêiner */
+    border-radius: 10px; /* Bordas arredondadas */
+    margin-right: 15px; /* Espaçamento entre a imagem e o texto */
+}
+
+/* Estilo para o conteúdo das informações dos jogos */
+.game-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza o conteúdo verticalmente */
+}
+
+.game-info h5 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.game-info p {
+    font-size: 14px;
+    color: #777;
+    margin: 5px 0 0 0;
+}
+
 /*-----------------
   Contact page
 --------------------*/

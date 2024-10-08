@@ -14,6 +14,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import json
+from django.db.models import Q
+
 
 
 class HomeView(TemplateView):
@@ -94,11 +96,34 @@ class CommunityView(TemplateView):
     template_name = 'community/community.html'
 
     def get_context_data(self, **kwargs):
-        context = super(CommunityView, self).get_context_data(**kwargs)
-        context ['membros'] = Membro.objects.all()
-        context['membros_count'] = context['membros'].count()  # Contagem dos membros
-        return context
+        context = super().get_context_data(**kwargs)
 
+        # Obtém o valor da pesquisa do campo de texto
+        search_query = self.request.GET.get('membro', '').strip()
+
+        if search_query:
+            # Busca membros cujo primeiro ou último nome contém a string de pesquisa
+            membros = Membro.objects.filter(
+                Q(first_name__icontains=search_query) |
+                Q(last_name__icontains=search_query) |
+                Q(membro__icontains=search_query) |
+                Q(first_name__icontains=search_query.split()[0]) & Q(last_name__icontains=' '.join(search_query.split()[1:]))
+            )
+        else:
+            membros = Membro.objects.all()
+
+        context['membros'] = membros
+        context['membros_count'] = membros.count()
+
+        # Verificar se há um membro específico sendo pesquisado
+        if membros.count() == 1:
+            membro_pesquisado = membros.first()
+
+            # Buscar jogos favoritados pelo membro
+            jogos_favoritos = GameRating.objects.filter(membro=membro_pesquisado, favorito=True).select_related('game')
+            context['jogos_favoritos'] = jogos_favoritos
+
+        return context
 
 class ContactView(FormView):
     template_name = 'contact/contact.html'
