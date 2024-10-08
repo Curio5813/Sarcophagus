@@ -18,26 +18,6 @@
                 </form>
                 <br><br>
 
-                <!-- Jogos Favoritados pelo Membro -->
-                {% if jogos_favoritos %}
-                    <h4>Your Favorite Games:</h4>
-                    <div class="recent-game-row">
-                        {% for game in jogos_favoritos %}
-                        <div class="recent-game-item" style="background-color: transparent; border: none;">
-                            <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
-                                <!-- Apenas a imagem do jogo favorito -->
-                            </div>
-                            <div class="rgi-content">
-                                <h5>{{ game.game }}</h5>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p style="text-align: center;">Você ainda não favoritou nenhum jogo.</p>
-                    <br>
-                {% endif %}
-
                 <!-- Resultados da busca -->
                 <div class="recent-game-row">
                     {% if games %}

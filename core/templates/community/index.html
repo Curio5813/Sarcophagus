@@ -56,24 +56,23 @@
             {% if jogos_favoritos %}
             <h3>Jogos Favoritados</h3>
             <br>
-            <ul class="favorite-games-list">
+            <ul class="favorite-games-list" style="list-style: none; padding-left: 0;">
                 {% for favorito in jogos_favoritos %}
-                <li>
+                <li style="margin-bottom: 15px;">
                     <div class="game-card">
-                        <div class="game-thumb">
-                            <!-- Caminho para a imagem do jogo favoritado -->
-                            <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}">
-                        </div>
                         <div class="game-info">
                             <h5>{{ favorito.game.game }}</h5> <!-- Nome do jogo favoritado -->
                             <p>{{ favorito.game.descricao|truncatewords:20 }}</p> <!-- Descrição do jogo -->
+                        </div>
+                        <div class="game-thumb">
+                            <!-- Caminho para a imagem do jogo favoritado -->
+                            <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}">
                         </div>
                     </div>
                 </li>
                 {% endfor %}
             </ul>
             {% endif %}
-
             <div class="site-pagination sp-style-2">
                 <span class="active">01.</span>
                 <a href="#">02.</a>
