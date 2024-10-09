@@ -15,7 +15,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import json
 from django.db.models import Q
-
+from django import forms
+from .models import Membro
 
 
 class HomeView(TemplateView):
@@ -242,29 +243,32 @@ class LoginView(FormView):
             login(self.request, user)
             return redirect('index')
         else:
+            form.add_error(None, "Login inválido")  # Adiciona erro ao formulário
             return self.form_invalid(form)
+
+
+class RegisterForm(forms.ModelForm):
+    password = forms.CharField(label='Senha', widget=forms.PasswordInput)
+
+    class Meta:
+        model = Membro
+        fields = ['email', 'first_name', 'last_name', 'membro', 'password']
+
+    def save(self, commit=True):
+        membro = super(RegisterForm, self).save(commit=False)
+        membro.set_password(self.cleaned_data['password'])  # Usa o método set_password
+        if commit:
+            membro.save()
+        return membro
 
 
 class RegisterView(FormView):
     template_name = 'registration/register.html'
-    form_class = AuthenticationForm
+    form_class = RegisterForm
 
     def form_valid(self, form):
-        username = form.cleaned_data.get('username')
-        password = form.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            login(self.request, user)
-            return redirect('index')
-        else:
-            return self.form_invalid(form)
-
-class RegisterForm(FormView):
-
-    class Meta:
-        model = Membro
-        field = ['username', 'email', 'password']
+        form.save()  # Salva o novo membro
+        return redirect('login')  # Redireciona para a página de login após o registro
 
 
 @method_decorator(login_required, name='dispatch')

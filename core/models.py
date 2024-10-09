@@ -5,6 +5,8 @@ from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
 
 
 
@@ -22,25 +24,6 @@ class Base(models.Model):
     class Meta:
         abstract = True
 
-class MembroManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, password=None):
-        if not email:
-            raise ValueError("O campo Email é obrigatório")
-        email = self.normalize_email(email)
-        user = self.model(email=email, first_name=first_name, last_name=last_name)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, first_name, last_name, password=None):
-        user = self.create_user(email, first_name, last_name, password)
-        user.is_admin = True
-        user.save(using=self._db)
-        return user
-
-
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
 
 class MembroManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
