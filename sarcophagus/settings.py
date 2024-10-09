@@ -31,7 +31,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'usuarios',
     'core',
     #'django_elasticsearch_dsl',
     'django.contrib.admin',
@@ -146,7 +145,7 @@ DEFAULT_FROM_EMAIL = 'contato@sarcophagus.com'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'usuarios.CustomUsuarios'
+AUTH_USER_MODEL = 'core.Membro'
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'

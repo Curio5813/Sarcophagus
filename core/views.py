@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .forms import ContatoForm, BlogForm
+from .forms import ContatoForm, BlogForm, MembroLoginForm
 from .models import Games, Membro, GameRating
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
@@ -231,18 +231,19 @@ class TesteView(TemplateView):
 
 class LoginView(FormView):
     template_name = 'registration/login.html'
-    form_class = AuthenticationForm
+    form_class = MembroLoginForm
 
     def form_valid(self, form):
-        username = form.cleaned_data.get('username')
+        email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
+        user = authenticate(email=email, password=password)
 
         if user is not None:
             login(self.request, user)
             return redirect('index')
         else:
             return self.form_invalid(form)
+
 
 class RegisterView(FormView):
     template_name = 'registration/register.html'

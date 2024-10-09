@@ -1,6 +1,20 @@
 from django import forms
 from django.core.mail.message import EmailMessage
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import authenticate
+
+
+class MembroLoginForm(forms.Form):
+    email = forms.EmailField(label='E-mail')
+    password = forms.CharField(label='Senha', widget=forms.PasswordInput)
+
+    def clean(self):
+        email = self.cleaned_data.get('email')
+        password = self.cleaned_data.get('password')
+        user = authenticate(email=email, password=password)
+        if not user:
+            raise forms.ValidationError("Login inválido")
+        return self.cleaned_data
 
 
 class ContatoForm(forms.Form):

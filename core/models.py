@@ -3,6 +3,9 @@ import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth.models import Group, Permission
+
 
 
 def get_file_path(_instance, filename):
@@ -19,14 +22,51 @@ class Base(models.Model):
     class Meta:
         abstract = True
 
+class MembroManager(BaseUserManager):
+    def create_user(self, email, first_name, last_name, password=None):
+        if not email:
+            raise ValueError("O campo Email é obrigatório")
+        email = self.normalize_email(email)
+        user = self.model(email=email, first_name=first_name, last_name=last_name)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class Membro(Base):
+    def create_superuser(self, email, first_name, last_name, password=None):
+        user = self.create_user(email, first_name, last_name, password)
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin
+
+class MembroManager(BaseUserManager):
+    def create_user(self, email, first_name, last_name, password=None):
+        if not email:
+            raise ValueError("O campo Email é obrigatório")
+        email = self.normalize_email(email)
+        user = self.model(email=email, first_name=first_name, last_name=last_name)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, first_name, last_name, password=None):
+        user = self.create_user(email, first_name, last_name, password)
+        user.is_admin = True
+        user.is_staff = True
+        user.save(using=self._db)
+        return user
+
+
+class Membro(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('Nome'), max_length=50)
     last_name = models.CharField(_('Sobrenome'), max_length=100)
     membro = models.CharField(_('Membro'), max_length=100)
-    email = models.EmailField(_('E-mail'), max_length=100)
+    email = models.EmailField(_('E-mail'), unique=True, max_length=100)
     senha = models.CharField(_('Senha'), max_length=100)
-    nascimento = models.DateField(_('Data de Nascimento'))
+    nascimento = models.DateField(_('Data de Nascimento'), null=True, blank=True)
     GENERO_CHOICES = [
         ('M', _('Masculino')),
         ('F', _('Feminino')),
@@ -34,6 +74,31 @@ class Membro(Base):
     ]
     genero = models.CharField(max_length=1, choices=GENERO_CHOICES)
     imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 200, 'height': 200, 'crop': True}})
+    ativo = models.BooleanField(default=True)  # 'ativo' aqui
+    modificado = models.DateTimeField(auto_now=True)  # 'modificado' aqui
+
+    groups = models.ManyToManyField(
+        Group,
+        related_name='membro_set',  # Defina um related_name único
+        blank=True,
+        help_text=_('Os grupos aos quais o usuário pertence.'),
+        verbose_name=_('grupos')
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='membro_permissions_set',  # Defina um related_name único
+        blank=True,
+        help_text=_('As permissões específicas para este usuário.'),
+        verbose_name=_('permissões do usuário')
+    )
+
+    # Campos adicionais para autenticação
+    is_admin = models.BooleanField(default=False)
+
+    objects = MembroManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     class Meta:
         verbose_name = _('Membro')
@@ -41,6 +106,10 @@ class Membro(Base):
 
     def __str__(self):
         return self.membro
+
+    @property
+    def is_staff(self):
+        return self.is_admin
 
 
 class Genero(models.Model):
