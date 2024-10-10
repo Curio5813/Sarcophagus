@@ -5,7 +5,6 @@ from .forms import ContatoForm, BlogForm, MembroLoginForm
 from .models import Games, Membro, GameRating
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import gettext as _
 from django.utils import translation
 from math import floor
@@ -16,7 +15,6 @@ from django.utils.decorators import method_decorator
 import json
 from django.db.models import Q
 from django import forms
-from .models import Membro
 
 
 class HomeView(TemplateView):
@@ -268,7 +266,7 @@ class RegisterView(FormView):
 
     def form_valid(self, form):
         form.save()  # Salva o novo membro
-        return redirect('login')  # Redireciona para a página de login após o registro
+        return redirect('index')  # Redireciona para a página de login após o registro
 
 
 @method_decorator(login_required, name='dispatch')

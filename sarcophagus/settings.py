@@ -130,6 +130,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # E-mail teste console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
+                           'django.contrib.auth.backends.ModelBackend']
+
+
 """
 # Email produção
 

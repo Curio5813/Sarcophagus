@@ -3,7 +3,6 @@ import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
@@ -32,23 +31,23 @@ class MembroManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
+        user.is_active = True
+        user.is_staff = False  # Normalmente, usuários regulares não devem ser staff
         user.save(using=self._db)
         return user
 
     def create_superuser(self, email, first_name, last_name, password=None):
         user = self.create_user(email, first_name, last_name, password)
-        user.is_admin = True
         user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
-
 
 class Membro(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('Nome'), max_length=50)
     last_name = models.CharField(_('Sobrenome'), max_length=100)
     membro = models.CharField(_('Membro'), max_length=100)
     email = models.EmailField(_('E-mail'), unique=True, max_length=100)
-    senha = models.CharField(_('Senha'), max_length=100)
     nascimento = models.DateField(_('Data de Nascimento'), null=True, blank=True)
     GENERO_CHOICES = [
         ('M', _('Masculino')),
@@ -59,7 +58,8 @@ class Membro(AbstractBaseUser, PermissionsMixin):
     imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 200, 'height': 200, 'crop': True}})
     ativo = models.BooleanField(default=True)  # 'ativo' aqui
     modificado = models.DateTimeField(auto_now=True)  # 'modificado' aqui
-
+    is_staff = models.BooleanField(default=False)  # Adicione este campo
+    is_superuser = models.BooleanField(default=False)  # Se não tiver, adicione também
     groups = models.ManyToManyField(
         Group,
         related_name='membro_set',  # Defina um related_name único
@@ -76,7 +76,6 @@ class Membro(AbstractBaseUser, PermissionsMixin):
     )
 
     # Campos adicionais para autenticação
-    is_admin = models.BooleanField(default=False)
 
     objects = MembroManager()
 
@@ -89,10 +88,6 @@ class Membro(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.membro
-
-    @property
-    def is_staff(self):
-        return self.is_admin
 
 
 class Genero(models.Model):
