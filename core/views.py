@@ -241,7 +241,7 @@ class LoginView(FormView):
             login(self.request, user)
             return redirect('index')
         else:
-            form.add_error(None, "Login inválido")  # Adiciona erro ao formulário
+            form.add_error(None, "Login inválido")
             return self.form_invalid(form)
 
 
