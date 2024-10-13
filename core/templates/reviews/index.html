@@ -1,86 +1,87 @@
-    {% load static %}
-    <section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/3.jpg' %}">
-        <div class="pi-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-5 col-lg-6 text-white">
-                        <h2>Best Old PC Games ever!</h2>
-                        <p>A landmark in adventure games, Myst transported players to a mysterious and intriguing world filled with puzzles and stunning landscapes. The gameplay focused on exploration and puzzle-solving.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Page info section -->
-
-    <!-- Page section -->
-    <section class="page-section review-page spad">
+{% load static %}
+<section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/3.jpg' %}"
+         xmlns="http://www.w3.org/1999/html">
+    <div class="pi-content">
         <div class="container">
             <div class="row">
-                {% for g in reviews %}
-                <div class="col-md-6 review-item-wrapper"> <!-- Adicionei a classe "review-item-wrapper" -->
-                    <div class="review-item">
-                        <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
-                            <div class="score yellow">{{ g.rating }}</div>
-                        </div>
-                        <div class="review-text">
-                            <h4>{{ g.game }}</h4>
-                               <div class="rating">
-                                    {% for i in "01234" %}
-                                        {% if i|add:0 < g.half_rating %}
-                                            <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
-                                        {% elif i|add:0 == g.half_rating %}
-                                            <i class="fa fa-star-half-alt" style="color: yellow;"></i>  <!-- Estrela meia -->
-                                        {% else %}
-                                            <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            <p>{{ g.ano }}</p>
-                            <p>{{ g.genero }}</p>
-                            <p>{{ g.desenvolvedor }}</p>
-                            <p>{{ g.descricao }}</p>
-                        </div>
-                    </div>
+                <div class="col-xl-5 col-lg-6 text-white">
+                    <h2>Best Old PC Games ever!</h2>
+                    <p>A landmark in adventure games, Myst transported players to a mysterious and intriguing world filled with puzzles and stunning landscapes. The gameplay focused on exploration and puzzle-solving.</p>
                 </div>
-                {% endfor %}
-            </div>
-            <div class="text-center pt-4" id="load-more-container" style="display: flex; justify-content: center;">
-                <button class="site-btn btn-sm" id="load-more-btn">Load More</button>
             </div>
         </div>
-    </section>
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const reviews = document.querySelectorAll(".review-item-wrapper"); // Todos os reviews
-        const loadMoreBtn = document.getElementById("load-more-btn");
-        let itemsToShow = 4; // Quantidade inicial a ser mostrada
+    </div>
+</section>
 
-        // Função para esconder todos os itens e mostrar só os primeiros 'itemsToShow'
-        function showItems() {
-            reviews.forEach((review, index) => {
-                if (index < itemsToShow) {
-                    review.style.display = "block"; // Mostra o review
-                } else {
-                    review.style.display = "none"; // Esconde o review
-                }
-            });
+<!-- Page section -->
+<section class="page-section review-page spad">
+    <div class="container">
+        <div class="row">
+            {% for g in reviews %}
+            <div class="col-md-6 review-item-wrapper">
+                <div class="review-item">
+                    <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
+                        <div class="score yellow">{{ g.media_rating|floatformat:1 }}</div> <!-- Mostra a média da nota -->
+                    </div>
+                    <div class="review-text">
+                        <h4>{{ g.game }}</h4>
 
-            // Esconde o botão "Load More" se todos os itens forem exibidos
-            if (itemsToShow >= reviews.length) {
-                loadMoreBtn.style.display = "none"; // Oculta o botão quando não há mais itens
+                        <!-- Exibição das estrelas com base na média -->
+                        <div class="rating">
+                            {% for i in "12345" %}
+                                {% if i|add:0 < g.full_stars %}
+                                    <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
+                                {% elif i|add:0 == g.full_stars and g.has_half_star %}
+                                    <i class="fa fa-star-half-alt" style="color: yellow;"></i>  <!-- Estrela meia -->
+                                {% else %}
+                                    <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <p>Média de Avaliação: {{ g.media_rating|floatformat:1 }} / 10</p>  <!-- Exibe a média -->
+                        <p>{{ g.ano }}</p>
+                        <p>{{ g.genero }}</p>
+                        <p>{{ g.desenvolvedor }}</p>
+                        <p>{{ g.descricao }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center pt-4" id="load-more-container" style="display: flex; justify-content: center;">
+            <button class="site-btn btn-sm" id="load-more-btn">Load More</button>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const reviews = document.querySelectorAll(".review-item-wrapper");
+    const loadMoreBtn = document.getElementById("load-more-btn");
+    let itemsToShow = 4;
+
+    function showItems() {
+        reviews.forEach((review, index) => {
+            if (index < itemsToShow) {
+                review.style.display = "block";
             } else {
-                loadMoreBtn.style.display = "block"; // Mantém o botão visível
+                review.style.display = "none";
             }
-        }
-
-        // Exibe os itens iniciais ao carregar a página
-        showItems();
-
-        // Evento de clique para o botão "Load More"
-        loadMoreBtn.addEventListener("click", function () {
-            itemsToShow += 4; // Exibe mais 4 itens
-            showItems();
         });
+
+        if (itemsToShow >= reviews.length) {
+            loadMoreBtn.style.display = "none";
+        } else {
+            loadMoreBtn.style.display = "block";
+        }
+    }
+
+    showItems();
+
+    loadMoreBtn.addEventListener("click", function () {
+        itemsToShow += 4;
+        showItems();
     });
-    </script>
+});
+</script>

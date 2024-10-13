@@ -15,6 +15,7 @@ from django.utils.decorators import method_decorator
 import json
 from django.db.models import Q
 from django import forms
+from django.db.models import Avg
 
 
 class HomeView(TemplateView):
@@ -30,7 +31,7 @@ class DownloadView(TemplateView):
         # Obter parâmetros de busca da solicitação
         game = self.request.GET.get('game')
         descricao = self.request.GET.get('descricao')
-        genero = self.request.GET.get('generos', None)  # Alteração aqui
+        genero = self.request.GET.get('generos', None)
         ano = self.request.GET.get('ano')
         desenvolvedor = self.request.GET.get('desenvolvedor')
         distribuidor = self.request.GET.get('distribuidor')
@@ -46,7 +47,7 @@ class DownloadView(TemplateView):
             if descricao:
                 queryset = queryset.filter(descricao__icontains=descricao)
             if genero:
-                queryset = queryset.filter(generos__nome__icontains=genero)  # Alteração aqui
+                queryset = queryset.filter(generos__nome__icontains=genero)
             if ano:
                 queryset = queryset.filter(ano=ano)
             if desenvolvedor:
@@ -54,41 +55,22 @@ class DownloadView(TemplateView):
             if distribuidor:
                 queryset = queryset.filter(distribuidor__icontains=distribuidor)
 
-        context['games'] = queryset
-
-        # Verificar se o usuário está logado
+        # Se o usuário estiver logado, pegar suas avaliações e favoritos
         if self.request.user.is_authenticated:
             membro = Membro.objects.get(email=self.request.user.email)
-            jogos_favoritos = Games.objects.filter(gamerating__membro=membro, gamerating__favorito=True)
-            context['jogos_favoritos'] = jogos_favoritos
+            game_ratings = GameRating.objects.filter(membro=membro)
+
+            # Criar um dicionário para armazenar avaliações e favoritos
+            ratings_dict = {rating.game.id: rating for rating in game_ratings}
+
+            # Adicionar informações ao contexto dos jogos
+            for game in queryset:
+                game.user_rating = ratings_dict.get(game.id).rating if ratings_dict.get(game.id) else None
+                game.user_favorito = ratings_dict.get(game.id).favorito if ratings_dict.get(game.id) else False
+
+        context['games'] = queryset
 
         return context
-
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return JsonResponse({'error': 'Você precisa estar logado para avaliar.'}, status=403)
-
-        membro = Membro.objects.get(email=request.user.email)
-        game_id = request.POST.get('game_id')
-        rating = request.POST.get('rating')
-        favorito = request.POST.get('favorito', 'false') == 'true'
-
-        try:
-            game = Games.objects.get(id=game_id)
-            game_rating, created = GameRating.objects.get_or_create(membro=membro, game=game)
-
-            if rating:
-                game_rating.rating = rating
-            game_rating.favorito = favorito
-            game_rating.save()
-
-            return JsonResponse({'success': 'Avaliação salva com sucesso!'})
-
-        except Games.DoesNotExist:
-            return JsonResponse({'error': 'Jogo não encontrado.'}, status=404)
-
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
 
 
 class CommunityView(TemplateView):
@@ -157,15 +139,26 @@ class ReviewView(TemplateView):
     template_name = 'reviews/reviews.html'
 
     def get_context_data(self, **kwargs):
-        # Chama o método da superclasse para obter o contexto padrão
         context = super().get_context_data(**kwargs)
 
-        # Obtém todos os jogos, ordenados pelo rating
-        reviews = Games.objects.all().order_by('-rating')
+        # Obtém todos os jogos
+        reviews = Games.objects.all()
 
-        # Adiciona um novo campo que contém a metade do rating
+        # Adiciona os campos full_stars e has_half_star com base na média das avaliações dos membros
         for r in reviews:
-            r.half_rating = float(floor(r.rating / 2))
+            # Calcula a média das avaliações dos membros para este jogo
+            media_rating = GameRating.objects.filter(game=r).aggregate(Avg('rating'))['rating__avg']
+
+            if media_rating is None:
+                media_rating = 0  # Se o jogo não tiver avaliação, define a média como 0
+
+            full_stars = int(media_rating // 2)  + 1# Estrelas completas
+            has_half_star = (media_rating % 2) >= 0.5  # Verifica se há meia estrela
+
+            # Atribui esses valores ao objeto do jogo
+            r.full_stars = full_stars
+            r.has_half_star = has_half_star
+            r.media_rating = media_rating
 
         # Adiciona a lista de reviews ao contexto
         context['reviews'] = reviews

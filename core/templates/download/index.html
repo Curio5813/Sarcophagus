@@ -29,14 +29,14 @@
                             <div class="rgi-content">
                                 <h5>{{ game.game }}</h5>
                                 <p><strong>{{ game.ano }}</strong></p>
-                              <p>
-                                Genre(s):
-                                <span class="generos-container">
-                                    {% for genero in game.generos.all %}
-                                        {{ genero.nome }}{% if not forloop.last %}, {% endif %}
-                                    {% endfor %}
-                                </span>
-                              </p>
+                                <p>
+                                    Genre(s):
+                                    <span class="generos-container">
+                                        {% for genero in game.generos.all %}
+                                            {{ genero.nome }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                </p>
                                 <p>Rating: <strong>{{ game.rating }}</strong></p>
                                 <p>Developer: <strong>{{ game.desenvolvedor }}</strong></p>
                                 <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
@@ -49,16 +49,17 @@
                                     <p>Vídeo não disponível.</p>
                                 {% endif %}
 
-                                <!-- Avaliação de 5 estrelas -->
-                                <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.gamerating_set.first.rating|default:0 }}">
+                                <!-- Avaliação de 5 estrelas, refletindo a avaliação existente do usuário -->
+
+                                <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.user_rating|default:0 }}">
                                     {% for i in "12345" %}
-                                        <span class="star {% if game.gamerating_set.first.rating|default:0 == i|add:"0" %}active{% endif %}" data-value="{{ i }}">&#9733;</span>
+                                        <span class="star {% if game.user_rating|calcular_estrelas:i %}active{% endif %}" data-value="{{ i }}">&#9733;</span>
                                     {% endfor %}
                                 </div>
 
-                                <!-- Botão de favorito -->
-                                <span class="favorite-btn" data-game-id="{{ game.id }}">
-                                    <i class="fa fa-heart-o" aria-hidden="true"></i> <!-- Coração vazio -->
+                                <!-- Botão de favorito refletindo se o jogo foi favoritado -->
+                                <span class="favorite-btn {% if game.user_favorito %}active{% endif %}" data-game-id="{{ game.id }}">
+                                    <i class="fa {% if game.user_favorito %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
                                 </span>
 
                             </div>
@@ -76,15 +77,16 @@
 
 <script>
     // Função para enviar a avaliação do jogo via AJAX
-document.querySelectorAll('.star-rating .star').forEach(star => {
+    document.querySelectorAll('.star-rating .star').forEach(star => {
     star.addEventListener('mouseover', function() {
         const rating = this.getAttribute('data-value');
         const stars = this.parentNode.querySelectorAll('.star');
 
+        // Marca as estrelas anteriores e a estrela atual como selecionadas
         stars.forEach(s => {
-            s.classList.remove('selected'); // Remove a seleção anterior
+            s.classList.remove('selected'); // Remove qualquer seleção anterior
             if (s.getAttribute('data-value') <= rating) {
-                s.classList.add('selected'); // Adiciona a seleção
+                s.classList.add('selected'); // Adiciona seleção
             }
         });
     });
@@ -92,39 +94,33 @@ document.querySelectorAll('.star-rating .star').forEach(star => {
     star.addEventListener('mouseout', function() {
         const stars = this.parentNode.querySelectorAll('.star');
         stars.forEach(s => {
-            s.classList.remove('selected'); // Remove a seleção ao sair
+            s.classList.remove('selected'); // Remove a seleção ao sair do hover
+        });
+
+        // Mantém apenas as estrelas que foram ativamente selecionadas
+        const currentRating = this.parentNode.getAttribute('data-current-rating');
+        stars.forEach(s => {
+            if (s.getAttribute('data-value') <= currentRating) {
+                s.classList.add('active');
+            }
         });
     });
 
-    // Aqui é onde você adiciona o stopPropagation
     star.addEventListener('click', function(event) {
-        event.stopPropagation(); // Impede que o clique no coração seja afetado
+        event.stopPropagation();
         const gameId = this.parentNode.getAttribute('data-game-id');
         const ratingValue = this.getAttribute('data-value');
 
-        // Mapear a quantidade de estrelas para a nota
         let nota;
         switch (ratingValue) {
-            case '1':
-                nota = 2;
-                break;
-            case '2':
-                nota = 4;
-                break;
-            case '3':
-                nota = 6;
-                break;
-            case '4':
-                nota = 8;
-                break;
-            case '5':
-                nota = 10;
-                break;
-            default:
-                nota = 0; // caso não se encaixe em nenhuma das opções
+            case '1': nota = 2; break;
+            case '2': nota = 4; break;
+            case '3': nota = 6; break;
+            case '4': nota = 8; break;
+            case '5': nota = 10; break;
+            default: nota = 0;
         }
 
-        // Enviar a avaliação via AJAX
         fetch("/avaliar_jogo/", {
             method: "POST",
             headers: {
@@ -133,59 +129,57 @@ document.querySelectorAll('.star-rating .star').forEach(star => {
             },
             body: JSON.stringify({
                 "game_id": gameId,
-                "rating": nota // Envia a nota calculada
+                "rating": nota
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
                 alert("Avaliação salva com sucesso!");
-                // Atualiza as estrelas para mostrar que a avaliação foi registrada
                 const stars = this.parentNode.querySelectorAll('.star');
+                this.parentNode.setAttribute('data-current-rating', ratingValue);
                 stars.forEach(s => {
-                    s.classList.remove('selected');
+                    s.classList.remove('selected', 'active');
                     if (s.getAttribute('data-value') <= ratingValue) {
-                        s.classList.add('selected');
+                        s.classList.add('active');
                     }
                 });
             }
         })
         .catch(error => console.error("Erro ao salvar a avaliação:", error));
+        });
     });
-});
 
-// Função para favoritar o jogo
-document.querySelectorAll('.favorite-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const gameId = this.getAttribute('data-game-id');
-        const isActive = this.classList.contains('active');
+    // Função para favoritar o jogo
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const gameId = this.getAttribute('data-game-id');
+            const isActive = this.classList.contains('active');
 
-        // Enviar a requisição AJAX para adicionar ou remover o favorito
-        fetch("/favoritar_jogo/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": "{{ csrf_token }}"
-            },
-            body: JSON.stringify({
-                "game_id": gameId,
-                "favorito": !isActive // Muda o estado do favorito
+            // Envia a requisição AJAX para favoritar/desfavoritar
+            fetch("{% url 'favoritar_jogo' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    "game_id": gameId,
+                    "favorito": !isActive
+                })
             })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Alterna a classe 'active' do coração
-                this.classList.toggle('active'); // Alterna o estado do favorito
-            } else {
-                alert("Erro ao favoritar o jogo.");
-            }
-        })
-        .catch(error => console.error("Erro ao favoritar o jogo:", error));
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.classList.toggle('active');  // Alterna o estado de favorito
+                } else {
+                    alert("Erro ao favoritar o jogo.");
+                }
+            })
+            .catch(error => console.error("Erro ao favoritar o jogo:", error));
+        });
     });
-});
 </script>
-
 
 <style>
    .star {
@@ -194,12 +188,16 @@ document.querySelectorAll('.favorite-btn').forEach(btn => {
     color: lightgray; /* Cor padrão das estrelas */
     }
 
-    .star.active {
-        color: gold; /* Cor das estrelas ativas */
+    .star.active, .star.selected {
+        color: gold; /* Cor das estrelas ativas e selecionadas */
     }
 
-    .star.selected {
-        color: gold; /* Cor das estrelas selecionadas durante o hover */
+    .star:hover ~ .star {
+        color: lightgray; /* Estrelas que vêm depois da estrela sobre a qual o mouse está não mudam de cor */
+    }
+
+    .star:hover, .star:hover ~ .star {
+        color: gold; /* Estrelas que ficam "acesas" ao passar o mouse */
     }
 
     .favorite-btn {
