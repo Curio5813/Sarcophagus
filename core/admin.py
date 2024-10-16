@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from .models import Games, Membro, GameRating, Genero
+from .models import Games, Membro, GameRating, Genero, BlogPost
 
 
 class MembroForm(forms.ModelForm):
@@ -38,3 +38,9 @@ class GameRatingAdmin(admin.ModelAdmin):
     list_display = ('membro', 'game', 'rating', 'favorito')
     list_filter = ('favorito', 'rating')
     search_fields = ('membro__membro', 'game__game')
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'autor', 'publicado_em', 'atualizado_em')
+    search_fields = ('titulo', 'autor__membro')  # Permite buscar pelo título ou autor
+    list_filter = ('publicado_em', 'autor')  # Filtros laterais para ajudar na busca

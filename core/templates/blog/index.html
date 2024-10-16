@@ -1,106 +1,75 @@
 {% load static %}
 <section class="page-section single-blog-page spad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-8">
-					<div class="blog-thumb set-bg" data-setbg="{% static 'img/recent-game/big.jpg' %}">
-						<div class="cata new">new</div>
-						<div class="rgi-extra">
-							<div class="rgi-star"><img src="{% static 'img/icons/star.png' %}" alt=""></div>
-							<div class="rgi-heart"><img src="{% static 'img/icons/heart.png' %}" alt=""></div>
-						</div>
-					</div>
-					<div class="blog-content">
-						<h3>Shadow Warrior - The Last Samurai</h3>
-						<a href="" class="meta-comment">3 comment</a>
-						<p>Shadow Warrior, a first-person shooter originally released in 1997 for PC, has been ported to other systems in several ways. Recently, a free version of the game, called Shadow Warrior Classic, was released on Steam. This version contains the same gameplay as before, with slight changes to the controls but no changes to the visuals. Check out our review of this classic game.</p>
-					</div>
-					<div class="comment-form-warp">
-						<h4 class="comment-title">Leave Your Comment</h4>
-						<form class="comment-form" method="post" action="{% url 'blog' %}">
-							{% csrf_token %}
-							<div class="row">
-								<div class="col-md-6">
-									<input type="text" placeholder="Name">
-								</div>
-								<div class="col-md-6">
-									<input type="email" placeholder="Email">
-								</div>
-								<div class="col-lg-12">
-									<input type="text" placeholder="Subject">
-									<textarea placeholder="Message"></textarea>
-									<button class="site-btn btn-sm">Send</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<!-- sidebar -->
-				<div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
-					<!-- widget -->
-					<div class="widget-item">
-							<form action="{% url 'game-details' %}" method="get" class="search-widget">  <input type="text" name="q" value="{{ query }}" placeholder="Search">
-						   <button type="submit"><i class="fa fa-search"></i></button>
-						</form>
-					</div>
-					<!-- widget -->
-					<div class="widget-item">
-						<h4 class="widget-title">Latest Posts</h4>
-						<div class="latest-blog">
-							<div class="lb-item">
-								<div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/1.jpg' %}"></div>
-								<div class="lb-content">
-									<div class="lb-date">June 21, 2018</div>
-									<p>Ipsum dolor sit amet, consectetur adipisc ing consecips</p>
-									<a href="#" class="lb-author">By Admin</a>
-								</div>
-							</div>
-							<div class="lb-item">
-								<div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/2.jpg' %}"></div>
-								<div class="lb-content">
-									<div class="lb-date">June 21, 2018</div>
-									<p>Ipsum dolor sit amet, consectetur adipisc ing consecips</p>
-									<a href="#" class="lb-author">By Admin</a>
-								</div>
-							</div>
-							<div class="lb-item">
-								<div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/3.jpg' %}"></div>
-								<div class="lb-content">
-									<div class="lb-date">June 21, 2018</div>
-									<p>Ipsum dolor sit amet, consectetur adipisc ing consecips</p>
-									<a href="#" class="lb-author">By Admin</a>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- widget -->
-					{% block content %}
-					{% include 'top_comments.html' %}
-					{% endblock %}
-					<!-- widget -->
-					<div class="widget-item">
-						<div class="feature-item set-bg" data-setbg="{% static 'img/features/1.jpg' %}">
-							<span class="cata new">new</span>
-							<div class="fi-content text-white">
-								<h5><a href="#">Suspendisse ut justo tem por, rutrum</a></h5>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-								<a href="#" class="fi-comment">3 Comments</a>
-							</div>
-						</div>
-					</div>
-					<!-- widget -->
-					<div class="widget-item">
-						<div class="review-item">
-							<div class="review-cover set-bg" data-setbg="{% static 'img/games/1.jpg' %}">
-								<div class="score yellow">9.3</div>
-							</div>
-							<div class="review-text">
-								<h5>Prince of Persia</h5>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisc ing ipsum dolor sit ame.</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <!-- Exibir o formulário de criação de post apenas para superusuários -->
+                {% if user.is_authenticated and user.is_superuser %}
+                <div class="create-post">
+                    <h4>Create New Post</h4>
+                    <br><br>
+                    <form method="post" action="{% url 'blog_create' %}" enctype="multipart/form-data" class="comment-form">
+                        {% csrf_token %}
+
+                        <!-- Título do Post -->
+                        <input type="text" name="titulo" placeholder="Post Title" required>
+
+                        <!-- Conteúdo do Post -->
+                        <textarea name="conteudo" placeholder="Post Content" required></textarea>
+
+                        <!-- Upload de Imagem -->
+                        <input type="file" name="imagem" required>
+
+                        <!-- Botão de Publicar -->
+                        <button type="submit" class="site-btn btn-sm">Publish Post</button>
+                    </form>
+                </div>
+                <hr>
+                {% endif %}
+
+                <!-- Loop através dos posts do blog -->
+                {% for post in posts %}
+                    <div class="blog-post">
+                        <h3>{{ post.titulo }}</h3>
+                        <br>
+
+                        <!-- Exibição da imagem do post -->
+                        {% if post.imagem %}
+                        <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" width="700" height="400">
+                        {% endif %}
+
+                        <!-- Exibir o conteúdo resumido -->
+                        <p>{{ post.conteudo|truncatewords:200 }}</p>
+
+                        <!-- Link para os detalhes do post -->
+                        <a href="{% url 'blog_post_detail' post.pk %}">Leave a Comment</a>
+                    </div>
+                {% empty %}
+                    <p>No posts available at the moment.</p>
+                {% endfor %}
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
+                <!-- Widget de últimos posts -->
+                <div class="widget-item">
+                    <h4 class="widget-title">Latest posts</h4>
+                    <div class="latest-blog">
+                        {% for post in latest_posts %}
+                        <div class="lb-item">
+                            <div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/1.jpg' %}"></div>
+                            <div class="lb-content">
+                                <div class="lb-date">{{ post.publicado_em|date:"F d, Y" }}</div>
+                                <p>{{ post.titulo }}</p>
+                                <a href="{% url 'blog_post_detail' post.pk %}" class="lb-author">By {{ post.autor }}</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

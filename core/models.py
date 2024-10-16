@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth import get_user_model
 
 
 def get_file_path(_instance, filename):
@@ -112,7 +113,6 @@ class Genero(models.Model):
         return self.nome
 
 
-
 class Games(Base):
     game = models.CharField(_('Nome'), max_length=100)
     descricao = models.TextField(_('Descrição'), max_length=1500)
@@ -152,4 +152,27 @@ class GameRating(Base):
 
     def __str__(self):
         return f'{self.membro} - {self.game} - Nota: {self.rating}'
+
+
+class BlogPost(models.Model):
+    titulo = models.CharField(max_length=200)
+    conteudo = models.TextField()
+    imagem = StdImageField(upload_to='img/games', variations={'thumbnail': (700, 400, True)}, blank=False)
+    autor = models.ForeignKey(Membro, on_delete=models.CASCADE)
+    publicado_em = models.DateTimeField(auto_now_add=True)
+    atualizado_em = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.titulo
+
+
+class BlogComment(models.Model):
+    post = models.ForeignKey(BlogPost, related_name='comentarios', on_delete=models.CASCADE)
+    membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
+    comentario = models.TextField()
+    publicado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Comentário por {self.membro} no post {self.post}'
+
 

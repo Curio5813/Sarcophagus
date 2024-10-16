@@ -1,13 +1,12 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .forms import ContatoForm, BlogForm, MembroLoginForm
+from .forms import ContatoForm, BlogForm, MembroLoginForm, BlogCommentForm
 from .models import Games, Membro, GameRating
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.utils.translation import gettext as _
 from django.utils import translation
-from math import floor
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -16,6 +15,9 @@ import json
 from django.db.models import Q
 from django import forms
 from django.db.models import Avg
+from django.contrib.auth.decorators import user_passes_test
+from .models import BlogPost
+from .forms import BlogForm
 
 
 class HomeView(TemplateView):
@@ -142,7 +144,7 @@ class ReviewView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         # Obtém todos os jogos
-        reviews = Games.objects.all()
+        reviews = Games.objects.all().order_by('ano')
 
         # Adiciona os campos full_stars e has_half_star com base na média das avaliações dos membros
         for r in reviews:
@@ -167,12 +169,16 @@ class ReviewView(TemplateView):
 
 class BlogView(TemplateView):
     template_name = 'blog/blog.html'
-    form_class = BlogForm
-    success_url = reverse_lazy('blog')
 
-    def lista_membros(request):
-        membros = Membro.objects.all()
-        return render(request, 'blog/blog.html', {'membros': membros})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Adicionar os posts no contexto
+        context['posts'] = BlogPost.objects.all().order_by('-publicado_em')
+
+        # Verificar se o usuário é superusuário para passar o formulário
+        if self.request.user.is_authenticated and self.request.user.is_superuser:
+            context['form'] = BlogForm()  # Formulário para criar posts
+        return context
 
 
 class GameSearchView(TemplateView):
@@ -192,29 +198,6 @@ class GameSearchView(TemplateView):
     def get(self, request, *args, **kwargs):  # Override the default GET method
         context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context)
-
-
-class BlogViewForm(FormView):
-    template_name = 'blog/blog.html'
-    form_class = BlogForm
-    success_url = reverse_lazy('blog')
-    lang = translation.get_language()
-    translation.activate(lang)
-
-    def form_valid(self, form, *args, **kwargs):
-        try:
-            form.send_mail()
-            messages.success(self.request, _('E-mail enviado com sucesso.'))
-        except Exception as e:
-            messages.error(self.request, _(f'Erro ao enviar e-mail: {str(e)}'))
-        return super(BlogViewForm, self).form_valid(form, *args, **kwargs)
-
-    def form_invalid(self, form, *args, **kwargs):
-        try:
-            messages.success(self.request, _('E-mail enviado com sucesso.'))
-        except Exception as e:
-            messages.error(self.request, _(f'Erro ao enviar e-mail: {str(e)}'))
-        return super(BlogViewForm, self).form_invalid(form)
 
 
 class TesteView(TemplateView):
@@ -302,3 +285,48 @@ class FavoritarJogoView(TemplateView):
         rating.save()
 
         return JsonResponse({"success": True})
+
+
+@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
+class BlogPostCreateView(FormView):
+    template_name = 'blog/blog_post_form.html'
+    form_class = BlogForm
+    success_url = reverse_lazy('blog')
+
+    def form_valid(self, form):
+        blog_post = form.save(commit=False)
+        blog_post.autor = self.request.user
+        blog_post.save()
+        messages.success(self.request, 'Post published successfully!')
+        return super().form_valid(form)
+
+
+class BlogPostDetailView(TemplateView):
+    template_name = 'blog/blog_post_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = get_object_or_404(BlogPost, pk=kwargs['pk'])
+        context['post'] = post
+        context['comentarios'] = post.comentarios.all()
+        context['latest_posts'] = BlogPost.objects.order_by('-publicado_em')[:3]
+
+        # Verifique se o usuário está autenticado e não é superusuário
+        if self.request.user.is_authenticated and not self.request.user.is_superuser:
+            context['comment_form'] = BlogCommentForm()
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        # Processa o envio de comentários
+        post = get_object_or_404(BlogPost, pk=kwargs['pk'])
+        if request.user.is_authenticated and not request.user.is_superuser:
+            comment_form = BlogCommentForm(request.POST)
+            if comment_form.is_valid():
+                comentario = comment_form.save(commit=False)
+                comentario.post = post
+                comentario.membro = request.user
+                comentario.save()
+                messages.success(request, "Comentário enviado com sucesso!")
+                return redirect('blog_post_detail', pk=post.pk)
+        return self.get(request, *args, **kwargs)

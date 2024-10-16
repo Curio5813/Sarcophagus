@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="page-section single-blog-page spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Detalhes do post -->
+                <div class="blog-post">
+                    <h2>{{ post.titulo }}</h2>
+                    <p>{{ post.conteudo }}</p>
+                </div>
+
+               <!-- Exibir o formulário de comentário para membros logados que não são superusuários --><!-- Exibir o formulário de comentário para membros logados que não são superusuários -->
+                {% if user.is_authenticated and not user.is_superuser %}
+                <div class="comment-form">
+                    <h4>Leave your comment</h4>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        {{ comment_form.as_p }}  <!-- Aqui o formulário deve aparecer -->
+                        <button type="submit" class="site-btn btn-sm">Send Comment</button>
+                    </form>
+                </div>
+                {% elif not user.is_authenticated %}
+                <p>You need <a href="{% url 'login' %}">to login</a> to comment.</p>
+                {% endif %}
+
+                <!-- Exibir os comentários já existentes -->
+                <div class="comments">
+                    <h4>Comments</h4>
+                    {% for comentario in comentarios %}
+                    <div class="comment">
+                        <p><strong>{{ comentario.membro }}</strong>: {{ comentario.comentario }}</p>
+                        <p><small>{{ comentario.publicado_em|date:"d/m/Y H:i" }}</small></p>
+                    </div>
+                    {% empty %}
+                    <p>No comments yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sidebar (últimos posts) -->
+            <div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
+                <div class="widget-item">
+                    <h4 class="widget-title">Latest Posts</h4>
+                    <div class="latest-blog">
+                        {% for post in latest_posts %}
+                        <div class="lb-item">
+                            <div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/1.jpg' %}"></div>
+                            <div class="lb-content">
+                                <div class="lb-date">{{ post.publicado_em|date:"F d, Y" }}</div>
+                                <p>{{ post.titulo }}</p>
+                                <a href="{% url 'blog_post_detail' post.pk %}" class="lb-author">By {{ post.autor }}</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
