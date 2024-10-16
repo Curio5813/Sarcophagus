@@ -67,3 +67,6 @@ class BlogCommentForm(forms.ModelForm):
     class Meta:
         model = BlogComment
         fields = ['comentario']  # Campos do formulário de comentário
+        labels = {
+            'comentario': 'Comment',  # Altera o rótulo para "Comment"
+        }

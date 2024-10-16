@@ -157,7 +157,7 @@ class GameRating(Base):
 class BlogPost(models.Model):
     titulo = models.CharField(max_length=200)
     conteudo = models.TextField()
-    imagem = StdImageField(upload_to='img/games', variations={'thumbnail': (700, 400, True)}, blank=False)
+    imagem = StdImageField(upload_to='img/blog', variations={'thumbnail': (700, 400, True)}, blank=False)
     autor = models.ForeignKey(Membro, on_delete=models.CASCADE)
     publicado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)

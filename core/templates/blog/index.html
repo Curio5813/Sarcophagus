@@ -36,7 +36,7 @@
 
                         <!-- Exibição da imagem do post -->
                         {% if post.imagem %}
-                        <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" width="700" height="400">
+                        <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}">
                         {% endif %}
 
                         <!-- Exibir o conteúdo resumido -->
@@ -55,11 +55,14 @@
             <div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
                 <!-- Widget de últimos posts -->
                 <div class="widget-item">
-                    <h4 class="widget-title">Latest posts</h4>
+                    <h4 class="widget-title">Latest Posts</h4>
                     <div class="latest-blog">
                         {% for post in latest_posts %}
                         <div class="lb-item">
-                            <div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/1.jpg' %}"></div>
+                            <div class="lb-thumb">
+                                <!-- Substituir imagem estática por imagem real do post -->
+                                <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 64px; height: 64px; object-fit: cover;">
+                            </div>
                             <div class="lb-content">
                                 <div class="lb-date">{{ post.publicado_em|date:"F d, Y" }}</div>
                                 <p>{{ post.titulo }}</p>
@@ -73,3 +76,4 @@
         </div>
     </div>
 </section>
+

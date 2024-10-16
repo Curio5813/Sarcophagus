@@ -11,7 +11,7 @@
                     <p>{{ post.conteudo }}</p>
                 </div>
 
-               <!-- Exibir o formulário de comentário para membros logados que não são superusuários --><!-- Exibir o formulário de comentário para membros logados que não são superusuários -->
+               <!-- Exibir o formulário de comentário para membros logados que não são superusuários -->
                 {% if user.is_authenticated and not user.is_superuser %}
                 <div class="comment-form">
                     <h4>Leave your comment</h4>
@@ -26,6 +26,7 @@
                 {% endif %}
 
                 <!-- Exibir os comentários já existentes -->
+                <br><br>
                 <div class="comments">
                     <h4>Comments</h4>
                     {% for comentario in comentarios %}
@@ -46,7 +47,9 @@
                     <div class="latest-blog">
                         {% for post in latest_posts %}
                         <div class="lb-item">
-                            <div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/1.jpg' %}"></div>
+                            <div class="lb-thumb">
+                                <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 64px; height: 64px; object-fit: cover;">
+                            </div>
                             <div class="lb-content">
                                 <div class="lb-date">{{ post.publicado_em|date:"F d, Y" }}</div>
                                 <p>{{ post.titulo }}</p>

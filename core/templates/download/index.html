@@ -9,7 +9,7 @@
                 <br><br><br>
                 <form class="search-widget" method="get" action="{% url 'download' %}">
                     <input type="text" name="game" placeholder="Game Name">
-                     <input type="number" name="ano" placeholder="Year">
+                    <input type="number" name="ano" placeholder="Year">
                     <input type="text" name="generos" placeholder="Genre">
                     <input type="text" name="descricao" placeholder="Theme">
                     <input type="text" name="desenvolvedor" placeholder="Developer">
@@ -22,7 +22,7 @@
                 <div class="recent-game-row">
                     {% if games %}
                         {% for game in games %}
-                        <div class="recent-game-item" style="background-color: #FFDAB9;">
+                        <div class="recent-game-item" style="background-color: #FFDAB9; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
                             <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
                                 <div class="cata">{{ game.genero }}</div>
                             </div>
@@ -37,7 +37,24 @@
                                         {% endfor %}
                                     </span>
                                 </p>
-                                <p>Rating: <strong>{{ game.rating }}</strong></p>
+
+                                <!-- Mostrar a avaliação anterior se houver -->
+                                <p>
+                                    {% if game.user_rating %}
+                                        Your Last Rating: <strong>{{ game.user_rating }}</strong>
+                                    {% else %}
+                                        You haven't rated this game yet.
+                                    {% endif %}
+                                </p>
+
+                                <!-- Mostrar se o jogo foi favoritado -->
+                                <p>
+                                    Favorite:
+                                    <span class="favorite-btn {% if game.user_favorito %}active{% else %}inactive{% endif %}">
+                                        <i class="fa {% if game.user_favorito %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
+                                    </span>
+                                </p>
+
                                 <p>Developer: <strong>{{ game.desenvolvedor }}</strong></p>
                                 <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
                                 <p>Review:</p>
@@ -50,18 +67,11 @@
                                 {% endif %}
 
                                 <!-- Avaliação de 5 estrelas, refletindo a avaliação existente do usuário -->
-
                                 <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.user_rating|default:0 }}">
                                     {% for i in "12345" %}
                                         <span class="star {% if game.user_rating|calcular_estrelas:i %}active{% endif %}" data-value="{{ i }}">&#9733;</span>
                                     {% endfor %}
                                 </div>
-
-                                <!-- Botão de favorito refletindo se o jogo foi favoritado -->
-                                <span class="favorite-btn {% if game.user_favorito %}active{% endif %}" data-game-id="{{ game.id }}">
-                                    <i class="fa {% if game.user_favorito %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
-                                </span>
-
                             </div>
                         </div>
                         {% endfor %}
@@ -182,10 +192,10 @@
 </script>
 
 <style>
-   .star {
-    cursor: pointer;
-    font-size: 24px; /* Tamanho da estrela */
-    color: lightgray; /* Cor padrão das estrelas */
+    .star {
+        cursor: pointer;
+        font-size: 24px; /* Tamanho da estrela */
+        color: lightgray; /* Cor padrão das estrelas */
     }
 
     .star.active, .star.selected {
@@ -208,5 +218,12 @@
 
     .favorite-btn.active {
         color: red; /* Cor do coração quando favoritado */
+    }
+
+    .recent-game-item {
+        background-color: #FFDAB9; /* Cor de fundo do post */
+        border-radius: 10px; /* Bordas arredondadas */
+        padding: 15px; /* Espaçamento interno */
+        margin-bottom: 20px; /* Espaçamento entre os posts */
     }
 </style>

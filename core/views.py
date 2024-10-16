@@ -5,7 +5,6 @@ from .forms import ContatoForm, BlogForm, MembroLoginForm, BlogCommentForm
 from .models import Games, Membro, GameRating
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
-from django.utils.translation import gettext as _
 from django.utils import translation
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -57,10 +56,12 @@ class DownloadView(TemplateView):
             if distribuidor:
                 queryset = queryset.filter(distribuidor__icontains=distribuidor)
 
-        # Se o usuário estiver logado, pegar suas avaliações e favoritos
+        # Se o usuário estiver logado, pegar a avaliação mais recente e favoritos
         if self.request.user.is_authenticated:
             membro = Membro.objects.get(email=self.request.user.email)
-            game_ratings = GameRating.objects.filter(membro=membro)
+
+            # Buscar a última avaliação e se foi favoritado
+            game_ratings = GameRating.objects.filter(membro=membro).order_by('-criado')
 
             # Criar um dicionário para armazenar avaliações e favoritos
             ratings_dict = {rating.game.id: rating for rating in game_ratings}
@@ -174,6 +175,7 @@ class BlogView(TemplateView):
         context = super().get_context_data(**kwargs)
         # Adicionar os posts no contexto
         context['posts'] = BlogPost.objects.all().order_by('-publicado_em')
+        context['latest_posts'] = BlogPost.objects.all().order_by('-publicado_em')[:3]
 
         # Verificar se o usuário é superusuário para passar o formulário
         if self.request.user.is_authenticated and self.request.user.is_superuser:
