@@ -109,6 +109,7 @@ class CommunityView(TemplateView):
 
         return context
 
+
 class ContactView(FormView):
     template_name = 'contact/contact.html'
     form_class = ContatoForm

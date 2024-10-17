@@ -19,10 +19,12 @@
                         <textarea name="conteudo" placeholder="Post Content" required></textarea>
 
                         <!-- Upload de Imagem -->
-                        <input type="file" name="imagem" required>
+                        <input type="file" name="imagem" id="imageUpload" accept="image/*" onchange="updateFileName()" required style="display: none;">
+                        <label for="imageUpload" id="fileLabel" class="file-label">Choose an image</label>
+                        <span id="fileName">No image chosen</span>
 
-                        <!-- Botão de Publicar -->
-                        <button type="submit" class="site-btn btn-sm">Publish Post</button>
+                        <!-- Botão de Publicar, agora posicionado abaixo do botão de upload -->
+                        <button type="submit" class="site-btn btn-sm" style="margin-top: 10px;">Publish Post</button>
                     </form>
                 </div>
                 <hr>
@@ -77,3 +79,26 @@
     </div>
 </section>
 
+<script>
+    function updateFileName() {
+        const fileInput = document.getElementById('imageUpload');
+        const fileNameDisplay = document.getElementById('fileName');
+        if (fileInput.files.length > 0) {
+            fileNameDisplay.textContent = fileInput.files[0].name; // Atualiza para o nome do arquivo
+        } else {
+            fileNameDisplay.textContent = 'No image chosen'; // Exibe mensagem padrão
+        }
+    }
+</script>
+
+<style>
+    .file-label {
+        display: inline-block;
+        padding: 10px 15px;
+        background-color: #e7e7e7; /* Cor de fundo do botão */
+        border: 1px solid #ccc; /* Borda do botão */
+        border-radius: 5px; /* Bordas arredondadas */
+        cursor: pointer; /* Cursor de ponteiro */
+        margin-top: 10px; /* Margem acima do label */
+    }
+</style>
