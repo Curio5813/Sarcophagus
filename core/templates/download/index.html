@@ -50,7 +50,7 @@
                                 <!-- Mostrar se o jogo foi favoritado -->
                                 <p>
                                     Favorite:
-                                    <span class="favorite-btn {% if game.user_favorito %}active{% else %}inactive{% endif %}">
+                                    <span class="favorite-btn {% if game.user_favorito %}active{% else %}inactive{% endif %}" data-game-id="{{ game.id }}">
                                         <i class="fa {% if game.user_favorito %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
                                     </span>
                                 </p>
@@ -65,7 +65,6 @@
                                 {% else %}
                                     <p>Vídeo não disponível.</p>
                                 {% endif %}
-
                                 <!-- Avaliação de 5 estrelas, refletindo a avaliação existente do usuário -->
                                 <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.user_rating|default:0 }}">
                                     {% for i in "12345" %}
@@ -161,34 +160,36 @@
     });
 
     // Função para favoritar o jogo
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const gameId = this.getAttribute('data-game-id');
-            const isActive = this.classList.contains('active');
+document.querySelectorAll('.favorite-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const gameId = this.getAttribute('data-game-id');
+        const isActive = this.classList.contains('active');
 
-            // Envia a requisição AJAX para favoritar/desfavoritar
-            fetch("{% url 'favoritar_jogo' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}"
-                },
-                body: JSON.stringify({
-                    "game_id": gameId,
-                    "favorito": !isActive
-                })
+        // Envia a requisição AJAX para favoritar/desfavoritar
+        fetch("{% url 'favoritar_jogo' %}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                "game_id": gameId,
+                "favorito": !isActive
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.classList.toggle('active');  // Alterna o estado de favorito
-                } else {
-                    alert("Erro ao favoritar o jogo.");
-                }
-            })
-            .catch(error => console.error("Erro ao favoritar o jogo:", error));
-        });
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                this.classList.toggle('active');  // Alterna o estado de favorito
+                this.querySelector('i').classList.toggle('fa-heart');
+                this.querySelector('i').classList.toggle('fa-heart-o');
+            } else {
+                alert("Erro ao favoritar o jogo.");
+            }
+        })
+        .catch(error => console.error("Erro ao favoritar o jogo:", error));
     });
+});
 </script>
 
 <style>
