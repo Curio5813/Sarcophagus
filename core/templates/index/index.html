@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load recent_reviews_tags %}
 {% block content %}
 	<!-- Header section end -->
 
@@ -24,7 +25,7 @@
 	<!-- Tournaments section bg -->
 
 	<!-- Review section -->
-		{% include 'recent_reviews.html' %}
+		{% show_recent_reviews %}
 	<!-- Review section end -->
 
 	<!-- Footer top section -->

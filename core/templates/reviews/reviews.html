@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load recent_reviews_tags %}
 {% load static %}
 {% block content %}
 
@@ -13,7 +14,7 @@
 
 
 	<!-- Review section -->
-		{% include 'recent_reviews.html' %}
+		{% show_recent_reviews %}
 	<!-- Review section end -->
 
 

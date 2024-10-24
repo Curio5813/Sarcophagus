@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load recent_reviews_tags %}
 {% block content %}
 
 	<!-- Latest news section -->
@@ -18,7 +19,7 @@
 
 
 	<!-- Page recents views -->
-		{% include 'recent_reviews.html' %}
+		{% show_recent_reviews %}
 	<!-- Page section end -->
 
 

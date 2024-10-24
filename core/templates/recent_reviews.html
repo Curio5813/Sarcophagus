@@ -1,55 +1,29 @@
 {% load static %}
-<section class="review-section review-dark spad set-bg" data-setbg="{% static 'img/review-bg-2.jpg' %}">
-		<div class="container">
-			<div class="section-title text-white">
-				<div class="cata new">new</div>
-				<h2>Recent Games Reviews</h2>
-			</div>
-			<div class="row text-white">
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="{% static 'img/games/1.jpg' %}">
-							<div class="score yellow">9.3</div>
-						</div>
-						<div class="review-text">
-							<h5>Prince of Persia</h5>
-							<p>Prince of Persia was one of the first games to feature fluid isometric graphics and detailed animations for its time, revolutionizing the video game industry. Originally released in 1989, the game tells the story of a prince who must escape from a dungeon after being betrayed by his twin brother.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="{% static 'img/games/2.jpg' %}">
-							<div class="score purple">9.5</div>
-						</div>
-						<div class="review-text">
-							<h5>The Legend of Zelda</h5>
-							<p>One of the most influential games of all time, The Legend of Zelda introduced a non-linear, open world where the player was free to explore and discover new challenges. The Zelda series remains a mainstay for Nintendo to this day.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="{% static 'img/games/3.jpg' %}">
-							<div class="score green">9.1</div>
-						</div>
-						<div class="review-text">
-							<h5>bad mojo</h5>
-							<p>Bad Mojo was a rather peculiar point-and-click adventure game, originally released for DOS in 1996. The story revolves around a man who, after being fired and abandoned by his girlfriend, turns into a giant cockroach and finds himself trapped in the sewers of a large city.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6">
-					<div class="review-item">
-						<div class="review-cover set-bg" data-setbg="{% static 'img/games/4.jpg' %}">
-							<div class="score pink">9.7</div>
-						</div>
-						<div class="review-text">
-							<h5>Grim Fandango</h5>
-							<p>Grim Fandango is a true gem among point-and-click adventure games. Originally released in 1998 by LucasArts, the game takes us to a Mexican afterlife where recently deceased souls embark on a long train journey to heaven.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+<section class="review-section review-dark spad">
+    <div class="container">
+        <div class="section-title text-white">
+            <div class="cata new">new</div>
+            <h2>Recent Games Reviews</h2>
+        </div>
+        <div class="row text-white">
+            {% for game in latest_games %}
+                <div class="col-lg-3 col-md-6">
+                    <div class="review-item" style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="review-cover" style="position: relative; margin-bottom: 0;">
+                            <!-- Imagem do jogo -->
+                            <img src="{{ game.imagem.url }}" alt="{{ game.game }}" class="review-image" style="width: 100%; height: auto; max-height: 345px; object-fit: cover; border-radius: 10px; margin: 0; display: block;">
+                            <!-- Balão da nota -->
+                            <div class="score yellow" style="position: absolute; width: 54px; height: 54px; top: -20px; left: 20px; padding-top: 15px; font-size: 18px; font-weight: 500; color: #fff; text-align: center; border-radius: 50%; z-index: 1; background-color: #ffb320;">
+                                {{ game.media_rating|floatformat:1 }}
+                            </div>
+                        </div>
+                        <div class="review-text" style="text-align: center; margin-top: -170px; padding: 0;">
+                            <h5 style="margin: 0; padding: 0;">{{ game.game }}</h5>
+                            <p style="margin: 0; padding: 0;">{{ game.descricao|truncatewords:20 }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
