@@ -1,85 +1,70 @@
 {% load static %}
 <section class="footer-top-section">
-		<div class="container">
-			<img src="{% static 'img/pattern1.png' %}" alt="">
-			<div class="row">
-				<div class="col-lg-4">
-					<div class="footer-logo text-white">
-						<img src="{% static 'img/footer-logo1.png' %}" alt="">
-						<p>Welcome to Sarcophagus! Immerse yourself in a world of nostalgia and relive the thrills of era-defining PC games. Here, you’ll find a vast collection of forgotten classics from the 80s, 90s, and early 2000s, ready to be replayed. Unearth forgotten gems, explore legendary genres, and rediscover the magic of early PC gaming.</p>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="footer-widget mb-5 mb-md-0">
-						<h4 class="fw-title">Latest Posts</h4>
-						<div class="latest-blog">
-							<div class="lb-item">
-								<div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/1_1.jpeg' %}"></div>
-								<div class="lb-content">
-									<div class="lb-date">June 21, 2018</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisc ing ipsum </p>
-									<a href="#" class="lb-author">By Admin</a>
-								</div>
-							</div>
-							<div class="lb-item">
-								<div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/2_2.jpeg' %}"></div>
-								<div class="lb-content">
-									<div class="lb-date">June 21, 2018</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisc ing ipsum </p>
-									<a href="#" class="lb-author">By Admin</a>
-								</div>
-							</div>
-							<div class="lb-item">
-								<div class="lb-thumb set-bg" data-setbg="{% static 'img/latest-blog/3_3.jpeg' %}"></div>
-								<div class="lb-content">
-									<div class="lb-date">June 21, 2018</div>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisc ing ipsum </p>
-									<a href="#" class="lb-author">By Admin</a>
-								</div>
+    <div class="container">
+        <img src="{% static 'img/pattern1.png' %}" alt="">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="footer-logo text-white">
+                    <img src="{% static 'img/footer-logo1.png' %}" alt="">
+                    <p>Welcome to Sarcophagus! Immerse yourself in a world of nostalgia and relive the thrills of era-defining PC games. Here, you’ll find a vast collection of forgotten classics from the 80s, 90s, and early 2000s, ready to be replayed. Unearth forgotten gems, explore legendary genres, and rediscover the magic of early PC gaming.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+				<div class="footer-widget mb-5 mb-md-0">
+					<h4 class="fw-title">Latest Posts</h4>
+					<div class="latest-blog">
+						{% for post in latest_posts %}
+						<div class="lb-item" style="display: flex; align-items: flex-start; gap: 15px; padding: 10px; background-color: #333; border-radius: 8px; overflow: hidden; width: 100%;">
+							<div class="lb-thumb" style="min-width: 120px; height: 120px; background-image: url({{ post.imagem.url }}); background-size: cover; background-position: center; border-radius: 8px; flex-shrink: 0;"></div>
+							<div class="lb-content" style="flex-grow: 1; color: #aeaeae; display: flex; flex-direction: column; justify-content: space-between; padding-left: 10px;">
+								<div class="lb-date" style="font-size: 12px; margin-bottom: 8px; color: #B8860B;">{{ post.publicado_em|date:"F d, Y" }}</div>
+								<p style="font-size: 14px; margin: 0; line-height: 1.6;">{{ post.titulo|truncatewords:10 }}</p>
+								<a href="{% url 'blog_post_detail' post.pk %}" class="lb-author" style="font-size: 12px; color: #aeaeae; margin-top: auto;">By {{ post.autor }}</a>
 							</div>
 						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="footer-widget">
-						<h4 class="fw-title">Top Comments</h4>
-						{% for m in membros|slice:"0:5" %}
-						<ul>
-							<li>
-								<div class="top-comment">
-									<div class="tc-item">
-										<div class="tc-thumb set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
-										<div class="tc-content">
-											<p><a href="#">{{ m.membros }}</a> <span>on</span>  Lorem ipsum dolor sit amet, co</p>
-											<div class="tc-date">June 21, 2018</div>
-										</div>
-									</div>
-								</div>
-							</li>
-						</ul>
 						{% endfor %}
 					</div>
 				</div>
-			</div>
-		</div>
-	</section>
-	<!-- Footer top section end -->
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="footer-widget">
+                    <h4 class="fw-title">Top Comments</h4>
+                    {% for m in membros|slice:"0:5" %}
+                    <ul>
+                        <li>
+                            <div class="top-comment">
+                                <div class="tc-item">
+                                    <div class="tc-thumb" style="background-image: url({{ m.imagem.thumb.url }});"></div>
+                                    <div class="tc-content">
+                                        <p><a href="#">{{ m.membro }}</a> <span>on</span> Lorem ipsum dolor sit amet, co</p>
+                                        <div class="tc-date">June 21, 2018</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Footer top section end -->
 
 
-	<!-- Footer section -->
-	<footer class="footer-section">
-		<div class="container">
-			<ul class="footer-menu">
-				<li><a href="{% url 'index' %}">Home</a></li>
-				<li><a href="{% url 'reviews' %}">Reviews</a></li>
-				<li><a href="{% url 'download' %}">Games</a></li>
-				<li><a href="{% url 'community' %}">Community</a></li>
-				<li><a href="{% url 'blog' %}">Blog</a></li>
-				<li><a href="{% url 'contact' %}">Contact</a></li>
-			</ul>
-			<p class="copyright"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-				Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Sarcophagus
-				<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-			</p>
-		</div>
-	</footer>
+<!-- Footer section -->
+<footer class="footer-section">
+    <div class="container">
+        <ul class="footer-menu">
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'reviews' %}">Reviews</a></li>
+            <li><a href="{% url 'download' %}">Games</a></li>
+            <li><a href="{% url 'community' %}">Community</a></li>
+            <li><a href="{% url 'blog' %}">Blog</a></li>
+            <li><a href="{% url 'contact' %}">Contact</a></li>
+        </ul>
+        <p class="copyright">
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Sarcophagus
+        </p>
+    </div>
+</footer>
