@@ -15,7 +15,7 @@ from django.db.models import Q
 from django import forms
 from django.db.models import Avg
 from django.contrib.auth.decorators import user_passes_test
-from .models import BlogPost
+from .models import BlogPost, Genero
 from .forms import BlogForm
 
 
@@ -28,11 +28,13 @@ class DownloadView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DownloadView, self).get_context_data(**kwargs)
+        context['generos'] = Genero.objects.all()
+        context['anos'] = range(1980, 2004)
 
         # Obter parâmetros de busca da solicitação
         game = self.request.GET.get('game')
         descricao = self.request.GET.get('descricao')
-        genero = self.request.GET.get('generos', None)
+        genero = self.request.GET.get('genero', None)  # Altere para "genero" (singular)
         ano = self.request.GET.get('ano')
         desenvolvedor = self.request.GET.get('desenvolvedor')
         distribuidor = self.request.GET.get('distribuidor')
@@ -48,7 +50,7 @@ class DownloadView(TemplateView):
             if descricao:
                 queryset = queryset.filter(descricao__icontains=descricao)
             if genero:
-                queryset = queryset.filter(generos__nome__icontains=genero)
+                queryset = queryset.filter(generos__id=genero)  # Filtrar pelo ID do gênero
             if ano:
                 queryset = queryset.filter(ano=ano)
             if desenvolvedor:
@@ -76,11 +78,13 @@ class DownloadView(TemplateView):
         return context
 
 
+
 class CommunityView(TemplateView):
     template_name = 'community/community.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
 
         # Obtém o valor da pesquisa do campo de texto
         search_query = self.request.GET.get('membro', '').strip()

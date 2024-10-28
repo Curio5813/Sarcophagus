@@ -1656,6 +1656,18 @@ ol {
     width: 150px; /* Largura fixa ou ajustável conforme necessário */
 }
 
+.search-widget select { /* Aplica o mesmo estilo aos campos input e select */
+    margin: 0 5px; /* Margem entre os campos */
+    border-radius: 30px; /* Bordas arredondadas */
+    padding: 10px;
+    border: none;
+    background-color: #ffb320;
+    width: 150px; /* Largura fixa ou ajustável conforme necessário */
+    font-family: sans-serif; /* Fonte padrão dos campos */
+    font-size: 12px; /* Tamanho da fonte para manter a legibilidade */
+    color: #878787; /* Cor do texto */
+}
+
 .search-widget button {
     margin: 0 5px;
     border-radius: 30px;

@@ -9,8 +9,22 @@
                 <br><br><br>
                 <form class="search-widget" method="get" action="{% url 'download' %}">
                     <input type="text" name="game" placeholder="Game Name">
-                    <input type="number" name="ano" placeholder="Year">
-                    <input type="text" name="generos" placeholder="Genre">
+
+                      <!-- Dropdown de anos -->
+                    <select name="ano">
+                        <option value="">Select Year</option>
+                        {% for year in anos %}
+                            <option value="{{ year }}">{{ year }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <!-- Dropdown de gêneros -->
+                    <select name="genero"> <!-- Certifique-se de que o name seja "genero" -->
+                        <option value="">Select Genre</option>
+                        {% for genero in generos %}
+                            <option value="{{ genero.id }}">{{ genero.nome }}</option>
+                        {% endfor %}
+                    </select>
                     <input type="text" name="descricao" placeholder="Theme">
                     <input type="text" name="desenvolvedor" placeholder="Developer">
                     <input type="text" name="distribuidor" placeholder="Publisher">
