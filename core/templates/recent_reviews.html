@@ -8,20 +8,22 @@
         <div class="row text-white">
             {% for game in latest_games %}
                 <div class="col-lg-3 col-md-6">
-                    <div class="review-item" style="display: flex; flex-direction: column; align-items: center;">
-                        <div class="review-cover" style="position: relative; margin-bottom: 0;">
-                            <!-- Imagem do jogo -->
-                            <img src="{{ game.imagem.url }}" alt="{{ game.game }}" class="review-image" style="width: 100%; height: auto; max-height: 345px; object-fit: cover; border-radius: 10px; margin: 0; display: block;">
-                            <!-- Balão da nota -->
-                            <div class="score yellow" style="position: absolute; width: 54px; height: 54px; top: -20px; left: 20px; padding-top: 15px; font-size: 18px; font-weight: 500; color: #fff; text-align: center; border-radius: 50%; z-index: 1; background-color: #ffb320;">
-                                {{ game.media_rating|floatformat:1 }}
+                    <a href="{% url 'game-details' game.id %}" style="text-decoration: none; color: inherit;">
+                        <div class="review-item" style="display: flex; flex-direction: column; align-items: center;">
+                            <div class="review-cover" style="position: relative; margin-bottom: 0;">
+                                <!-- Imagem do jogo -->
+                                <img src="{{ game.imagem.url }}" alt="{{ game.game }}" class="review-image" style="width: 100%; height: auto; max-height: 345px; object-fit: cover; border-radius: 10px; margin: 0; display: block;">
+                                <!-- Balão da nota -->
+                                <div class="score yellow" style="position: absolute; width: 54px; height: 54px; top: -20px; left: 20px; padding-top: 15px; font-size: 18px; font-weight: 500; color: #fff; text-align: center; border-radius: 50%; z-index: 1; background-color: #ffb320;">
+                                    {{ game.media_rating|floatformat:1 }}
+                                </div>
+                            </div>
+                            <div class="review-text" style="text-align: center; margin-top: -170px; padding: 0;">
+                                <h5 style="margin: 0; padding: 0;">{{ game.game }}</h5>
+                                <p style="margin: 0; padding: 0;">{{ game.descricao|truncatewords:20 }}</p>
                             </div>
                         </div>
-                        <div class="review-text" style="text-align: center; margin-top: -170px; padding: 0;">
-                            <h5 style="margin: 0; padding: 0;">{{ game.game }}</h5>
-                            <p style="margin: 0; padding: 0;">{{ game.descricao|truncatewords:20 }}</p>
-                        </div>
-                    </div>
+                    </a>
                 </div>
             {% endfor %}
         </div>

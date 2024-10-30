@@ -15,7 +15,7 @@ from django.db.models import Q
 from django import forms
 from django.db.models import Avg
 from django.contrib.auth.decorators import user_passes_test
-from .models import BlogPost, Genero
+from .models import BlogPost, Genero, Games
 from .forms import BlogForm
 
 
@@ -76,7 +76,6 @@ class DownloadView(TemplateView):
         context['games'] = queryset
 
         return context
-
 
 
 class CommunityView(TemplateView):
@@ -205,6 +204,16 @@ class GameSearchView(TemplateView):
     def get(self, request, *args, **kwargs):  # Override the default GET method
         context = self.get_context_data(**kwargs)
         return render(request, self.template_name, context)
+
+
+class GameDetailView(TemplateView):
+    template_name = 'game-details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        game_id = self.kwargs['id']
+        context['game'] = get_object_or_404(Games, id=game_id)
+        return context
 
 
 class TesteView(TemplateView):

@@ -4,13 +4,14 @@ from django.urls import path
 from .views import (HomeView, DownloadView, CommunityView, ContactView,
                     ReviewView, AvaliarJogoView, FavoritarJogoView,
                     GameSearchView, BlogView, TesteView, LoginView,
-                    RegisterView)
+                    RegisterView, GameDetailView)
 from .views import BlogPostCreateView, BlogPostDetailView
 
 
 urlpatterns = [
     path('', HomeView.as_view(), name='index'),
     path('game-details/', GameSearchView.as_view(), name='game-details'),
+    path('game/<int:id>/', GameDetailView.as_view(), name='game-details'),
     path('download/', DownloadView.as_view(), name='download'),
     path('avaliar_jogo/', AvaliarJogoView.as_view(), name='avaliar_jogo'),
     path('favoritar_jogo/', FavoritarJogoView.as_view(), name='favoritar_jogo'),
