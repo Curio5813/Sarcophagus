@@ -73,7 +73,14 @@
                                 <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
                                 <p>Review:</p>
                                 <p>{{ game.descricao }}</p>
-
+                                <p>Gameplay:</p>
+                                <p>{{ game.gameplay }}</p>
+                                <p>Graphics:</p>
+                                <p>{{ game.graphics }}</p>
+                                <p>Sound and Music:</p>
+                                <p>{{ game.sound_and_music }}</p>
+                                <p>Conclusion:</p>
+                                <p>{{ game.conclusion }}</p>
                                 {% if game.video %}
                                     <iframe width="560" height="315" src="{{ game.video_embed_url|safe }}" frameborder="0" allowfullscreen></iframe>
                                 {% else %}

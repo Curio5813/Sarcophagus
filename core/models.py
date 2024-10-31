@@ -116,6 +116,10 @@ class Genero(models.Model):
 class Games(Base):
     game = models.CharField(_('Nome'), max_length=100)
     descricao = models.TextField(_('Descrição'), max_length=1500)
+    gameplay = models.TextField(_('Gameplay'), max_length=1500, blank=True, null=True)
+    graphics = models.TextField(_('Graphics'), max_length=1500, blank=True, null=True)
+    sound_and_music = models.TextField(_('Sound and Music'), max_length=1500, blank=True, null=True)
+    conclusion = models.TextField(_('Conclusion'), max_length=1500, blank=True, null=True)
     generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))  # Many-to-Many com o modelo Genero
     rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=1)
     ano = models.IntegerField(_('Ano'))

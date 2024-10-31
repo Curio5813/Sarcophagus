@@ -30,7 +30,32 @@
                 <p><strong>Developer:</strong> {{ game.desenvolvedor }}</p>
                 <p><strong>Publisher:</strong> {{ game.distribuidor }}</p>
             </div>
+            <p><strong>Review</strong></p>
             <p>{{ game.descricao }}</p>
+        </div>
+
+        <!-- Gameplay Section -->
+        <div style="text-align: justify; width: 100%; margin-top: 20px;">
+            <p><strong>Gameplay</strong></p>
+            <p>{{ game.gameplay }}</p>
+        </div>
+
+        <!-- Graphics Section -->
+        <div style="text-align: justify; width: 100%; margin-top: 20px;">
+            <p><strong>Graphics</strong></p>
+            <p>{{ game.graphics }}</p>
+        </div>
+
+        <!-- Sound and Music Section -->
+        <div style="text-align: justify; width: 100%; margin-top: 20px;">
+            <p><strong>Sound and Music</strong></p>
+            <p>{{ game.sound_and_music }}</p>
+        </div>
+
+        <!-- Conclusion Section -->
+        <div style="text-align: justify; width: 100%; margin-top: 20px;">
+            <p><strong>Conclusion</strong></p>
+            <p>{{ game.conclusion }}</p>
         </div>
     </div>
 {% endblock %}
