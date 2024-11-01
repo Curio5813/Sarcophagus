@@ -19,33 +19,35 @@
         <div class="row">
             {% for g in reviews %}
             <div class="col-md-6 review-item-wrapper">
-                <div class="review-item">
-                    <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
-                        <div class="score yellow">{{ g.media_rating|floatformat:1 }}</div> <!-- Mostra a média da nota -->
-                    </div>
-                    <div class="review-text">
-                        <h4>{{ g.game }}</h4>
-
-                        <!-- Exibição das estrelas com base na média -->
-                        <div class="rating">
-                            {% for i in "12345" %}
-                                {% if i|add:0 < g.full_stars %}
-                                    <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
-                                {% elif i|add:0 == g.full_stars and g.has_half_star %}
-                                    <i class="fa fa-star-half-alt" style="color: yellow;"></i>  <!-- Estrela meia -->
-                                {% else %}
-                                    <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->
-                                {% endif %}
-                            {% endfor %}
+                <a href="{% url 'game-details' g.id %}" style="text-decoration: none; color: inherit;">
+                    <div class="review-item">
+                        <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
+                            <div class="score yellow">{{ g.media_rating|floatformat:1 }}</div> <!-- Mostra a média da nota -->
                         </div>
+                        <div class="review-text">
+                            <h4>{{ g.game }}</h4>
 
-                        <p>Média de Avaliação: {{ g.media_rating|floatformat:1 }} / 10</p>  <!-- Exibe a média -->
-                        <p>{{ g.ano }}</p>
-                        <p>{{ g.genero }}</p>
-                        <p>{{ g.desenvolvedor }}</p>
-                        <p>{{ g.descricao }}</p>
+                            <!-- Exibição das estrelas com base na média -->
+                            <div class="rating">
+                                {% for i in "12345" %}
+                                    {% if i|add:0 < g.full_stars %}
+                                        <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
+                                    {% elif i|add:0 == g.full_stars and g.has_half_star %}
+                                        <i class="fa fa-star-half-alt" style="color: yellow;"></i>  <!-- Estrela meia -->
+                                    {% else %}
+                                        <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <p>Média de Avaliação: {{ g.media_rating|floatformat:1 }} / 10</p>  <!-- Exibe a média -->
+                            <p>{{ g.ano }}</p>
+                            <p>{{ g.genero }}</p>
+                            <p>{{ g.desenvolvedor }}</p>
+                            <p>{{ g.descricao }}</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>
