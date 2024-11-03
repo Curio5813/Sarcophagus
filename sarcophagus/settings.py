@@ -163,3 +163,16 @@ ELASTICSEARCH_DSL = {
         'hosts': 'http://localhost:9200'  # Esquema (http), host (localhost) e porta (9200)
     },
 }
+
+
+# Recursos de Segurança (ajustados para ambiente de desenvolvimento)
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_SUBDOMAINS = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
+SECURE_BROWSER_XSS_FILTER = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = False
+
