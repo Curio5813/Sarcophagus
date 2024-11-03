@@ -21,7 +21,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h3 class="community-top-title">All Members ({{ membros_count }})</h3> <!-- Usando a contagem -->
+                    {% if request.user.is_superuser %}
+                        <h3 class="community-top-title">All Members ({{ membros_count }})</h3> <!-- Contagem exibida apenas para administradores -->
+                    {% else %}
+                        <h3 class="community-top-title">Member Profile</h3>
+                    {% endif %}
                 </div>
                 <div class="col-md-6 text-lg-right">
                     <form class="community-filter" method="GET">
@@ -32,19 +36,22 @@
                             Search
                         </button>
                     </form>
-
                 </div>
-
             </div>
+
             <ul class="community-post-list">
                 {% for m in membros %}
                 <li>
                     <div class="community-post">
-                        <div class="author-avator set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
+                        <a href="{% url 'membro-details' m.id %}">
+                            <div class="author-avator set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
+                        </a>
                         <div class="post-content">
-                            <h5>{{ m.membro }}<span> posted an update</span></h5>
+                            <a href="{% url 'membro-details' m.id %}">
+                                <h5>{{ m.membro }}<span> posted an update</span></h5>
+                            </a>
                             <div class="post-date">{{ m.nascimento|date:"F j, Y" }}</div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis at eros sit amet aliquam.</p>
+                            <p>{{ m.bio|truncatewords:50 }}</p> <!-- Bio do membro -->
                         </div>
                     </div>
                 </li>
@@ -73,6 +80,7 @@
                 {% endfor %}
             </ul>
             {% endif %}
+
             <div class="site-pagination sp-style-2">
                 <span class="active">01.</span>
                 <a href="#">02.</a>

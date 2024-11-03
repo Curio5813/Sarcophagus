@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="latest-news-section">
+    <div class="ln-title">
+        <span style="font-family: 'Press Start 2P';">Latest News</span>
+    </div>
+    <div class="news-ticker">
+        <div class="news-ticker-contant">
+            <div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
+            <div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+            <div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
+        </div>
+    </div>
+</div>
+
+<section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/4.jpg' %}">
+    <div class="pi-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-5 col-lg-6 text-white">
+                    <h2>{{ membro.membro }}</h2>
+                    <p>{{ membro.bio }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section community-page">
+    <div class="container">
+        <br>
+        <div class="member-details">
+            <h4>{{ membro.first_name }} {{ membro.last_name }}</h4>
+            <br>
+            <img src="{{ membro.imagem.thumb.url }}" alt="{{ membro.membro }}" style="width: 150px; border-radius: 10px;">
+            <div>
+                <p><strong>Email:</strong> {{ membro.email }}</p>
+                <p><strong>Data de Nascimento:</strong> {{ membro.nascimento|date:"F j, Y" }}</p>
+                <p><strong>Gênero:</strong> {{ membro.get_genero_display }}</p>
+                <p><strong>Bio:</strong> {{ membro.bio }}</p>
+            </div>
+        </div>
+        <br>
+        <!-- Seção de jogos favoritos -->
+        {% if jogos_favoritos %}
+        <div class="favorite-games">
+            <h4>Favorite Games</h4>
+            <br>
+            <ul class="favorite-games-list" style="list-style: none; padding-left: 0;">
+                {% for favorito in jogos_favoritos %}
+                <li style="margin-bottom: 5px; text-align: center;">
+                    <a href="{% url 'game-details' favorito.game.id %}" style="text-decoration: none;">
+                        <div class="game-card">
+                            <div class="game-thumb">
+                                <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}" style="border-radius: 10px; width: 150px;">
+                                <h6 style="color: #A8A8A8; margin-top: 5px;"><strong>{{ favorito.game.game }}</strong></h6>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% include 'footer.html' %}
+{% endblock %}

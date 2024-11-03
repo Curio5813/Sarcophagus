@@ -4,7 +4,7 @@ from django.urls import path
 from .views import (HomeView, DownloadView, CommunityView, ContactView,
                     ReviewView, AvaliarJogoView, FavoritarJogoView,
                     GameSearchView, BlogView, TesteView, LoginView,
-                    RegisterView, GameDetailView)
+                    RegisterView, GameDetailView, MembroDetailView)
 from .views import BlogPostCreateView, BlogPostDetailView
 
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('avaliar_jogo/', AvaliarJogoView.as_view(), name='avaliar_jogo'),
     path('favoritar_jogo/', FavoritarJogoView.as_view(), name='favoritar_jogo'),
     path('community/', CommunityView.as_view(), name='community'),
+    path('membro/<int:id>/', MembroDetailView.as_view(), name='membro-details'),
     path('contact/', ContactView.as_view(), name='contact'),
     path('reviews/', ReviewView.as_view(), name='reviews'),
     path('blog/', BlogView.as_view(), name='blog'),

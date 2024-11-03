@@ -6,7 +6,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth import get_user_model
 
 
 def get_file_path(_instance, filename):
@@ -49,6 +48,7 @@ class Membro(AbstractBaseUser, PermissionsMixin):
     membro = models.CharField(_('Membro'), max_length=100)
     email = models.EmailField(_('E-mail'), unique=True, max_length=100)
     nascimento = models.DateField(_('Data de Nascimento'), null=True, blank=True)
+    bio = models.TextField(_('Bio'), max_length=500, blank=True, null=True)
     GENERO_CHOICES = [
         ('M', _('Masculino')),
         ('F', _('Feminino')),

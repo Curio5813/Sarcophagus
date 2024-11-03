@@ -84,31 +84,57 @@ class CommunityView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Verifica se o usuário é um superusuário (administrador)
+        if self.request.user.is_authenticated:
+            search_query = self.request.GET.get('membro', '').strip()
 
-        # Obtém o valor da pesquisa do campo de texto
-        search_query = self.request.GET.get('membro', '').strip()
+            if self.request.user.is_superuser:
+                # Exibe todos os membros para administradores, com ou sem pesquisa
+                if search_query:
+                    membros = Membro.objects.filter(
+                        Q(first_name__icontains=search_query) |
+                        Q(last_name__icontains=search_query) |
+                        Q(membro__icontains=search_query)
+                    )
+                else:
+                    membros = Membro.objects.all()
+            else:
+                # Para membros comuns, apenas permite a pesquisa por outros membros
+                if search_query:
+                    membros = Membro.objects.filter(
+                        Q(first_name__icontains=search_query) |
+                        Q(last_name__icontains=search_query) |
+                        Q(membro__icontains=search_query)
+                    )
+                else:
+                    # Caso não haja pesquisa, exibe o perfil do usuário logado
+                    membros = Membro.objects.filter(id=self.request.user.id)
 
-        if search_query:
-            # Busca membros cujo primeiro ou último nome contém a string de pesquisa
-            membros = Membro.objects.filter(
-                Q(first_name__icontains=search_query) |
-                Q(last_name__icontains=search_query) |
-                Q(membro__icontains=search_query) |
-                Q(first_name__icontains=search_query.split()[0]) & Q(last_name__icontains=' '.join(search_query.split()[1:]))
-            )
-        else:
-            membros = Membro.objects.all()
+            context['membros'] = membros
+            context['membros_count'] = membros.count()
 
-        context['membros'] = membros
-        context['membros_count'] = membros.count()
+            # Se apenas um membro for encontrado (após pesquisa), exibir seus jogos favoritados
+            if membros.count() == 1:
+                membro_pesquisado = membros.first()
+                jogos_favoritos = GameRating.objects.filter(membro=membro_pesquisado, favorito=True).select_related(
+                    'game')
+                context['jogos_favoritos'] = jogos_favoritos
 
-        # Verificar se há um membro específico sendo pesquisado
-        if membros.count() == 1:
-            membro_pesquisado = membros.first()
+        return context
 
-            # Buscar jogos favoritados pelo membro
-            jogos_favoritos = GameRating.objects.filter(membro=membro_pesquisado, favorito=True).select_related('game')
-            context['jogos_favoritos'] = jogos_favoritos
+
+class MembroDetailView(TemplateView):
+    template_name = 'membro-details.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        membro_id = kwargs['id']
+        membro = get_object_or_404(Membro, id=membro_id)
+        context['membro'] = membro
+
+        # Buscar jogos favoritos do membro
+        jogos_favoritos = GameRating.objects.filter(membro=membro, favorito=True).select_related('game')
+        context['jogos_favoritos'] = jogos_favoritos
 
         return context
 
