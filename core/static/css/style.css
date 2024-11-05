@@ -1696,8 +1696,8 @@ ol {
     display: inline-block;
     width: 100%;
     padding: 10px;
-    background-color: #4285f4;
-    color: #fff;
+    background-color: #ffffff;
+    color: #000000;
     border-radius: 30px;
     text-decoration: none;
     text-align: center;
@@ -1708,7 +1708,7 @@ ol {
 }
 
 .google-login-button:hover {
-    background-color: #357ae8; /* Cor de fundo mais escura ao passar o mouse */
+    background-color: #f1f1f1; /* Cor de fundo mais escura ao passar o mouse */
     transform: scale(1.05); /* Aumenta levemente o botão ao passar o mouse */
 }
 
