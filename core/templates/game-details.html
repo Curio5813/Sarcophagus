@@ -1,17 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<div class="latest-news-section">
-		<div class="ln-title">
-			<span style="font-family: 'Press Start 2P';">Latest News</span></div>
-		<div class="news-ticker">
-			<div class="news-ticker-contant">
-				<div class="nt-item"><span class="new">new</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </div>
-				<div class="nt-item"><span class="strategy">strategy</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
-				<div class="nt-item"><span class="racing">racing</span>Isum dolor sit amet, consectetur adipiscing elit. </div>
-			</div>
-		</div>
-	</div>
+{% include 'latest_news.html' %}
     <div style="display: flex; flex-direction: column; align-items: flex-start; max-width: 800px; margin: 30px 0 0 20px;">
         <!-- Título centralizado -->
         <h1 style="font-size: 1.5em; text-align: center; margin-bottom: 15px; margin-top: 30px; width: 100%;">{{ game.game }}</h1>
@@ -68,4 +58,5 @@
             <p>{{ game.conclusion }}</p>
         </div>
     </div>
+{% include 'footer.html' %}
 {% endblock %}
