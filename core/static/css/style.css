@@ -1608,32 +1608,115 @@ ol {
 -----------------------*/
 
 .background-image-login {
-  background-image: url("{% static 'img/login-bg.jpg' %}");
-  background-size: 100%;
-  background-position: center;
-  width: 100%;
-  height: 100%;
-  position: relative;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Background image styling */
+.login-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* ---------------------
+   Login | Logout page
+-----------------------*/
+
+/* Background container */
+.background-image-login {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Background image styling */
+.login-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1; /* Coloca a imagem atrás do conteúdo */
+}
+
+/* Login container - deslocado para a direita */
+.login-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+    transform: translateX(60%); /* Ajusta o contêiner mais para a direita */
+}
+
+/* Form styling */
+.login-form {
+    margin-bottom: 10px;
+}
+
+/* Login button styling */
 .custom-button {
-  background-color: #ffb320;
-  color: #131313;
-  border: none;
-  padding: 8px 22px;
-  font-size: 15px;
-  font-weight: 520;
-  cursor: pointer;
-  border-radius: 30px;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #ffb320;
+    color: #131313;
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Adiciona uma transição suave */
 }
 
-.background-image-login form {
-    position: absolute; /* Position the form over the background */
-    top: 55%; /* Adjust top position as needed */
-    left: 65%;
-    transform: translate(-50%, -50%); /* Center the form */
-    background-color: rgba(0, 0, 0, 0.0); /* Add a semi-transparent background for readability */
-    border-radius: 35px; /* Add rounded corners to the form */
+.custom-button:hover {
+    background-color: #e0a10d; /* Cor de fundo mais escura ao passar o mouse */
+    transform: scale(1.05); /* Aumenta levemente o botão ao passar o mouse */
+}
+
+/* Google login button styling */
+.google-login-button {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    background-color: #4285f4;
+    color: #fff;
+    border-radius: 30px;
+    text-decoration: none;
+    text-align: center;
+    margin-top: 10px; /* Espaçamento entre o botão de login e o botão do Google */
+    font-size: 15px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Adiciona uma transição suave */
+}
+
+.google-login-button:hover {
+    background-color: #357ae8; /* Cor de fundo mais escura ao passar o mouse */
+    transform: scale(1.05); /* Aumenta levemente o botão ao passar o mouse */
+}
+
+/* Google icon styling */
+.google-icon {
+    width: 20px;
+    vertical-align: middle;
+    margin-right: 8px;
 }
 
 /* -------------------------------

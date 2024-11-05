@@ -7,28 +7,35 @@
 <html lang="en-us">
 <head>
     <title>Sarcophagus House of Old Pc Games - Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
     {% include 'latest_news.html' %}
+
     <div class="background-image-login">
-        <img src="{% static 'img/login-bg.jpg' %}" alt="Login Background">
+        <img src="{% static 'img/login-bg.jpg' %}" alt="Login Background" class="login-bg">
+
+        <!-- Contêiner de login centralizado sobre a imagem -->
         <div class="login-container">
+            <h5>Login</h5>
+            <br>
 
             <!-- Formulário de login padrão -->
-            <form method="post">
+            <form method="post" class="login-form">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button type="submit" class="custom-button">Login</button>
+                <button type="submit" class="custom-button">Login com Email</button>
             </form>
 
             <!-- Botão de Login com Google abaixo do botão de login por email -->
-            <a href="{% provider_login_url 'google' %}" class="social-button google" style="margin-left: 680px; margin-top: 300px; padding: 10px 20px; background-color: #4285f4; color: #fff; border-radius: 4px; text-align: center;">
-                <img src="{% static 'img/google-icon.png' %}" alt="" style="width: 20px">
+            <a href="{% provider_login_url 'google' %}" class="google-login-button">
+                <img src="{% static 'img/google-icon.png' %}" alt="" class="google-icon">
                 Login com Google
             </a>
         </div>
     </div>
+
+    {% include 'footer.html' %}
 </body>
-{% include 'footer.html' %}
 </html>
 {% endblock %}
