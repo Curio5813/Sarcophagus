@@ -22,7 +22,11 @@
             <div class="row">
                 <div class="col-md-6">
                     {% if request.user.is_superuser %}
-                        <h3 class="community-top-title">All Members ({{ membros_count }})</h3> <!-- Contagem exibida apenas para administradores -->
+                        {% if show_all_members_title %}
+                            <h3 class="community-top-title">All Members ({{ membros_count }})</h3>
+                        {% else %}
+                            <h3 class="community-top-title">Member Profile</h3>
+                        {% endif %}
                     {% else %}
                         <h3 class="community-top-title">Member Profile</h3>
                     {% endif %}
@@ -51,7 +55,7 @@
                                 <h5>{{ m.membro }}<span> posted an update</span></h5>
                             </a>
                             <div class="post-date">{{ m.nascimento|date:"F j, Y" }}</div>
-                            <p>{{ m.bio|truncatewords:50 }}</p> <!-- Bio do membro -->
+                            <p>{{ m.bio|truncatewords:50 }}</p>
                         </div>
                     </div>
                 </li>
@@ -68,11 +72,10 @@
                 <li style="margin-bottom: 15px;">
                     <div class="game-card">
                         <div class="game-info">
-                            <h5>{{ favorito.game.game }}</h5> <!-- Nome do jogo favoritado -->
-                            <p>{{ favorito.game.descricao|truncatewords:20 }}</p> <!-- Descrição do jogo -->
+                            <h5>{{ favorito.game.game }}</h5>
+                            <p>{{ favorito.game.descricao|truncatewords:20 }}</p>
                         </div>
                         <div class="game-thumb">
-                            <!-- Caminho para a imagem do jogo favoritado -->
                             <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}">
                         </div>
                     </div>

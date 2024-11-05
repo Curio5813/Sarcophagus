@@ -96,8 +96,10 @@ class CommunityView(TemplateView):
                         Q(last_name__icontains=search_query) |
                         Q(membro__icontains=search_query)
                     )
+                    context['show_all_members_title'] = False  # Pesquisa ativa
                 else:
                     membros = Membro.objects.all()
+                    context['show_all_members_title'] = True  # Sem pesquisa
             else:
                 # Para membros comuns, apenas permite a pesquisa por outros membros
                 if search_query:
@@ -121,6 +123,7 @@ class CommunityView(TemplateView):
                 context['jogos_favoritos'] = jogos_favoritos
 
         return context
+
 
 
 class MembroDetailView(TemplateView):

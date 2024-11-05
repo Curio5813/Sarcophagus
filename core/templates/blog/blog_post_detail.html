@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+{% include 'latest_news.html' %}
 <section class="page-section single-blog-page spad">
     <div class="container">
         <div class="row">
@@ -8,10 +9,18 @@
                 <!-- Detalhes do post -->
                 <div class="blog-post">
                     <h2>{{ post.titulo }}</h2>
+
+                    <!-- Exibir a imagem do post, se disponível -->
+                    {% if post.imagem %}
+                    <div class="post-image" style="margin: 20px 0;">
+                        <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 100%; height: auto; border-radius: 8px;">
+                    </div>
+                    {% endif %}
+
                     <p>{{ post.conteudo }}</p>
                 </div>
 
-               <!-- Exibir o formulário de comentário para membros logados que não são superusuários -->
+                <!-- Exibir o formulário de comentário para membros logados que não são superusuários -->
                 {% if user.is_authenticated and not user.is_superuser %}
                 <div class="comment-form">
                     <h4>Leave your comment</h4>
@@ -48,7 +57,7 @@
                         {% for post in latest_posts %}
                         <div class="lb-item">
                             <div class="lb-thumb">
-                                <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 64px; height: 64px; object-fit: cover;">
+                                <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 86px; height: 86px; object-fit: cover;">
                             </div>
                             <div class="lb-content">
                                 <div class="lb-date">{{ post.publicado_em|date:"F d, Y" }}</div>
@@ -63,4 +72,5 @@
         </div>
     </div>
 </section>
+{% include 'footer.html' %}
 {% endblock %}
