@@ -17,6 +17,8 @@ from django.db.models import Avg
 from django.contrib.auth.decorators import user_passes_test
 from .models import BlogPost, Genero, Games
 from .forms import BlogForm
+from django.views.generic.edit import UpdateView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class HomeView(TemplateView):
@@ -84,46 +86,50 @@ class CommunityView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Verifica se o usuário é um superusuário (administrador)
         if self.request.user.is_authenticated:
             search_query = self.request.GET.get('membro', '').strip()
+            post_id = self.request.GET.get('post_id')  # Novo parâmetro para filtrar por post
 
-            if self.request.user.is_superuser:
-                # Exibe todos os membros para administradores, com ou sem pesquisa
-                if search_query:
-                    membros = Membro.objects.filter(
-                        Q(first_name__icontains=search_query) |
-                        Q(last_name__icontains=search_query) |
-                        Q(membro__icontains=search_query)
-                    )
-                    context['show_all_members_title'] = False  # Pesquisa ativa
-                else:
-                    membros = Membro.objects.all()
-                    context['show_all_members_title'] = True  # Sem pesquisa
+            # Se o parâmetro post_id estiver presente, filtra membros que comentaram no post específico
+            if post_id:
+                membros = Membro.objects.filter(
+                    blogcomment__post_id=post_id  # Atualiza para o campo correto
+                ).distinct()
+                context['show_all_members_title'] = False
             else:
-                # Para membros comuns, apenas permite a pesquisa por outros membros
-                if search_query:
-                    membros = Membro.objects.filter(
-                        Q(first_name__icontains=search_query) |
-                        Q(last_name__icontains=search_query) |
-                        Q(membro__icontains=search_query)
-                    )
+                # Mantém os filtros já existentes
+                if self.request.user.is_superuser:
+                    if search_query:
+                        membros = Membro.objects.filter(
+                            Q(first_name__icontains=search_query) |
+                            Q(last_name__icontains=search_query) |
+                            Q(membro__icontains=search_query)
+                        )
+                        context['show_all_members_title'] = False  # Pesquisa ativa
+                    else:
+                        membros = Membro.objects.all()
+                        context['show_all_members_title'] = True  # Sem pesquisa
                 else:
-                    # Caso não haja pesquisa, exibe o perfil do usuário logado
-                    membros = Membro.objects.filter(id=self.request.user.id)
+                    if search_query:
+                        membros = Membro.objects.filter(
+                            Q(first_name__icontains=search_query) |
+                            Q(last_name__icontains=search_query) |
+                            Q(membro__icontains=search_query)
+                        )
+                    else:
+                        membros = Membro.objects.filter(id=self.request.user.id)
 
             context['membros'] = membros
             context['membros_count'] = membros.count()
 
-            # Se apenas um membro for encontrado (após pesquisa), exibir seus jogos favoritados
             if membros.count() == 1:
                 membro_pesquisado = membros.first()
-                jogos_favoritos = GameRating.objects.filter(membro=membro_pesquisado, favorito=True).select_related(
-                    'game')
+                jogos_favoritos = GameRating.objects.filter(
+                    membro=membro_pesquisado, favorito=True
+                ).select_related('game')
                 context['jogos_favoritos'] = jogos_favoritos
 
         return context
-
 
 
 class MembroDetailView(TemplateView):
@@ -146,7 +152,6 @@ class ContactView(FormView):
     template_name = 'contact/contact.html'
     form_class = ContatoForm
     success_url = reverse_lazy('contact')
-
 
     def get_context_data(self, **kwargs):
         context = super(ContactView, self).get_context_data(**kwargs)
@@ -206,13 +211,13 @@ class BlogView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Adicionar os posts no contexto
-        context['posts'] = BlogPost.objects.all().order_by('-publicado_em')
-        context['latest_posts'] = BlogPost.objects.all().order_by('-publicado_em')[:3]
-
-        # Verificar se o usuário é superusuário para passar o formulário
+        posts = BlogPost.objects.all().order_by('-publicado_em')
+        for post in posts:
+            post.comment_count = post.comentarios.count()
+        context['posts'] = posts
+        context['latest_posts'] = posts[:3]
         if self.request.user.is_authenticated and self.request.user.is_superuser:
-            context['form'] = BlogForm()  # Formulário para criar posts
+            context['form'] = BlogForm()
         return context
 
 
@@ -375,3 +380,15 @@ class BlogPostDetailView(TemplateView):
                 messages.success(request, "Comentário enviado com sucesso!")
                 return redirect('blog_post_detail', pk=post.pk)
         return self.get(request, *args, **kwargs)
+
+
+class BlogPostEditView(UserPassesTestMixin, UpdateView):
+    model = BlogPost
+    fields = ['titulo', 'conteudo', 'imagem']  # Campos permitidos para edição
+    template_name = 'blog/blog_post_form.html'  # Template para edição
+    success_url = reverse_lazy('blog')  # Redireciona para a página do blog após edição
+
+    def test_func(self):
+        # Permite acesso se o usuário for o autor e um superusuário
+        post = self.get_object()
+        return self.request.user.is_superuser and self.request.user == post.autor

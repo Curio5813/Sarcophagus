@@ -4,7 +4,7 @@ from django.urls import path
 from .views import (HomeView, DownloadView, CommunityView, ContactView,
                     ReviewView, AvaliarJogoView, FavoritarJogoView,
                     GameSearchView, BlogView, TesteView, LoginView,
-                    RegisterView, GameDetailView, MembroDetailView)
+                    RegisterView, GameDetailView, MembroDetailView, BlogPostEditView)
 from .views import BlogPostCreateView, BlogPostDetailView
 
 
@@ -25,4 +25,5 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),  # Corrigido
     path('blog/create/', BlogPostCreateView.as_view(), name='blog_create'),
     path('blog/<int:pk>/', BlogPostDetailView.as_view(), name='blog_post_detail'),
+    path('blog/<int:pk>/edit/', BlogPostEditView.as_view(), name='blog_post_edit'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

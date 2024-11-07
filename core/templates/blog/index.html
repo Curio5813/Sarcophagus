@@ -23,7 +23,7 @@
                         <label for="imageUpload" id="fileLabel" class="file-label">Choose an image</label>
                         <span id="fileName">No image chosen</span>
 
-                        <!-- Botão de Publicar, agora posicionado abaixo do botão de upload -->
+                        <!-- Botão de Publicar -->
                         <button type="submit" class="site-btn btn-sm" style="margin-top: 10px;">Publish Post</button>
                     </form>
                 </div>
@@ -44,9 +44,22 @@
                         <!-- Exibir o conteúdo resumido -->
                         <p>{{ post.conteudo|truncatewords:200 }}</p>
 
+                        <!-- Exibir o número de comentários como um link para a comunidade -->
+                        <p>
+                            <a href="{% url 'community' %}?post_id={{ post.pk }}">
+                                {{ post.comment_count }} {{ post.comment_count|pluralize:"comment,comments" }}
+                            </a>
+                        </p>
+
                         <!-- Link para os detalhes do post -->
                         <a href="{% url 'blog_post_detail' post.pk %}">Leave a Comment</a>
+
+                        <!-- Link de edição para o autor administrador -->
+                        {% if user.is_authenticated and user.is_superuser and post.autor == user %}
+                        <a href="{% url 'blog_post_edit' post.pk %}" class="edit-link">Edit Post</a>
+                        {% endif %}
                     </div>
+                    <hr>
                 {% empty %}
                     <p>No posts available at the moment.</p>
                 {% endfor %}
@@ -62,7 +75,6 @@
                         {% for post in latest_posts %}
                         <div class="lb-item">
                             <div class="lb-thumb">
-                                <!-- Substituir imagem estática por imagem real do post -->
                                 <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 86px; height: 86px; object-fit: cover;">
                             </div>
                             <div class="lb-content">
@@ -84,9 +96,9 @@
         const fileInput = document.getElementById('imageUpload');
         const fileNameDisplay = document.getElementById('fileName');
         if (fileInput.files.length > 0) {
-            fileNameDisplay.textContent = fileInput.files[0].name; // Atualiza para o nome do arquivo
+            fileNameDisplay.textContent = fileInput.files[0].name;
         } else {
-            fileNameDisplay.textContent = 'No image chosen'; // Exibe mensagem padrão
+            fileNameDisplay.textContent = 'No image chosen';
         }
     }
 </script>
@@ -95,10 +107,15 @@
     .file-label {
         display: inline-block;
         padding: 10px 15px;
-        background-color: #e7e7e7; /* Cor de fundo do botão */
-        border: 1px solid #ccc; /* Borda do botão */
-        border-radius: 5px; /* Bordas arredondadas */
-        cursor: pointer; /* Cursor de ponteiro */
-        margin-top: 10px; /* Margem acima do label */
+        background-color: #e7e7e7;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .edit-link {
+        color: #007bff;
+        font-weight: bold;
+        margin-left: 15px;
     }
 </style>

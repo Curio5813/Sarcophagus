@@ -10,6 +10,14 @@
                 <div class="blog-post">
                     <h2>{{ post.titulo }}</h2>
 
+                    <!-- Exibir o número de comentários -->
+                    <p>{{ post.comentarios.count }} {{ post.comentarios.count|pluralize:"comment,comments" }}</p>
+
+                    <!-- Link de edição para o autor administrador -->
+                    {% if user.is_authenticated and user.is_superuser and post.autor == user %}
+                        <a href="{% url 'blog_post_edit' post.pk %}" class="edit-link">Edit Post</a>
+                    {% endif %}
+
                     <!-- Exibir a imagem do post, se disponível -->
                     {% if post.imagem %}
                     <div class="post-image" style="margin: 20px 0;">
@@ -26,7 +34,7 @@
                     <h4>Leave your comment</h4>
                     <form method="post" action="">
                         {% csrf_token %}
-                        {{ comment_form.as_p }}  <!-- Aqui o formulário deve aparecer -->
+                        {{ comment_form.as_p }}
                         <button type="submit" class="site-btn btn-sm">Send Comment</button>
                     </form>
                 </div>
@@ -74,3 +82,11 @@
 </section>
 {% include 'footer.html' %}
 {% endblock %}
+
+<style>
+    .edit-link {
+        color: #007bff;
+        font-weight: bold;
+        margin-left: 15px;
+    }
+</style>
