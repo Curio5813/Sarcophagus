@@ -1,19 +1,29 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<!DOCTYPE html>
-<html lang="en-us">
-<head>
-    <title>Sarcophagus Old Pc Games - Register</title>
-</head>
-<body>
-    <div class="container">
-        <h1>Register</h1>
-        <form method="post">
+<div class="background-image-login">
+    <img src="{% static 'img/login-bg.jpg' %}" alt="Login Background" class="login-bg">
+
+    <div class="login-container">
+        <h5>Register</h5>
+        <br>
+        <form method="post" class="login-form">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Register</button>
+            <div class="form-group">
+                <label for="id_username">Username</label>
+                {{ form.username }} <!-- Exibe a caixa de input do campo Username -->
+            </div>
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                {{ form.email }} <!-- Exibe a caixa de input do campo Email -->
+            </div>
+            <div class="form-group">
+                <label for="id_password">Password</label>
+                {{ form.password }} <!-- Exibe a caixa de input do campo Password -->
+            </div>
+            <button type="submit" class="custom-button">Register</button>
         </form>
     </div>
-</body>
-</html>
+</div>
 {% endblock %}

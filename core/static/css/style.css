@@ -1654,41 +1654,54 @@ ol {
 }
 
 /* Login container - deslocado para a direita */
+/* Contêiner do formulário centralizado */
 .login-container {
-    background-color: rgba(255, 255, 255, 0.9);
+    max-width: 400px;
     padding: 20px;
     border-radius: 8px;
-    width: 300px;
-    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
-    z-index: 1;
-    transform: translateX(60%); /* Ajusta o contêiner mais para a direita */
+    text-align: left;
 }
 
-/* Form styling */
-.login-form {
+/* Alinhamento dos campos de formulário */
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
 }
 
-/* Login button styling */
+.form-group label {
+    width: 100px;             /* Define a mesma largura para todos os labels */
+    font-weight: bold;
+}
+
+.form-group input {
+    width: calc(100% - 120px); /* Ajusta a largura para que os inputs fiquem alinhados ao lado dos labels */
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* Botão de submissão personalizado */
 .custom-button {
     width: 100%;
     padding: 10px;
-    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bold;
     background-color: #ffb320;
     color: #131313;
     border: none;
-    font-size: 15px;
-    font-weight: bold;
+    border-radius: 4px;
     cursor: pointer;
-    border-radius: 30px;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Adiciona uma transição suave */
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .custom-button:hover {
-    background-color: #e0a10d; /* Cor de fundo mais escura ao passar o mouse */
-    transform: scale(1.05); /* Aumenta levemente o botão ao passar o mouse */
+    background-color: #e0a10d;
+    transform: scale(1.05);
 }
 
 /* Google login button styling */
