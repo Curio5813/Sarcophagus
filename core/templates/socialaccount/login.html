@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block content %}
+{% include 'latest_news.html' %}
+<div class="background-image-login" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+    <img src="{% static 'img/login-bg.jpg' %}" alt="Login Background" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: -1;">
+
+    <div class="login-container" style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 8px; width: 300px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; z-index: 1;">
+        <h6 style="margin-bottom: 20px;">Entrar via Google</h6>
+        <p style="margin-bottom: 15px;">Você está prestes a fazer login usando uma conta de terceiros de Google.</p>
+
+        <!-- Botão para redirecionar para o Google -->
+        <a href="{% provider_login_url 'google' %}" style="display: block; padding: 10px; background-color: #4285F4; color: #fff; text-align: center; border-radius: 5px; text-decoration: none; font-weight: bold;">
+            <img src="{% static 'img/google-icon.png' %}" alt="Google Icon" style="width: 20px; vertical-align: middle; margin-right: 8px;">
+            Continuar com Google
+        </a>
+    </div>
+</div>
+{% include 'footer.html' %}
+{% endblock %}

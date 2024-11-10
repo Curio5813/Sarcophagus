@@ -63,7 +63,7 @@ ROOT_URLCONF = 'sarcophagus.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [BASE_DIR / 'templates'],  # Use BASE_DIR para apontar para o diretório de templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -137,9 +137,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # E-mail teste console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+SITE_ID = 1
 AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
-                           'django.contrib.auth.backends.ModelBackend']
+                           'django.contrib.auth.backends.ModelBackend',]
 
 
 """
@@ -183,6 +183,6 @@ CSRF_COOKIE_HTTPONLY = False
 X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = False
 
-SITE_ID = 1
+
 
 
