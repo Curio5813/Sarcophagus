@@ -4,18 +4,18 @@
 
 {% block content %}
 {% include 'latest_news.html' %}
-<div class="background-image-login" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+<div style="position: relative; width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center;">
     <img src="{% static 'img/login-bg.jpg' %}" alt="Login Background" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: -1;">
 
-    <div class="login-container" style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 8px; width: 300px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; z-index: 1;">
-        <h6 style="margin-bottom: 20px;">Entrar via Google</h6>
-        <p style="margin-bottom: 15px;">Você está prestes a fazer login usando uma conta de terceiros de Google.</p>
+    <div style="background-color: rgba(255, 255, 255, 0.9); padding: 20px; border-radius: 8px; width: 300px; text-align: center; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); position: relative; z-index: 1;">
+        <h5 style="font-size: 24px; color: #131313;">Entrar via Google</h5>
+        <p style="font-size: 16px; color: #878787;">Você está prestes a fazer login usando sua conta do Google.</p>
 
-        <!-- Botão para redirecionar para o Google -->
-        <a href="{% provider_login_url 'google' %}" style="display: block; padding: 10px; background-color: #4285F4; color: #fff; text-align: center; border-radius: 5px; text-decoration: none; font-weight: bold;">
-            <img src="{% static 'img/google-icon.png' %}" alt="Google Icon" style="width: 20px; vertical-align: middle; margin-right: 8px;">
-            Continuar com Google
-        </a>
+        <form method="post" action="">
+            {% csrf_token %}
+            <button type="submit" style="width: 100%; padding: 10px; margin-top: 10px; background-color: #ffb320; color: #131313; border: none; font-size: 15px; font-weight: bold; cursor: pointer; border-radius: 30px; transition: background-color 0.3s ease, transform 0.3s ease;"
+            onmouseover="this.style.backgroundColor='#e0a10d'; this.style.transform='scale(1.05)';" onmouseout="this.style.backgroundColor='#ffb320'; this.style.transform='scale(1)';">Continuar</button>
+        </form>
     </div>
 </div>
 {% include 'footer.html' %}
