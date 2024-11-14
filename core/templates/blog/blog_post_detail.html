@@ -30,12 +30,16 @@
 
                 <!-- Exibir o formulário de comentário para membros logados que não são superusuários -->
                 {% if user.is_authenticated and not user.is_superuser %}
-                <div class="comment-form">
-                    <h4>Leave your comment</h4>
-                    <form method="post" action="">
+                <div class="comment-form" style="margin-top: 0px;">
+                    <h4 style="font-family: 'Press Start 2P', sans-serif; color: #131313;">Leave your comment</h4>
+                    <form method="post" action="" style="margin: 0; padding: 0;">
                         {% csrf_token %}
-                        {{ comment_form.as_p }}
-                        <button type="submit" class="site-btn btn-sm">Send Comment</button>
+                        <div style="margin-bottom: 5px;">
+                            {{ comment_form.as_p }}
+                        </div>
+                        <button type="submit" style="font-size: 15px; color: #131313; padding: 8px 16px; border-radius: 30px; font-weight: 500; border: none; background-color: #ffb320; cursor: pointer; margin-top: 5px;">
+                            Send Comment
+                        </button>
                     </form>
                 </div>
                 {% elif not user.is_authenticated %}
