@@ -1,19 +1,4 @@
 {% load static %}
-<section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/3.jpg' %}"
-         xmlns="http://www.w3.org/1999/html">
-    <div class="pi-content">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-5 col-lg-6 text-white">
-                    <h2>Best Old PC Games ever!</h2>
-                    <p>A landmark in adventure games, Myst transported players to a mysterious and intriguing world filled with puzzles and stunning landscapes. The gameplay focused on exploration and puzzle-solving.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Page section -->
 <section class="page-section review-page spad">
     <div class="container">
         <div class="row">
@@ -22,7 +7,9 @@
                 <a href="{% url 'game-details' g.id %}" style="text-decoration: none; color: inherit;">
                     <div class="review-item">
                         <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
-                            <div class="score yellow">{{ g.media_rating|floatformat:1 }}</div> <!-- Mostra a média da nota -->
+                            <div class="score yellow">
+                                {{ g.media_rating|floatformat:1 }}
+                            </div> <!-- Mostra a média da nota -->
                         </div>
                         <div class="review-text">
                             <h4>{{ g.game }}</h4>
@@ -31,19 +18,25 @@
                             <div class="rating">
                                 {% for i in "12345" %}
                                     {% if i|add:0 < g.full_stars %}
-                                        <i class="fa fa-star" style="color: yellow;"></i>  <!-- Estrela cheia -->
+                                        <i class="fa fa-star" style="color: yellow;"></i> <!-- Estrela cheia -->
                                     {% elif i|add:0 == g.full_stars and g.has_half_star %}
-                                        <i class="fa fa-star-half-alt" style="color: yellow;"></i>  <!-- Estrela meia -->
+                                        <i class="fa fa-star-half-alt" style="color: yellow;"></i> <!-- Estrela meia -->
                                     {% else %}
-                                        <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i>  <!-- Estrela apagada -->
+                                        <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i> <!-- Estrela apagada -->
                                     {% endif %}
                                 {% endfor %}
                             </div>
 
-                            <p>Média de Avaliação: {{ g.media_rating|floatformat:1 }} / 10</p>  <!-- Exibe a média -->
-                            <p>{{ g.ano }}</p>
-                            <p>{{ g.genero }}</p>
-                            <p>{{ g.desenvolvedor }}</p>
+                            <!-- Exibição das informações adicionais -->
+                            <p>Média de Avaliação: {{ g.media_rating|floatformat:1 }}</p>
+                            <p>Número de Avaliações: {{ g.review_count }}</p>
+
+                            {% if g.user_rating %}
+                            <p>Sua Nota: {{ g.user_rating|floatformat:1 }}</p>
+                            {% endif %}
+
+                            <p>Ano: {{ g.ano }}</p>
+                            <p>Desenvolvedor: {{ g.desenvolvedor }}</p>
                             <p>{{ g.descricao }}</p>
                         </div>
                     </div>

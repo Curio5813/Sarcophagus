@@ -19,6 +19,7 @@ from .models import BlogPost, Genero, Games
 from .forms import BlogForm
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.db.models import Count
 
 
 class HomeView(TemplateView):
@@ -182,26 +183,39 @@ class ReviewView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # Obtém todos os jogos
+        # Obter todos os jogos
         reviews = Games.objects.all().order_by('ano')
 
-        # Adiciona os campos full_stars e has_half_star com base na média das avaliações dos membros
+        # Verificar se o usuário está autenticado
+        membro = self.request.user if self.request.user.is_authenticated else None
+
+        # Adiciona os campos necessários para exibição
         for r in reviews:
-            # Calcula a média das avaliações dos membros para este jogo
+            # Média de todas as notas
             media_rating = GameRating.objects.filter(game=r).aggregate(Avg('rating'))['rating__avg']
+            review_count = GameRating.objects.filter(game=r).count()  # Número total de avaliações
 
+            # Nota do membro logado
+            user_rating = None
+            if membro:
+                user_rating_obj = GameRating.objects.filter(game=r, membro=membro).first()
+                user_rating = user_rating_obj.rating if user_rating_obj else None
+
+            # Se não houver média, defina como 0
             if media_rating is None:
-                media_rating = 0  # Se o jogo não tiver avaliação, define a média como 0
+                media_rating = 0
 
-            full_stars = int(media_rating // 2)  + 1# Estrelas completas
+            # Estrelas cheias e meia estrela
+            full_stars = int(media_rating // 2)  + 1 # Estrelas completas
             has_half_star = (media_rating % 2) >= 0.5  # Verifica se há meia estrela
 
-            # Atribui esses valores ao objeto do jogo
+            # Atribuir valores ao objeto do jogo
+            r.media_rating = media_rating
+            r.review_count = review_count
+            r.user_rating = user_rating
             r.full_stars = full_stars
             r.has_half_star = has_half_star
-            r.media_rating = media_rating
 
-        # Adiciona a lista de reviews ao contexto
         context['reviews'] = reviews
         return context
 
