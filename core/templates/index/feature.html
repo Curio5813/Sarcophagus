@@ -1,47 +1,27 @@
 {% load static %}
 <section class="feature-section spad">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6 p-0">
-					<div class="feature-item set-bg" data-setbg="{% static 'img/features/1.jpg' %} ">
-						<span class="cata new">new</span>
-						<div class="fi-content text-white">
-							<h5><a href="#">Suspendisse ut justo tem por, rutrum</a></h5>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-							<a href="#" class="fi-comment">3 Comments</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6 p-0">
-					<div class="feature-item set-bg" data-setbg="{% static 'img/features/2.jpg' %}">
-						<span class="cata strategy">strategy</span>
-						<div class="fi-content text-white">
-							<h5><a href="#">Justo tempor, rutrum erat id, molestie</a></h5>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-							<a href="#" class="fi-comment">3 Comments</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6 p-0">
-					<div class="feature-item set-bg" data-setbg="{% static 'img/features/3.jpg' %}">
-						<span class="cata new">new</span>
-						<div class="fi-content text-white">
-							<h5><a href="#">Nullam lacinia ex eleifend orci porttitor</a></h5>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-							<a href="#" class="fi-comment">3 Comments</a>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6 p-0">
-					<div class="feature-item set-bg" data-setbg="{% static 'img/features/4.jpg' %}">
-						<span class="cata racing">racing</span>
-						<div class="fi-content text-white">
-							<h5><a href="#">Lacinia ex eleifend orci suscipit</a></h5>
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
-							<a href="#" class="fi-comment">3 Comments</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+    <div class="container">
+        <div class="row">
+            {% for jogo in jogos_por_genero %}
+                <div class="col-lg-3 col-md-6 p-0">
+                    <div class="feature-item set-bg" data-setbg="{{ jogo.capa.url }}">
+                        <span class="cata"
+                              style="
+                                  {% if jogo.genero_prioritario == 'Shooter' %}background: #ff0000;{% endif %}
+                                  {% if jogo.genero_prioritario == 'Puzzle' %}background: #40abf5;{% endif %}
+                                  {% if jogo.genero_prioritario == 'Racing' %}background: #694eae;{% endif %}
+                                  {% if jogo.genero_prioritario == 'Simulation' %}background: #556b2f;{% endif %}
+                              ">
+                              {{ jogo.genero_prioritario }}
+                        </span>
+                        <div class="fi-content text-white">
+                            <h5><a href="{% url 'game-details' jogo.id %}">{{ jogo.game }}</a></h5>
+                            <p>{{ jogo.descricao|truncatechars:50 }}</p>
+                            <a href="{% url 'game-details' jogo.id %}" class="fi-comment">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

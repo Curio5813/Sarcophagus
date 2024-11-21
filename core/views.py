@@ -19,11 +19,47 @@ from .models import BlogPost, Genero, Games
 from .forms import BlogForm
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.db.models import Count
 
 
 class HomeView(TemplateView):
     template_name = 'index/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeView, self).get_context_data(**kwargs)
+
+        # Define a ordem de prioridade dos gêneros
+        generos_prioridade = ['Shooter', 'Puzzle', 'Racing', 'Simulation']
+        jogos_adicionados = []
+
+        for genero_nome in generos_prioridade:
+            jogo = Games.objects.filter(
+                generos__nome=genero_nome
+            ).exclude(id__in=[j.id for j in jogos_adicionados]).order_by('-criado').first()
+
+            if jogo:
+                # Garante que o gênero prioritário seja destacado
+                jogo.genero_prioritario = genero_nome
+                jogos_adicionados.append(jogo)
+
+        # Completa com jogos restantes se não tiver 4
+        if len(jogos_adicionados) < 4:
+            jogos_restantes = Games.objects.exclude(
+                id__in=[j.id for j in jogos_adicionados]
+            ).order_by('-criado')[:4 - len(jogos_adicionados)]
+
+            for jogo in jogos_restantes:
+                # Define o gênero prioritário com base na ordem ou o primeiro gênero associado
+                for genero_nome in generos_prioridade:
+                    if genero_nome in jogo.generos.values_list('nome', flat=True):
+                        jogo.genero_prioritario = genero_nome
+                        break
+                else:
+                    # Fallback para o primeiro gênero disponível
+                    jogo.genero_prioritario = jogo.generos.first().nome if jogo.generos.exists() else "Outro"
+                jogos_adicionados.append(jogo)
+
+        context['jogos_por_genero'] = jogos_adicionados
+        return context
 
 
 class DownloadView(TemplateView):
