@@ -63,7 +63,7 @@ class HomeView(TemplateView):
         context['jogos_por_genero'] = jogos_adicionados
 
         # Adiciona o campeonato em destaque do jogo Diablo
-        context['highlighted_tournament'] = Tournament.objects.filter(game__game='Diablo').last()
+        context['tournaments'] = Tournament.objects.all().order_by('-start_date')  # Ordena pelos mais recentes
 
         return context
 

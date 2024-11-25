@@ -47,7 +47,12 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 @admin.register(Tournament)
 class TournamentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'game', 'start_date', 'end_date', 'created_by')
-    search_fields = ('name', 'game__game', 'created_by__membro')
-    list_filter = ('start_date', 'end_date', 'game')
+    list_display = ('name', 'game', 'start_date', 'end_date', 'max_participants', 'participants_count')
+    list_filter = ('game', 'start_date', 'end_date')
+    search_fields = ('name', 'game__game')
+    filter_horizontal = ('participants',)  # Habilita seleção de múltiplos participantes no admin
+    fields = ('game', 'name', 'description', 'start_date', 'end_date', 'created_by', 'participants', 'max_participants', 'capa')
 
+    def participants_count(self, obj):
+        return obj.participants.count()
+    participants_count.short_description = "Número de Participantes"

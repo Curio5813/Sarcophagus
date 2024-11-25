@@ -1,65 +1,60 @@
 {% load static %}
 <section class="tournaments-section spad">
-		<div class="container">
-			<div class="tournament-title">Tournaments</div>
-			<div class="row">
-				<div class="col-md-6">
-					<div class="tournament-item mb-4 mb-lg-0">
-						<div class="ti-notic">Premium Tournament</div>
-						<div class="ti-content">
-							<div class="ti-thumb set-bg" data-setbg="{% static 'img/tournament/1.png' %}"></div>
-							<div class="ti-text">
-								<h4>World Of WarCraft</h4>
-								<ul>
-									<li><span>Tournament Beggins:</span> June 20, 2018</li>
-									<li><span>Tounament Ends:</span> July 01, 2018</li>
-									<li><span>Participants:</span> 10 teams</li>
-									<li><span>Tournament Author:</span> Admin</li>
-								</ul>
-								<p><span>Prizes:</span> 1st place $2000, 2nd place: $1000, 3rd place: $500</p>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="tournament-item">
-						<div class="ti-notic">Premium Tournament</div>
-						<div class="ti-content">
-							<div class="ti-thumb set-bg" data-setbg="{% static 'img/tournament/2.jpg' %}"></div>
-							<div class="ti-text">
-								<h4>Diablo</h4>
-								<ul>
-									<li><span>Tournament Beggins:</span> June 20, 2018</li>
-									<li><span>Tounament Ends:</span> July 01, 2018</li>
-									<li><span>Participants:</span> 10 teams</li>
-									<li><span>Tournament Author:</span> Admin</li>
-								</ul>
-								<p><span>Prizes:</span> 1st place $2000, 2nd place: $1000, 3rd place: $500</p>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-<!-- Highlighted Tournament Section -->
-<section class="tournament-highlight spad">
     <div class="container">
-        {% if highlighted_tournament %}
-            <div class="section-title">
-                <h2>Campeonato em Destaque</h2>
-            </div>
-            <div class="tournament-item">
-                <h3>{{ highlighted_tournament.name }}</h3>
-                <p><strong>Jogo:</strong> {{ highlighted_tournament.game.game }}</p>
-                <p><strong>Descrição:</strong> {{ highlighted_tournament.description }}</p>
-                <p><strong>Data de Início:</strong> {{ highlighted_tournament.start_date|date:"d/m/Y H:i" }}</p>
-                <p><strong>Data de Término:</strong> {{ highlighted_tournament.end_date|date:"d/m/Y H:i" }}</p>
-                <a href="{% url 'tournament_detail' highlighted_tournament.pk %}" class="site-btn">Ver Detalhes</a>
-            </div>
-        {% else %}
-            <p>Nenhum campeonato em destaque no momento.</p>
-        {% endif %}
+        <div class="section-title">
+            <h2>Todos os Campeonatos</h2>
+        </div>
+        <div class="row">
+            {% if tournaments %}
+                {% for tournament in tournaments %}
+                    <div class="col-md-6">
+                        <div class="tournament-item">
+                            <div class="ti-notic">Tournament</div>
+                            <div class="ti-content">
+                                <div class="ti-thumb">
+                                    <!-- Exibe a capa do campeonato -->
+                                    {% if tournament.capa %}
+                                        <img
+                                            src="{{ tournament.capa.url }}"
+                                            alt="{{ tournament.name }}"
+                                            style="
+                                                width: 100%;
+                                                height: auto;
+                                                max-width: 500px;
+                                                max-height: 723px;
+                                                display: block;
+                                                object-fit: contain;">
+                                    {% else %}
+                                        <img
+                                            src="{% static 'img/tournament/default.jpg' %}"
+                                            alt="Capa padrão"
+                                            style="
+                                                width: 100%;
+                                                height: auto;
+                                                max-width: 500px;
+                                                max-height: 723px;
+                                                display: block;
+                                                object-fit: contain;">
+                                    {% endif %}
+                                </div>
+                                <div class="ti-text">
+                                    <h4>{{ tournament.name }}</h4>
+                                    <ul>
+                                        <li><span>Início:</span> {{ tournament.start_date|date:"d/m/Y H:i" }}</li>
+                                        <li><span>Término:</span> {{ tournament.end_date|date:"d/m/Y H:i" }}</li>
+                                        <li><span>Participantes:</span> {{ tournament.participants.count }}/{{ tournament.max_participants }}</li>
+                                        <li><span>Autor:</span> {{ tournament.created_by.membro }}</li>
+                                    </ul>
+                                    <p>{{ tournament.description }}</p>
+                                    <a href="{% url 'tournament_detail' tournament.pk %}" class="site-btn">Ver Detalhes</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>Nenhum campeonato encontrado.</p>
+            {% endif %}
+        </div>
     </div>
 </section>

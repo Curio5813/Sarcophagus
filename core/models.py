@@ -6,6 +6,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from django.core.exceptions import ValidationError
 
 
 def get_file_path(_instance, filename):
@@ -182,17 +183,42 @@ class BlogComment(models.Model):
 
 
 class Tournament(models.Model):
-    game = models.ForeignKey(Games, on_delete=models.CASCADE, verbose_name=_('Jogo'))
-    name = models.CharField(_('Nome do Campeonato'), max_length=200)
-    description = models.TextField(_('Descrição'))
-    start_date = models.DateTimeField(_('Data de Início'))
-    end_date = models.DateTimeField(_('Data de Término'))
-    created_by = models.ForeignKey(Membro, on_delete=models.CASCADE, verbose_name=_('Criado por'))
-    participants = models.ManyToManyField(Membro, related_name='tournaments', blank=True)
-    max_participants = models.PositiveIntegerField(_('Máximo de Participantes'), default=16)
+    game = models.ForeignKey('Games', on_delete=models.CASCADE, verbose_name="Jogo")
+    name = models.CharField(max_length=200, verbose_name="Nome do Campeonato")
+    description = models.TextField(verbose_name="Descrição")
+    start_date = models.DateTimeField(verbose_name="Data de Início")
+    end_date = models.DateTimeField(verbose_name="Data de Término")
+    created_by = models.ForeignKey('Membro', on_delete=models.CASCADE, verbose_name="Criado por")
+    participants = models.ManyToManyField(
+        'Membro',
+        related_name='tournaments',
+        blank=True,
+        verbose_name="Participantes"
+    )
+    max_participants = models.IntegerField(
+        default=16,
+        verbose_name="Máximo de Participantes",
+        help_text="Número máximo de participantes permitidos."
+    )
+    capa = models.ImageField(
+        upload_to='tournaments/capas/',
+        verbose_name="Capa do Campeonato",
+        null=True,
+        blank=True
+    )
+
+    def clean(self):
+        """Validação personalizada para garantir que o número de participantes não exceda o limite."""
+        if self.participants.count() > self.max_participants:
+            raise ValidationError(
+                f"O número de participantes ({self.participants.count()}) excede o limite permitido ({self.max_participants})."
+            )
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.game.game}"
 
-
+    class Meta:
+        verbose_name = "Campeonato"
+        verbose_name_plural = "Campeonatos"
+        ordering = ['start_date']
 
