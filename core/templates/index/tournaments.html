@@ -2,7 +2,7 @@
 <section class="tournaments-section spad">
     <div class="container">
         <div class="section-title">
-            <h2>Todos os Campeonatos</h2>
+            <h2>All Tournaments</h2>
         </div>
         <div class="row">
             {% if tournaments %}
@@ -40,20 +40,21 @@
                                 <div class="ti-text">
                                     <h4>{{ tournament.name }}</h4>
                                     <ul>
-                                        <li><span>Início:</span> {{ tournament.start_date|date:"d/m/Y H:i" }}</li>
-                                        <li><span>Término:</span> {{ tournament.end_date|date:"d/m/Y H:i" }}</li>
-                                        <li><span>Participantes:</span> {{ tournament.participants.count }}/{{ tournament.max_participants }}</li>
-                                        <li><span>Autor:</span> {{ tournament.created_by.membro }}</li>
+                                        <li><span>Start:</span> {{ tournament.start_date|date:"d/m/Y H:i" }}</li>
+                                        <li><span>Ends:</span> {{ tournament.end_date|date:"d/m/Y H:i" }}</li>
+                                        <li><span>Participants:</span> {{ tournament.participants.count }}/{{ tournament.max_participants }}</li>
+                                        <li><span>Author:</span> {{ tournament.created_by.membro }}</li>
                                     </ul>
                                     <p>{{ tournament.description }}</p>
-                                    <a href="{% url 'tournament_detail' tournament.pk %}" class="site-btn">Ver Detalhes</a>
+                                    <br>
+                                    <a href="{% url 'tournament_detail' tournament.pk %}" class="site-btn">See Details</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             {% else %}
-                <p>Nenhum campeonato encontrado.</p>
+                <p>There are no tournaments right now.</p>
             {% endif %}
         </div>
     </div>

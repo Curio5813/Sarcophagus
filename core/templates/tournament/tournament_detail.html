@@ -2,17 +2,20 @@
 {% load static %}
 
 {% block content %}
+{% include 'latest_news.html' %}
 <section class="tournament-section spad">
     <div class="container">
         <h2>{{ tournament.name }}</h2>
-        <p><strong>Jogo:</strong> {{ tournament.game.game }}</p>
-        <p><strong>Descrição:</strong> {{ tournament.description }}</p>
-        <p><strong>Data de Início:</strong> {{ tournament.start_date|date:"d/m/Y H:i" }}</p>
-        <p><strong>Data de Término:</strong> {{ tournament.end_date|date:"d/m/Y H:i" }}</p>
-        <p><strong>Criado por:</strong> {{ tournament.created_by.membro }}</p>
-        <p><strong>Participantes:</strong> {{ tournament.participants.count }}/{{ tournament.max_participants }}</p>
-
-        <h3>Participantes:</h3>
+        <br><br>
+        <p><strong>Game:</strong> {{ tournament.game.game }}</p>
+        <p><strong>Description:</strong> {{ tournament.description }}</p>
+        <p><strong>Start Date:</strong> {{ tournament.start_date|date:"d/m/Y H:i" }}</p>
+        <p><strong>End Date:</strong> {{ tournament.end_date|date:"d/m/Y H:i" }}</p>
+        <p><strong>Created by:</strong> {{ tournament.created_by.membro }}</p>
+        <p><strong>Participants:</strong> {{ tournament.participants.count }}/{{ tournament.max_participants }}</p>
+        <br><br>
+        <h3>Participants:</h3>
+        <br>
         <ul>
             {% for participant in tournament.participants.all %}
                 <li>{{ participant.first_name }} {{ participant.last_name }}</li>
@@ -21,14 +24,15 @@
 
         {% if user.is_authenticated %}
             {% if user in tournament.participants.all %}
-                <p>Você já está participando deste campeonato.</p>
+                <br>
+                <p>You are already participating in this tournament.</p>
             {% elif tournament.participants.count < tournament.max_participants %}
                 <form action="{% url 'join_tournament' tournament.pk %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="site-btn">Participar</button>
                 </form>
             {% else %}
-                <p>O número máximo de participantes foi atingido.</p>
+                <p>The maximum number of participants has been reached.</p>
             {% endif %}
         {% else %}
             <p><a href="{% url 'login' %}">Faça login</a> para participar.</p>
