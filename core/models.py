@@ -181,3 +181,18 @@ class BlogComment(models.Model):
         return f'Comentário por {self.membro} no post {self.post}'
 
 
+class Tournament(models.Model):
+    game = models.ForeignKey(Games, on_delete=models.CASCADE, verbose_name=_('Jogo'))
+    name = models.CharField(_('Nome do Campeonato'), max_length=200)
+    description = models.TextField(_('Descrição'))
+    start_date = models.DateTimeField(_('Data de Início'))
+    end_date = models.DateTimeField(_('Data de Término'))
+    created_by = models.ForeignKey(Membro, on_delete=models.CASCADE, verbose_name=_('Criado por'))
+    participants = models.ManyToManyField(Membro, related_name='tournaments', blank=True)
+    max_participants = models.PositiveIntegerField(_('Máximo de Participantes'), default=16)
+
+    def __str__(self):
+        return self.name
+
+
+

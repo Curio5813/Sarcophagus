@@ -42,3 +42,24 @@
 			</div>
 		</div>
 	</section>
+
+<!-- Highlighted Tournament Section -->
+<section class="tournament-highlight spad">
+    <div class="container">
+        {% if highlighted_tournament %}
+            <div class="section-title">
+                <h2>Campeonato em Destaque</h2>
+            </div>
+            <div class="tournament-item">
+                <h3>{{ highlighted_tournament.name }}</h3>
+                <p><strong>Jogo:</strong> {{ highlighted_tournament.game.game }}</p>
+                <p><strong>Descrição:</strong> {{ highlighted_tournament.description }}</p>
+                <p><strong>Data de Início:</strong> {{ highlighted_tournament.start_date|date:"d/m/Y H:i" }}</p>
+                <p><strong>Data de Término:</strong> {{ highlighted_tournament.end_date|date:"d/m/Y H:i" }}</p>
+                <a href="{% url 'tournament_detail' highlighted_tournament.pk %}" class="site-btn">Ver Detalhes</a>
+            </div>
+        {% else %}
+            <p>Nenhum campeonato em destaque no momento.</p>
+        {% endif %}
+    </div>
+</section>

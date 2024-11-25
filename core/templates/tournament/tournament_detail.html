@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="tournament-section spad">
+    <div class="container">
+        <h2>{{ tournament.name }}</h2>
+        <p><strong>Jogo:</strong> {{ tournament.game.game }}</p>
+        <p><strong>Descrição:</strong> {{ tournament.description }}</p>
+        <p><strong>Data de Início:</strong> {{ tournament.start_date|date:"d/m/Y H:i" }}</p>
+        <p><strong>Data de Término:</strong> {{ tournament.end_date|date:"d/m/Y H:i" }}</p>
+        <p><strong>Criado por:</strong> {{ tournament.created_by.membro }}</p>
+        <p><strong>Participantes:</strong> {{ tournament.participants.count }}/{{ tournament.max_participants }}</p>
+
+        <h3>Participantes:</h3>
+        <ul>
+            {% for participant in tournament.participants.all %}
+                <li>{{ participant.first_name }} {{ participant.last_name }}</li>
+            {% endfor %}
+        </ul>
+
+        {% if user.is_authenticated %}
+            {% if user in tournament.participants.all %}
+                <p>Você já está participando deste campeonato.</p>
+            {% elif tournament.participants.count < tournament.max_participants %}
+                <form action="{% url 'join_tournament' tournament.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="site-btn">Participar</button>
+                </form>
+            {% else %}
+                <p>O número máximo de participantes foi atingido.</p>
+            {% endif %}
+        {% else %}
+            <p><a href="{% url 'login' %}">Faça login</a> para participar.</p>
+        {% endif %}
+    </div>
+</section>
+{% include 'footer.html' %}
+{% endblock %}

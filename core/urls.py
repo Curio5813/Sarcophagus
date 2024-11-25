@@ -5,7 +5,7 @@ from .views import (HomeView, DownloadView, CommunityView, ContactView,
                     ReviewView, AvaliarJogoView, FavoritarJogoView,
                     GameSearchView, BlogView, TesteView, LoginView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView)
-from .views import BlogPostCreateView, BlogPostDetailView
+from .views import BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView
 
 
 urlpatterns = [
@@ -26,4 +26,6 @@ urlpatterns = [
     path('blog/create/', BlogPostCreateView.as_view(), name='blog_create'),
     path('blog/<int:pk>/', BlogPostDetailView.as_view(), name='blog_post_detail'),
     path('blog/<int:pk>/edit/', BlogPostEditView.as_view(), name='blog_post_edit'),
+    path('tournament/<int:pk>/', TournamentDetailView.as_view(), name='tournament_detail'),
+    path('tournament/<int:pk>/join/', JoinTournamentView.as_view(), name='join_tournament'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

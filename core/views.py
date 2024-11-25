@@ -1,8 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
-from django.contrib import messages
 from .forms import ContatoForm, MembroLoginForm, BlogCommentForm
-from .models import Membro, GameRating
+from .models import Membro, GameRating, Tournament
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.utils import translation
@@ -19,6 +18,9 @@ from .models import BlogPost, Genero, Games
 from .forms import BlogForm
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import DetailView
+from django.contrib import messages
+from django.urls import reverse
 
 
 class HomeView(TemplateView):
@@ -59,6 +61,10 @@ class HomeView(TemplateView):
                 jogos_adicionados.append(jogo)
 
         context['jogos_por_genero'] = jogos_adicionados
+
+        # Adiciona o campeonato em destaque do jogo Diablo
+        context['highlighted_tournament'] = Tournament.objects.filter(game__game='Diablo').last()
+
         return context
 
 
@@ -442,3 +448,20 @@ class BlogPostEditView(UserPassesTestMixin, UpdateView):
         # Permite acesso se o usuário for o autor e um superusuário
         post = self.get_object()
         return self.request.user.is_superuser and self.request.user == post.autor
+
+
+class TournamentDetailView(DetailView):
+    model = Tournament
+    template_name = 'tournament/tournament_detail.html'
+    context_object_name = 'tournament'
+
+
+class JoinTournamentView(TemplateView):
+    def post(self, request, pk):
+        tournament = get_object_or_404(Tournament, pk=pk)
+        if request.user.is_authenticated and tournament.participants.count() < tournament.max_participants:
+            tournament.participants.add(request.user)
+            messages.success(request, "Você foi inscrito no campeonato!")
+        else:
+            messages.error(request, "Não foi possível realizar a inscrição.")
+        return redirect(reverse('tournament_detail', args=[pk]))
