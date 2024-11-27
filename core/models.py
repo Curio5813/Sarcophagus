@@ -207,9 +207,14 @@ class Tournament(models.Model):
         blank=True
     )
 
-    def clean(self):
-        """Validação personalizada para garantir que o número de participantes não exceda o limite."""
-        if self.participants.count() > self.max_participants:
+    def save(self, *args, **kwargs):
+        """Salva o objeto antes de validar os participantes."""
+        # Salvar o objeto para garantir que ele tenha um ID válido
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        # Valida os participantes somente para objetos existentes
+        if not is_new and self.participants.count() > self.max_participants:
             raise ValidationError(
                 f"O número de participantes ({self.participants.count()}) excede o limite permitido ({self.max_participants})."
             )
@@ -221,4 +226,3 @@ class Tournament(models.Model):
         verbose_name = "Campeonato"
         verbose_name_plural = "Campeonatos"
         ordering = ['start_date']
-
