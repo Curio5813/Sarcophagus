@@ -29,7 +29,8 @@
             {% elif tournament.participants.count < tournament.max_participants %}
                 <form action="{% url 'join_tournament' tournament.pk %}" method="post">
                     {% csrf_token %}
-                    <button type="submit" class="site-btn">Participar</button>
+                    <br><br>
+                    <button type="submit" class="site-btn">Enter</button>
                 </form>
             {% else %}
                 <p>The maximum number of participants has been reached.</p>
