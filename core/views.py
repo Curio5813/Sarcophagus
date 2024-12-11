@@ -21,6 +21,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import DetailView
 from django.contrib import messages
 from django.urls import reverse
+from datetime import date
 
 
 class HomeView(TemplateView):

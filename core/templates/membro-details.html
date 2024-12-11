@@ -48,12 +48,12 @@
         <div class="favorite-games">
             <h5 style="color: #A8A8A8"><strong>Favorite Games</strong></h5>
             <br>
-            <ul class="favorite-games-list" style="list-style: none; padding-left: 0;">
+            <ul style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; padding: 0; list-style: none;">
                 {% for favorito in jogos_favoritos %}
-                <li style="margin-bottom: 5px; text-align: center;">
+                <li style="flex: 0 0 150px; text-align: center;">
                     <a href="{% url 'game-details' favorito.game.id %}" style="text-decoration: none;">
-                        <div class="game-card">
-                            <div class="game-thumb">
+                        <div style="display: flex; flex-direction: column; align-items: center;">
+                            <div>
                                 <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}" style="border-radius: 10px; width: 150px;">
                                 <h6 style="color: #A8A8A8; margin-top: 5px;"><strong>{{ favorito.game.game }}</strong></h6>
                             </div>
