@@ -12,10 +12,7 @@
 html,
 
 @font-face {
-    font-family: 'Press Start 2P';
-    src: url('../fonts/PressStart2P-Regular.woff') format('woff');
-    src: url('../fonts/PressStart2P-Regular.woff2') format('woff2');
-    src: url('../fonts/PressStart2P-Regular.ttf') format('truetype');
+    font-family: sans-serif;
     font-weight: normal;
     font-style: normal;
 }
@@ -36,7 +33,7 @@ h4 {
 	margin: 0;
 	font-weight: 500;
 	color: #131313;
-    font-family: 'Press Start 2P', sans-serif; /* Use a fonte para cabeçalhos */
+    font-family: sans-serif; /* Use a fonte para cabeçalhos */
 }
 
 h5,
