@@ -20,8 +20,6 @@ html,
 body {
 	height: 100%;
 	font-family: sans-serif;
-	-webkit-font-smoothing: antialiased;
-	font-smoothing: antialiased;
 	background-color: #465975;
 }
 
@@ -99,7 +97,7 @@ ol {
 }
 
 .nostalgia-text {
-    font-family: 'Press Start 2P', cursive; /* Aplica a fonte Press Start 2P ao parágrafo */
+    font-family: sans-serif; /* Aplica a fonte Press Start 2P ao parágrafo */
 }
 /*---------------------
   Helper CSS
