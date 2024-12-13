@@ -37,7 +37,7 @@
             <img src="{{ membro.imagem.thumb.url }}" alt="{{ membro.membro }}" style="width: 150px; border-radius: 10px;">
             <div>
                 <p><strong>Email:</strong> {{ membro.email }}</p>
-                <p><strong>Data de Nascimento:</strong> {{ membro.nascimento|date:"F j, Y" }}</p>
+                <p><strong>Idade:</strong> {{ membro.idade }} anos</p>
                 <p><strong>Gênero:</strong> {{ membro.get_genero_display }}</p>
                 <p><strong>Bio:</strong> {{ membro.bio }}</p>
             </div>
@@ -48,15 +48,13 @@
         <div class="favorite-games">
             <h5 style="color: #A8A8A8"><strong>Favorite Games</strong></h5>
             <br>
-            <ul style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; padding: 0; list-style: none;">
+            <ul style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; list-style: none; padding-left: 0;">
                 {% for favorito in jogos_favoritos %}
                 <li style="flex: 0 0 150px; text-align: center;">
                     <a href="{% url 'game-details' favorito.game.id %}" style="text-decoration: none;">
-                        <div style="display: flex; flex-direction: column; align-items: center;">
-                            <div>
-                                <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}" style="border-radius: 10px; width: 150px;">
-                                <h6 style="color: #A8A8A8; margin-top: 5px;"><strong>{{ favorito.game.game }}</strong></h6>
-                            </div>
+                        <div>
+                            <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}" style="border-radius: 10px; width: 150px;">
+                            <h6 style="color: #A8A8A8; margin-top: 5px;"><strong>{{ favorito.game.game }}</strong></h6>
                         </div>
                     </a>
                 </li>

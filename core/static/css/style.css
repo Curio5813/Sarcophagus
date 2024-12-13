@@ -437,6 +437,7 @@ ol {
 	background: #131313;
 	padding: 24px 0;
 	position: relative;
+	font-family: sans-serif; /* Fonte aplicada globalmente à seção */
 }
 
 .ln-title {
@@ -453,6 +454,7 @@ ol {
 	color: #fff;
 	background: #ffb320;
 	z-index: 1;
+	font-family: sans-serif; /* Fonte aplicada ao título */
 }
 
 .news-ticker {
@@ -460,12 +462,14 @@ ol {
 	float: right;
 	overflow: hidden;
 	display: inline-block;
+	font-family: sans-serif; /* Fonte aplicada ao ticker */
 }
 
 .news-ticker-contant .nt-item {
 	margin-right: 35px;
 	color: #fff;
 	display: inline-block;
+	font-family: sans-serif; /* Fonte aplicada aos itens */
 }
 
 .news-ticker-contant .nt-item span {
@@ -476,6 +480,7 @@ ol {
 	font-weight: 500;
 	color: #fff;
 	padding: 4px 20px;
+	font-family: sans-serif; /* Fonte aplicada aos spans */
 }
 
 .news-ticker-contant .nt-item span.new {
