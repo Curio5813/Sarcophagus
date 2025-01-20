@@ -54,7 +54,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const reviews = document.querySelectorAll(".review-item-wrapper");
     const loadMoreBtn = document.getElementById("load-more-btn");
-    let itemsToShow = 6;
+    let itemsToShow = 12;
 
     function showItems() {
         reviews.forEach((review, index) => {
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showItems();
 
     loadMoreBtn.addEventListener("click", function () {
-        itemsToShow += 6;
+        itemsToShow += 12;
         showItems();
     });
 });
