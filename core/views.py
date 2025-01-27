@@ -21,6 +21,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import DetailView
 from django.contrib import messages
 from django.urls import reverse
+from datetime import date
 
 
 class HomeView(TemplateView):
@@ -248,7 +249,7 @@ class ReviewView(TemplateView):
                 media_rating = 0
 
             # Estrelas cheias e meia estrela
-            full_stars = int(media_rating // 2)  + 1 # Estrelas completas
+            full_stars = int(media_rating // 2) + 1 # Estrelas completas
             has_half_star = (media_rating % 2) >= 0.5  # Verifica se há meia estrela
 
             # Atribuir valores ao objeto do jogo
@@ -323,7 +324,7 @@ class LoginView(FormView):
             login(self.request, user)
             return redirect('index')
         else:
-            form.add_error(None, "Login ou Senha inválido!")
+            form.add_error(None, "Login inválido")
             return self.form_invalid(form)
 
 
