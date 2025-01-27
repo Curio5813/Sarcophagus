@@ -14,7 +14,7 @@ class MembroLoginForm(forms.Form):
         password = self.cleaned_data.get('password')
         user = authenticate(email=email, password=password)
         if not user:
-            raise forms.ValidationError("Login inválido")
+            raise forms.ValidationError("Login ou Senha inválido!")
         return self.cleaned_data
 
 
