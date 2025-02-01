@@ -18,3 +18,9 @@ def calcular_estrelas(rating, i):
         return estrelas_acesas >= i
     except (ValueError, TypeError):
         return False
+
+
+@register.filter
+def mul(value, arg):
+    """Multiplica o valor pelo argumento"""
+    return int(value) * int(arg)

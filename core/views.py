@@ -21,7 +21,6 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import DetailView
 from django.contrib import messages
 from django.urls import reverse
-from datetime import date
 
 
 class HomeView(TemplateView):
@@ -118,7 +117,6 @@ class DownloadView(TemplateView):
             for game in queryset:
                 game.user_rating = ratings_dict.get(game.id).rating if ratings_dict.get(game.id) else None
                 game.user_favorito = ratings_dict.get(game.id).favorito if ratings_dict.get(game.id) else False
-
         context['games'] = queryset
 
         return context

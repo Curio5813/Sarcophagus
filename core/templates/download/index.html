@@ -10,7 +10,7 @@
                 <form class="search-widget" method="get" action="{% url 'download' %}">
                     <input type="text" name="game" placeholder="Game Name">
 
-                      <!-- Dropdown de anos -->
+                    <!-- Dropdowns -->
                     <select name="ano">
                         <option value="">Select Year</option>
                         {% for year in anos %}
@@ -18,13 +18,13 @@
                         {% endfor %}
                     </select>
 
-                    <!-- Dropdown de gêneros -->
-                    <select name="genero"> <!-- Certifique-se de que o name seja "genero" -->
+                    <select name="genero">
                         <option value="">Select Genre</option>
                         {% for genero in generos %}
                             <option value="{{ genero.id }}">{{ genero.nome }}</option>
                         {% endfor %}
                     </select>
+
                     <input type="text" name="descricao" placeholder="Theme">
                     <input type="text" name="desenvolvedor" placeholder="Developer">
                     <input type="text" name="distribuidor" placeholder="Publisher">
@@ -32,64 +32,36 @@
                 </form>
                 <br><br>
 
-                <!-- Resultados da busca -->
+                <!-- Resultados -->
                 <div class="recent-game-row">
                     {% if games %}
                         {% for game in games %}
-                        <div class="recent-game-item" style="background-color: #FFDAB9; border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                        <div class="recent-game-item">
                             <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
                                 <div class="cata">{{ game.genero }}</div>
                             </div>
                             <div class="rgi-content">
-                                <h5>{{ game.game }}</h5>
-                                <p><strong>{{ game.ano }}</strong></p>
-                                <p>
-                                    Genre(s):
-                                    <span class="generos-container">
-                                        {% for genero in game.generos.all %}
-                                            {{ genero.nome }}{% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </span>
-                                </p>
-
-                                <!-- Mostrar a avaliação anterior se houver -->
-                                <p>
-                                    {% if game.user_rating %}
-                                        Your Last Rating: <strong>{{ game.user_rating }}</strong>
-                                    {% else %}
-                                        You haven't rated this game yet.
-                                    {% endif %}
-                                </p>
-
-                                <!-- Mostrar se o jogo foi favoritado -->
+                                <!-- Seção de Favoritos Corrigida -->
                                 <p>
                                     Favorite:
-                                    <span class="favorite-btn {% if game.user_favorito %}active{% else %}inactive{% endif %}" data-game-id="{{ game.id }}">
-                                        <i class="fa {% if game.user_favorito %}fa-heart{% else %}fa-heart-o{% endif %}" aria-hidden="true"></i>
+                                    <span class="favorite-btn {% if game.user_favorito %}active{% endif %}"
+                                          data-game-id="{{ game.id }}">
+                                        <i class="{% if game.user_favorito %}fas{% else %}far{% endif %} fa-heart"></i>
                                     </span>
                                 </p>
 
-                                <p>Developer: <strong>{{ game.desenvolvedor }}</strong></p>
-                                <p>Publisher: <strong>{{ game.distribuidor }}</strong></p>
-                                <p>Review:</p>
-                                <p>{{ game.descricao }}</p>
-                                <p>Gameplay:</p>
-                                <p>{{ game.gameplay }}</p>
-                                <p>Graphics:</p>
-                                <p>{{ game.graphics }}</p>
-                                <p>Sound and Music:</p>
-                                <p>{{ game.sound_and_music }}</p>
-                                <p>Conclusion:</p>
-                                <p>{{ game.conclusion }}</p>
-                                {% if game.video %}
-                                    <iframe width="560" height="315" src="{{ game.video_embed_url|safe }}" frameborder="0" allowfullscreen></iframe>
-                                {% else %}
-                                    <p>Vídeo não disponível.</p>
-                                {% endif %}
-                                <!-- Avaliação de 5 estrelas, refletindo a avaliação existente do usuário -->
-                                <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.user_rating|default:0 }}">
+                                <!-- Conteúdo restante do jogo -->
+                                <h5>{{ game.game }}</h5>
+                                <p><strong>{{ game.ano }}</strong></p>
+                                <p>Genre(s): {{ game.generos.all|join:", " }}</p>
+                                <!-- ... demais campos do jogo ... -->
+
+                                <!-- Sistema de Estrelas -->
+                                <div class="star-rating" data-game-id="{{ game.id }}"
+                                     data-current-rating="{{ game.user_rating|default:0 }}">
                                     {% for i in "12345" %}
-                                        <span class="star {% if game.user_rating|calcular_estrelas:i %}active{% endif %}" data-value="{{ i }}">&#9733;</span>
+                                        <span class="star {% if game.user_rating >= i|add:'0'|mul:2 %}active{% endif %}"
+                                              data-value="{{ i }}">&#9733;</span>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -97,7 +69,6 @@
                         {% endfor %}
                     {% else %}
                         <p style="text-align: center;">No results found.</p>
-                        <br>
                     {% endif %}
                 </div>
             </div>
@@ -105,147 +76,193 @@
     </div>
 </section>
 
+<!-- CSS -->
+<style>
+    /* Estilos Gerais */
+    .recent-game-page {
+        padding: 50px 0;
+    }
+
+    /* Favoritos */
+    .favorite-btn {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        display: inline-block;
+    }
+
+    .favorite-btn i {
+        font-size: 1.5rem;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+
+    .favorite-btn.active i {
+        color: #ff4444 !important;
+        text-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
+    }
+
+    .favorite-btn:hover i {
+        transform: scale(1.2);
+        color: #ff4444;
+    }
+
+    /* Estrelas */
+    .star-rating {
+        display: inline-block;
+        font-size: 0;
+        margin: 10px 0;
+    }
+
+    .star {
+        cursor: pointer;
+        font-size: 24px;
+        color: #ddd;
+        display: inline-block;
+        transition: color 0.3s ease;
+        padding: 0 2px;
+    }
+
+    .star.active, .star.selected {
+        color: #ffd700;
+    }
+
+    /* Cards */
+    .recent-game-item {
+        background: #fff5e6;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .recent-game-item:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Formulário */
+    .search-widget {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .search-widget input, .search-widget select {
+        padding: 10px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+    }
+</style>
+
+<!-- JavaScript -->
 <script>
-    // Função para enviar a avaliação do jogo via AJAX
+    // CSRF Token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // Sistema de Favoritos
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const gameId = this.dataset.gameId;
+            const isActive = this.classList.contains('active');
+            const icon = this.querySelector('i');
+
+            fetch("{% url 'favoritar_jogo' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken
+                },
+                body: JSON.stringify({
+                    "game_id": gameId,
+                    "favorito": !isActive
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.classList.toggle('active');
+                    icon.classList.toggle('far');
+                    icon.classList.toggle('fas');
+                }
+            })
+            .catch(error => console.error("Erro:", error));
+        });
+    });
+
+    // Sistema de Estrelas
     document.querySelectorAll('.star-rating .star').forEach(star => {
     star.addEventListener('mouseover', function() {
-        const rating = this.getAttribute('data-value');
+        const hoverValue = parseInt(this.dataset.value) * 2; // Multiplica por 2
         const stars = this.parentNode.querySelectorAll('.star');
 
-        // Marca as estrelas anteriores e a estrela atual como selecionadas
         stars.forEach(s => {
-            s.classList.remove('selected'); // Remove qualquer seleção anterior
-            if (s.getAttribute('data-value') <= rating) {
-                s.classList.add('selected'); // Adiciona seleção
+            const starValue = parseInt(s.dataset.value) * 2;
+            s.classList.remove('selected');
+            if (starValue <= hoverValue) {
+                s.classList.add('selected');
             }
         });
     });
 
     star.addEventListener('mouseout', function() {
+        const currentRating = parseInt(this.parentNode.dataset.currentRating);
         const stars = this.parentNode.querySelectorAll('.star');
-        stars.forEach(s => {
-            s.classList.remove('selected'); // Remove a seleção ao sair do hover
-        });
 
-        // Mantém apenas as estrelas que foram ativamente selecionadas
-        const currentRating = this.parentNode.getAttribute('data-current-rating');
         stars.forEach(s => {
-            if (s.getAttribute('data-value') <= currentRating) {
+            const starValue = parseInt(s.dataset.value) * 2;
+            s.classList.remove('selected');
+            if (starValue <= currentRating) {
                 s.classList.add('active');
             }
         });
     });
 
-    star.addEventListener('click', function(event) {
-        event.stopPropagation();
-        const gameId = this.parentNode.getAttribute('data-game-id');
-        const ratingValue = this.getAttribute('data-value');
+    star.addEventListener('click', function() {
+        const gameId = this.parentNode.dataset.gameId;
+        const ratingValue = parseInt(this.dataset.value) * 2; // Multiplica por 2 aqui
 
-        let nota;
-        switch (ratingValue) {
-            case '1': nota = 2; break;
-            case '2': nota = 4; break;
-            case '3': nota = 6; break;
-            case '4': nota = 8; break;
-            case '5': nota = 10; break;
-            default: nota = 0;
-        }
-
-        fetch("/avaliar_jogo/", {
+        fetch("{% url 'avaliar_jogo' %}", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRFToken": "{{ csrf_token }}"
+                "X-CSRFToken": csrftoken
             },
             body: JSON.stringify({
                 "game_id": gameId,
-                "rating": nota
+                "rating": ratingValue
             })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert("Avaliação salva com sucesso!");
                 const stars = this.parentNode.querySelectorAll('.star');
-                this.parentNode.setAttribute('data-current-rating', ratingValue);
+                this.parentNode.dataset.currentRating = ratingValue;
+
                 stars.forEach(s => {
-                    s.classList.remove('selected', 'active');
-                    if (s.getAttribute('data-value') <= ratingValue) {
+                    const starValue = parseInt(s.dataset.value) * 2;
+                    s.classList.remove('active');
+                    if (starValue <= ratingValue) {
                         s.classList.add('active');
                     }
                 });
             }
         })
-        .catch(error => console.error("Erro ao salvar a avaliação:", error));
-        });
-    });
-
-    // Função para favoritar o jogo
-document.querySelectorAll('.favorite-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const gameId = this.getAttribute('data-game-id');
-        const isActive = this.classList.contains('active');
-
-        // Envia a requisição AJAX para favoritar/desfavoritar
-        fetch("{% url 'favoritar_jogo' %}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": "{{ csrf_token }}"
-            },
-            body: JSON.stringify({
-                "game_id": gameId,
-                "favorito": !isActive
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                this.classList.toggle('active');  // Alterna o estado de favorito
-                this.querySelector('i').classList.toggle('fa-heart');
-                this.querySelector('i').classList.toggle('fa-heart-o');
-            } else {
-                alert("Erro ao favoritar o jogo.");
-            }
-        })
-        .catch(error => console.error("Erro ao favoritar o jogo:", error));
+        .catch(error => console.error("Erro:", error));
     });
 });
 </script>
-
-<style>
-    .star {
-        cursor: pointer;
-        font-size: 24px; /* Tamanho da estrela */
-        color: lightgray; /* Cor padrão das estrelas */
-    }
-
-    .star.active, .star.selected {
-        color: gold; /* Cor das estrelas ativas e selecionadas */
-    }
-
-    .star:hover ~ .star {
-        color: lightgray; /* Estrelas que vêm depois da estrela sobre a qual o mouse está não mudam de cor */
-    }
-
-    .star:hover, .star:hover ~ .star {
-        color: gold; /* Estrelas que ficam "acesas" ao passar o mouse */
-    }
-
-    .favorite-btn {
-        font-size: 24px; /* Ajuste o tamanho conforme necessário */
-        cursor: pointer;
-        color: #131313; /* Cor padrão do coração (vazio) */
-    }
-
-    .favorite-btn.active {
-        color: red; /* Cor do coração quando favoritado */
-    }
-
-    .recent-game-item {
-        background-color: #FFDAB9; /* Cor de fundo do post */
-        border-radius: 10px; /* Bordas arredondadas */
-        padding: 15px; /* Espaçamento interno */
-        margin-bottom: 20px; /* Espaçamento entre os posts */
-    }
-</style>
