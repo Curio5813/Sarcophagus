@@ -74,7 +74,7 @@ class DownloadView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DownloadView, self).get_context_data(**kwargs)
         context['generos'] = Genero.objects.all()
-        context['anos'] = range(1987, 2004)
+        context['anos'] = range(1987, 2006)
 
         # Obter parâmetros de busca da solicitação
         game = self.request.GET.get('game')
