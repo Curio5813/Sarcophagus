@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group, Permission
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ValidationError
-
+from datetime import date
 
 def get_file_path(_instance, filename):
     ext = filename.split('.')[-1]
@@ -82,6 +82,18 @@ class Membro(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    # Método para calcular a idade
+    @property
+    def idade(self):
+        if self.nascimento:
+            hoje = date.today()
+            idade = hoje.year - self.nascimento.year
+            # Ajuste para o caso em que o aniversário ainda não ocorreu este ano
+            if (hoje.month, hoje.day) < (self.nascimento.month, self.nascimento.day):
+                idade -= 1
+            return idade
+        return None  # Retorna None se a data de nascimento não estiver definida
 
     class Meta:
         verbose_name = _('Membro')
