@@ -45,10 +45,15 @@
 			<br><br>
 				<div class="user-panel">
 					{% if user.is_authenticated %}
-                		<a href="{% url 'login' %}">{% trans 'Logout' %}</a>
-            		{% else %}
-                		<a href="{% url 'login' %}">{% trans 'Login' %}</a> / <a href="{% url 'register' %}">{% trans 'Register' %}</a>
-            		{% endif %}
+						<a href="{% url 'membro-details' user.id %}">
+							<img src="{% if user.imagem %}{{ user.imagem.thumb.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+								alt="{{ user.first_name }}">
+						</a>
+						<a href="{% url 'login' %}" class="logout-btn">{% trans 'Logout' %}</a>
+					{% else %}
+						<a href="{% url 'login' %}">{% trans 'Login' %}</a> /
+						<a href="{% url 'register' %}">{% trans 'Register' %}</a>
+					{% endif %}
 				</div>
 			<!-- responsive -->
 			<div class="nav-switch">

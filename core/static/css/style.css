@@ -273,23 +273,38 @@ ol {
 	border-bottom: 1px solid #ffb320;
 }
 
-.site-logo {
-	display: inline-block;
-	float: left;
-	padding-top: 6px;
-}
-
 .user-panel {
-	float: right;
-	font-weight: 500;
-	background: #ffb320;
-	padding: 8px 28px;
-	border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espaçamento entre o avatar e o botão */
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
-.user-panel a {
-	font-size: 14px;
-	color: #131313;
+.user-panel img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+/* Botão de logout com fundo amarelo */
+.logout-btn {
+    background: #ffb320;
+    padding: 8px 14px;
+    border-radius: 20px;
+    color: #ffffff;
+    font-weight: bold;
+    transition: color 0.3s ease, background 0.3s ease;
+    text-decoration: none; /* Remover sublinhado */
+}
+
+/* Efeito hover no logout */
+.logout-btn:hover {
+    background: #ffaf20;
+    color: #000000;
 }
 
 .main-menu {
