@@ -51,8 +51,8 @@
 						</a>
 						<a href="{% url 'login' %}" class="logout-btn">{% trans 'Logout' %}</a>
 					{% else %}
-						<a href="{% url 'login' %}">{% trans 'Login' %}</a> /
-						<a href="{% url 'register' %}">{% trans 'Register' %}</a>
+						<a href="{% url 'login' %}" class="logout-btn">{% trans 'Login' %}</a> /
+						<a href="{% url 'register' %}" class="logout-btn">{% trans 'Register' %}</a>
 					{% endif %}
 				</div>
 			<!-- responsive -->
