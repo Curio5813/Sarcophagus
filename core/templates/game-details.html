@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 {% include 'latest_news.html' %}
+{% load custom_filters %}
     <div style="display: flex; flex-direction: column; align-items: flex-start; max-width: 800px; margin: 30px 0 0 20px;">
         <!-- Título centralizado -->
         <h1 style="font-size: 1.5em; text-align: center; margin-bottom: 15px; margin-top: 30px; width: 100%;">{{ game.game }}</h1>
@@ -22,9 +23,25 @@
                 {% endif %}
             </div>
         </div>
-
         <!-- Descrição do jogo -->
         <div style="text-align: justify; width: 100%; margin-top: 20px;">
+            <!-- Seção de Favoritos e Avaliação -->
+                {% if user.is_authenticated %}
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <p><strong>Favorite:</strong>
+                        <span class="favorite-btn {% if game.user_favorito %}active{% endif %}" data-game-id="{{ game.id }}">
+                            <i class="{% if game.user_favorito %}fas{% else %}far{% endif %} fa-heart"></i>
+                        </span>
+                    </p>
+
+                    <p><strong>Rate this game:</strong></p>
+                    <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.user_rating|default:0 }}">
+                        {% for i in "12345" %}
+                            <span class="star {% if game.user_rating >= i|add:'0'|mul:2 %}active{% endif %}" data-value="{{ i }}">&#9733;</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             <div style="text-align: center; margin-bottom: 20px;">
                 <p><strong>Year:</strong> {{ game.ano }}</p>
                 <p><strong>Developer:</strong> {{ game.desenvolvedor }}</p>
@@ -58,5 +75,163 @@
             <p>{{ game.conclusion }}</p>
         </div>
     </div>
+
+    <!-- CSS -->
+    <style>
+        /* Estilos para o botão de favorito */
+        .favorite-btn {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .favorite-btn i {
+            font-size: 1.5rem;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-btn.active i {
+            color: #ff4444 !important;
+            text-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
+        }
+
+        .favorite-btn:hover i {
+            transform: scale(1.2);
+            color: #ff4444;
+        }
+
+        /* Estilos para o sistema de estrelas */
+        .star-rating {
+            display: inline-block;
+            font-size: 0;
+            margin: 10px 0;
+        }
+
+        .star {
+            cursor: pointer;
+            font-size: 24px;
+            color: #ddd;
+            display: inline-block;
+            transition: color 0.3s ease;
+            padding: 0 2px;
+        }
+
+        .star.active, .star.selected {
+            color: #ffd700;
+        }
+    </style>
+
+    <!-- JavaScript -->
+    <script>
+        // CSRF Token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Sistema de Favoritos
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const gameId = this.dataset.gameId;
+                const isActive = this.classList.contains('active');
+                const icon = this.querySelector('i');
+
+                fetch("{% url 'favoritar_jogo' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken
+                    },
+                    body: JSON.stringify({
+                        "game_id": gameId,
+                        "favorito": !isActive
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.classList.toggle('active');
+                        icon.classList.toggle('far');
+                        icon.classList.toggle('fas');
+                    }
+                })
+                .catch(error => console.error("Erro:", error));
+            });
+        });
+
+        // Sistema de Estrelas
+        document.querySelectorAll('.star-rating .star').forEach(star => {
+            star.addEventListener('mouseover', function() {
+                const hoverValue = parseInt(this.dataset.value) * 2; // Multiplica por 2
+                const stars = this.parentNode.querySelectorAll('.star');
+
+                stars.forEach(s => {
+                    const starValue = parseInt(s.dataset.value) * 2;
+                    s.classList.remove('selected');
+                    if (starValue <= hoverValue) {
+                        s.classList.add('selected');
+                    }
+                });
+            });
+
+            star.addEventListener('mouseout', function() {
+                const currentRating = parseInt(this.parentNode.dataset.currentRating);
+                const stars = this.parentNode.querySelectorAll('.star');
+
+                stars.forEach(s => {
+                    const starValue = parseInt(s.dataset.value) * 2;
+                    s.classList.remove('selected');
+                    if (starValue <= currentRating) {
+                        s.classList.add('active');
+                    }
+                });
+            });
+
+            star.addEventListener('click', function() {
+                const gameId = this.parentNode.dataset.gameId;
+                const ratingValue = parseInt(this.dataset.value) * 2; // Multiplica por 2 aqui
+
+                fetch("{% url 'avaliar_jogo' %}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken
+                    },
+                    body: JSON.stringify({
+                        "game_id": gameId,
+                        "rating": ratingValue
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const stars = this.parentNode.querySelectorAll('.star');
+                        this.parentNode.dataset.currentRating = ratingValue;
+
+                        stars.forEach(s => {
+                            const starValue = parseInt(s.dataset.value) * 2;
+                            s.classList.remove('active');
+                            if (starValue <= ratingValue) {
+                                s.classList.add('active');
+                            }
+                        });
+                    }
+                })
+                .catch(error => console.error("Erro:", error));
+            });
+        });
+    </script>
 {% include 'footer.html' %}
 {% endblock %}

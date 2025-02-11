@@ -301,7 +301,23 @@ class GameDetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         game_id = self.kwargs['id']
-        context['game'] = get_object_or_404(Games, id=game_id)
+        game = get_object_or_404(Games, id=game_id)
+
+        # Inicializa os atributos do usuário
+        game.user_rating = None
+        game.user_favorito = False
+
+        if self.request.user.is_authenticated:
+            try:
+                membro = Membro.objects.get(email=self.request.user.email)
+                game_rating = GameRating.objects.filter(membro=membro, game=game).first()
+                if game_rating:
+                    game.user_rating = game_rating.rating
+                    game.user_favorito = game_rating.favorito
+            except Membro.DoesNotExist:
+                pass  # Ou lidar com exceção se necessário
+
+        context['game'] = game
         return context
 
 
