@@ -46,7 +46,7 @@ class MembroManager(BaseUserManager):
 class Membro(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('Nome'), max_length=50)
     last_name = models.CharField(_('Sobrenome'), max_length=100)
-    membro = models.CharField(_('Membro'), max_length=100)
+    membro = models.CharField(_('Membro'), max_length=16)
     email = models.EmailField(_('E-mail'), unique=True, max_length=100)
     nascimento = models.DateField(_('Data de Nascimento'), null=True, blank=True)
     bio = models.TextField(_('Bio'), max_length=500, blank=True, null=True)
