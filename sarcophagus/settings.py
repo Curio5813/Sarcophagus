@@ -89,12 +89,15 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 import dj_database_url
 import os
 
+# Em Produção!
+"""
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-
-# Em desenvolvimento
 """
+
+# Em desenvolvimento!
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -105,7 +108,7 @@ DATABASES = {
         'PORT': '5432',  # O padrão do PostgreSQL
     }
 }
-"""
+
 
 
 
