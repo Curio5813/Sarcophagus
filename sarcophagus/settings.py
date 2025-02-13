@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2
 DEBUG = False
 
 # Prodction and developing
-ALLOWED_HOSTS = ['sarcophagus.com', 'localhost']
+ALLOWED_HOSTS = ['sarcophagus.net', 'localhost']
 
 # Application definition
 
