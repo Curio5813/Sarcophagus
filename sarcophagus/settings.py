@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL', 'postgres://curio5813:{senha_escapada}@localhost:5432/sarcophagus'))
+    'default': dj_database_url.config(default=f'postgres://curio5813:{senha_escapada}@localhost:5432/sarcophagus')
 }
 
 
