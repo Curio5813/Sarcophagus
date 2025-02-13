@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sarcophagos',
+        'NAME': 'sarcophagus',
         'USER': 'curio5813',
         'PASSWORD': 'curio5813#$',
         'HOST': 'localhost',  # Pode ser alterado se o banco estiver em outro servidor
