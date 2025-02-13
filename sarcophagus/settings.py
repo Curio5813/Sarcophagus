@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Prodction and developing
 ALLOWED_HOSTS = ['sarco-476c576b92e6.herokuapp.com','sarcophagus.net', 'localhost']
@@ -149,13 +149,14 @@ AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
 
 
 # Email production
+"""
 EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = 'no-reply@sarcophagus.com'
 EMAIL_PORT = 587
 EMIAL_USE_TSL = True
 EMAIL_HOST_PASSWORD = 'curio581321'
 DEFAULT_FROM_EMAIL = 'contato@sarcophagus.com'
-
+"""
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -177,8 +178,21 @@ ELASTICSEARCH_DSL = {
 
 
 # Recursos de Segurança (ajustados para ambiente de desenvolvimento)
+
 SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_SUBDOMAINS = True
+SECURE_HSTS_SUBDOMAINS = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
+SECURE_BROWSER_XSS_FILTER = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
+# X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = False
+
+# In Production
+"""
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_SUBDOMAINS = 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
 SESSION_COOKIE_SECURE = True
@@ -186,15 +200,17 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
+"""
 
 import dj_database_url
 
 # Production
 
+"""
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
-
+"""
 
 import django_heroku
 django_heroku.settings(locals())
