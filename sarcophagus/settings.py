@@ -155,13 +155,14 @@ AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
 
 
 # Email produção
-
+"""
 EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = 'no-reply@sarcophagus.com'
 EMAIL_PORT = 587
 EMIAL_USE_TSL = True
 EMAIL_HOST_PASSWORD = 'curio5813#$'
 DEFAULT_FROM_EMAIL = 'contato@sarcophagus.com'
+"""
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
