@@ -93,6 +93,20 @@ DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
+# Em desenvolvimento
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'sarcophagus',
+        'USER': 'curio5813',
+        'PASSWORD': 'curio5813#$',
+        'HOST': 'localhost',  # Pode ser alterado se o banco estiver em outro servidor
+        'PORT': '5432',  # O padrão do PostgreSQL
+    }
+}
+"""
+
 
 
 # Password validation
