@@ -24,9 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
+# Prodction
+"""
 ALLOWED_HOSTS = ['.herokuapp.com', 'localhost']
+"""
+
+# Developing
+
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -87,15 +94,16 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-# Em Produção!
-
+# Production
+"""
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-
-
-# Em desenvolvimento!
 """
+
+
+# Developing
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -106,7 +114,6 @@ DATABASES = {
         'PORT': '5432',  # O padrão do PostgreSQL
     }
 }
-"""
 
 
 # Password validation
@@ -157,14 +164,14 @@ AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
 
 
 # Email produção
-
+"""
 EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = 'no-reply@sarcophagus.com'
 EMAIL_PORT = 587
 EMIAL_USE_TSL = True
 EMAIL_HOST_PASSWORD = 'curio581321'
 DEFAULT_FROM_EMAIL = 'contato@sarcophagus.com'
-
+"""
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -187,12 +194,12 @@ ELASTICSEARCH_DSL = {
 
 # Recursos de Segurança (ajustados para ambiente de desenvolvimento)
 SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_SUBDOMAINS = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
+SECURE_HSTS_SUBDOMAINS = False
+SECURE_CONTENT_TYPE_NOSNIFF = False
+SECURE_BROWSER_XSS_FILTER = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_HTTPONLY = False
 X_FRAME_OPTIONS = 'DENY'
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 
