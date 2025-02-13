@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-import os.path
+import os
 from pathlib import Path
-from telnetlib import LOGOUT
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'sarcophagus.urls'
@@ -85,14 +86,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sarcophagus',
-        'USER': 'curio5813',
-        'PASSWORD': 'curio5813#$',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
@@ -134,6 +128,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Configuração do Whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # E-mail teste console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -182,7 +179,4 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = False
-
-
-
 
