@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
 
 # In Developing
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -99,7 +99,7 @@ DATABASES = {
         'PORT': '5432',  # O padrão do PostgreSQL
     }
 }
-
+"""
 
 
 # Password validation
