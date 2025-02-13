@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-# Developing
+# In Developing
 
 DATABASES = {
     'default': {
@@ -99,6 +99,7 @@ DATABASES = {
         'PORT': '5432',  # O padrão do PostgreSQL
     }
 }
+
 
 
 # Password validation
@@ -149,14 +150,14 @@ AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
 
 
 # Email production
-"""
+
 EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = 'no-reply@sarcophagus.com'
 EMAIL_PORT = 587
 EMIAL_USE_TSL = True
 EMAIL_HOST_PASSWORD = 'curio581321'
 DEFAULT_FROM_EMAIL = 'contato@sarcophagus.com'
-"""
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -178,7 +179,7 @@ ELASTICSEARCH_DSL = {
 
 
 # Recursos de Segurança (ajustados para ambiente de desenvolvimento)
-
+"""
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_SUBDOMAINS = False
 SECURE_CONTENT_TYPE_NOSNIFF = False
@@ -188,9 +189,11 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = False
+"""
+
 
 # In Production
-"""
+
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_SUBDOMAINS = 
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -200,17 +203,17 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
-"""
+
 
 import dj_database_url
 
 # Production
 
-"""
+
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
-"""
+
 
 import django_heroku
 django_heroku.settings(locals())
