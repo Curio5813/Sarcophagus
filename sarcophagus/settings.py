@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['sapo-b7d8dc91ff98.herokuapp.com']
+ALLOWED_HOSTS = ['.herokuapp.com', 'localhost']
 
 # Application definition
 
@@ -170,13 +170,14 @@ ELASTICSEARCH_DSL = {
 
 
 # Recursos de Segurança (ajustados para ambiente de desenvolvimento)
+CSRF_TRUSTED_ORIGINS = ['https://sarco-476c576b92e6.herokuapp.com']
 SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_SUBDOMAINS = False
-SECURE_CONTENT_TYPE_NOSNIFF = False
-SECURE_BROWSER_XSS_FILTER = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = False
+SECURE_HSTS_SUBDOMAINS = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
-SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = True
 
