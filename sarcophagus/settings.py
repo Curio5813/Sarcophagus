@@ -85,16 +85,11 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sarcophagus',
-        'USER': 'curio5813',
-        'PASSWORD': 'Curio5813#$',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL', 'postgres://curio5813:Curio5813#$@localhost:5432/sarcophagus'))
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
