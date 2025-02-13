@@ -26,13 +26,8 @@ SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Prodction
+# Prodction and developing
 ALLOWED_HOSTS = ['sarco-476c576b92e6.herokuapp.com', 'localhost']
-
-# Developing
-"""
-ALLOWED_HOSTS = ['*']
-"""
 
 # Application definition
 
@@ -96,9 +91,8 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 # Production
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
-
 
 
 # Developing
@@ -201,3 +195,6 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
+
+import django_heroku
+django_heroku.settings(locals())
