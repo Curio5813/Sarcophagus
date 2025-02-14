@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 AWS_ACCESS_KEY_ID = 'AKIAYNKSDCQLCH5QQI3H'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'sarcophagus-media'
-AWS_S3_REGION_NAME = 'regiao-do-bucket'  # Ex: 'sa-east-1'
+AWS_S3_REGION_NAME = 'us-east-1'  # Ex: 'sa-east-1'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
