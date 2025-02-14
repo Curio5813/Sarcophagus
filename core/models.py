@@ -9,7 +9,6 @@ from django.core.exceptions import ValidationError
 from datetime import date
 
 def get_file_path(instance, filename):
-    # Ex: membro_1_profile.jpg
     return f'{filename}'
 
 
