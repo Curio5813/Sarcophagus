@@ -39,7 +39,7 @@
                         <div class="recent-game-item">
                             <div class="rgi-thumb set-bg" data-setbg="{{ game.imagem.thumb.url }}">
                                 <a href="{% url 'game-details' game.id %}">
-                                    <img src="{{ object.imagem.url }}" alt="Imagem" style="width: 100%; height: 100%; border-radius: 10px; object-fit: cover;">
+                                    <img src="{{ game.imagem.thumb.url }}" alt="{{ game.game }}" style="width: 100%; height: 100%; border-radius: 10px; object-fit: cover;">
                                 </a>
                                 <div class="cata">{{ game.genero }}</div>
                             </div>
