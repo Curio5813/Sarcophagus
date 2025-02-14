@@ -1,5 +1,4 @@
 from stdimage.models import StdImageField
-import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -11,7 +10,7 @@ from datetime import date
 
 def get_file_path(instance, filename):
     # Ex: membro_1_profile.jpg
-    return f'{instance._meta.model_name}_{instance.id}_{filename}'
+    return f'{filename}'
 
 
 class Base(models.Model):
