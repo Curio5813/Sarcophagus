@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.twitch',
-    'storages',
+    # 'storages',
 ]
 
 # Configurações do S3
+"""
 AWS_ACCESS_KEY_ID = 'AKIAYNKSDCQLCH5QQI3H'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'sarcophagus-media'
@@ -59,6 +60,8 @@ AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 # Configuração de arquivos de mídia
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+"""
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -155,7 +158,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-# MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
