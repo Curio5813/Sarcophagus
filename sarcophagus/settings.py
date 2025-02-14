@@ -181,7 +181,7 @@ ELASTICSEARCH_DSL = {
 }
 
 
-# Recursos de Segurança (ajustados para ambiente de desenvolvimento)
+# In Developing
 """
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_SUBDOMAINS = False

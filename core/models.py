@@ -1,4 +1,5 @@
 from stdimage.models import StdImageField
+import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -8,8 +9,10 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ValidationError
 from datetime import date
 
-def get_file_path(instance, filename):
-    return f'{filename}'
+def get_file_path(_instance, filename):
+    ext = filename.split('.')[-1]
+    filename = f'{uuid.uuid4()}.{ext}'
+    return filename
 
 
 class Base(models.Model):
@@ -140,7 +143,7 @@ class Games(Base):
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
-    imagem = models.ImageField(_('Imagem'), upload_to='games/images/', blank=True, null=True)
+    imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 560, 'height': 347, 'crop': True}})
     capa = StdImageField(_('Capa'), upload_to=get_file_path, variations={'thumb': {'width': 500, 'height': 723, 'crop': True}}, blank=True, null=True)
     video = models.URLField(_('Video URL'), blank=True, null=True)  # Alteração aqui
 
