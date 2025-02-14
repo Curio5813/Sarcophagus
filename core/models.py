@@ -9,10 +9,9 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.exceptions import ValidationError
 from datetime import date
 
-def get_file_path(_instance, filename):
-    ext = filename.split('.')[-1]
-    filename = f'{uuid.uuid4()}.{ext}'
-    return f'media/{filename}'
+def get_file_path(instance, filename):
+    # Ex: membro_1_profile.jpg
+    return f'{instance._meta.model_name}_{instance.id}_{filename}'
 
 
 class Base(models.Model):
