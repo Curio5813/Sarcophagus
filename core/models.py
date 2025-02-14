@@ -140,7 +140,7 @@ class Games(Base):
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
-    imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 560, 'height': 347, 'crop': True}})
+    imagem = models.ImageField(_('Imagem'), upload_to='games/images/', blank=True, null=True)
     capa = StdImageField(_('Capa'), upload_to=get_file_path, variations={'thumb': {'width': 500, 'height': 723, 'crop': True}}, blank=True, null=True)
     video = models.URLField(_('Video URL'), blank=True, null=True)  # Alteração aqui
 
