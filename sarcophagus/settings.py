@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import dj_database_url
 import django_heroku
 from pathlib import Path
 
@@ -24,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Prodction and developing
 ALLOWED_HOSTS = ['sarco-476c576b92e6.herokuapp.com','sarcophagus.net', 'localhost']
@@ -63,7 +64,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-
+"""
 django_heroku.settings(locals())
 
 
@@ -81,7 +82,7 @@ AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
-
+"""
 
 # Adicione/ajuste estas configurações
 """
@@ -125,7 +126,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
 
 # In Developing
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -136,7 +137,7 @@ DATABASES = {
         'PORT': '5432',  # O padrão do PostgreSQL
     }
 }
-"""
+
 
 
 # Password validation
@@ -175,9 +176,9 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-# MEDIA_URL = '/media/'
+MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 # E-mail teste console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -215,7 +216,7 @@ ELASTICSEARCH_DSL = {
 
 
 # In Developing
-"""
+
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_SUBDOMAINS = False
 SECURE_CONTENT_TYPE_NOSNIFF = False
@@ -225,11 +226,11 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = False
-"""
+
 
 
 # In Production
-
+"""
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_SUBDOMAINS = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -239,14 +240,13 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
+"""
 
 
-import dj_database_url
 
 # Production
-
-
+"""
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
-
+"""
