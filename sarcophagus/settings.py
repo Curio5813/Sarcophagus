@@ -57,13 +57,11 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-# Define o local para os arquivos de mídia
-AWS_LOCATION = 'media'
-AWS_QUERYSTRING_AUTH = False
+# Se não deseja usar uma pasta, não defina AWS_LOCATION ou defina como string vazia:
+# AWS_LOCATION = ''
 
-# Configuração de arquivos de mídia
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 
 
 MIDDLEWARE = [
