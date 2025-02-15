@@ -1,11 +1,8 @@
-from stdimage.models import StdImageField
 import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.contrib.auth.models import Group, Permission
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import Group, Permission, AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core.exceptions import ValidationError
 from datetime import date
 
@@ -14,7 +11,6 @@ def get_file_path(_instance, filename):
     filename = f'{uuid.uuid4()}.{ext}'
     return filename
 
-
 class Base(models.Model):
     criado = models.DateField(_('Created'), auto_now_add=True)
     modificado = models.DateField(_("Updating"), auto_now=True)
@@ -22,7 +18,6 @@ class Base(models.Model):
 
     class Meta:
         abstract = True
-
 
 class MembroManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
@@ -56,44 +51,41 @@ class Membro(AbstractBaseUser, PermissionsMixin):
         ('O', _('Outro')),
     ]
     genero = models.CharField(max_length=1, choices=GENERO_CHOICES)
-    imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 200, 'height': 200, 'crop': True}})
-    ativo = models.BooleanField(default=True)  # 'ativo' aqui
-    modificado = models.DateTimeField(auto_now=True)  # 'modificado' aqui
-    is_staff = models.BooleanField(default=False)  # Adicione este campo
-    is_superuser = models.BooleanField(default=False)  # Se não tiver, adicione também
+    # Usando ImageField para a imagem do usuário
+    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path, blank=True, null=True)
+    ativo = models.BooleanField(default=True)
+    modificado = models.DateTimeField(auto_now=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     groups = models.ManyToManyField(
         Group,
-        related_name='membro_set',  # Defina um related_name único
+        related_name='membro_set',
         blank=True,
         help_text=_('Os grupos aos quais o usuário pertence.'),
         verbose_name=_('grupos')
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='membro_permissions_set',  # Defina um related_name único
+        related_name='membro_permissions_set',
         blank=True,
         help_text=_('As permissões específicas para este usuário.'),
         verbose_name=_('permissões do usuário')
     )
-
-    # Campos adicionais para autenticação
 
     objects = MembroManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
-    # Método para calcular a idade
     @property
     def idade(self):
         if self.nascimento:
             hoje = date.today()
             idade = hoje.year - self.nascimento.year
-            # Ajuste para o caso em que o aniversário ainda não ocorreu este ano
             if (hoje.month, hoje.day) < (self.nascimento.month, self.nascimento.day):
                 idade -= 1
             return idade
-        return None  # Retorna None se a data de nascimento não estiver definida
+        return None
 
     class Meta:
         verbose_name = _('Membro')
@@ -101,7 +93,6 @@ class Membro(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.membro
-
 
 class Genero(models.Model):
     GENERO_CHOICES = [
@@ -125,7 +116,6 @@ class Genero(models.Model):
     def __str__(self):
         return self.nome
 
-
 class Games(Base):
     game = models.CharField(_('Nome'), max_length=100)
     descricao = models.TextField(_('Descrição'), max_length=1500)
@@ -133,35 +123,26 @@ class Games(Base):
     graphics = models.TextField(_('Graphics'), max_length=1500, blank=True, null=True)
     sound_and_music = models.TextField(_('Sound and Music'), max_length=1500, blank=True, null=True)
     conclusion = models.TextField(_('Conclusion'), max_length=1500, blank=True, null=True)
-    generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))  # Many-to-Many com o modelo Genero
+    generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))
     rating = models.DecimalField(
-    _('Rating'),
-    max_digits=3,
-    decimal_places=1,
-    validators=[MinValueValidator(0), MaxValueValidator(10)]
+        _('Rating'),
+        max_digits=3,
+        decimal_places=1,
+        validators=[MinValueValidator(0), MaxValueValidator(10)]
     )
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
-    imagem = StdImageField(
-        _('Imagem'), upload_to=get_file_path,
-        variations={'thumb': {'width': 560, 'height': 347, 'crop': True}},
-        render_variations=True  # Gera as variações durante o upload
-    )
-    capa = StdImageField(
-        _('Capa'), upload_to=get_file_path,
-        variations={'thumb': {'width': 500, 'height': 723, 'crop': True}},
-        blank=True, null=True,
-        render_variations=True  # Gera as variações durante o upload
-    )
-    video = models.URLField(_('Video URL'), blank=True, null=True)  # Alteração aqui
+    # Usando ImageField – sem variações automáticas
+    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path)
+    capa = models.ImageField(_('Capa'), upload_to=get_file_path, blank=True, null=True)
+    video = models.URLField(_('Video URL'), blank=True, null=True)
 
     @property
     def video_embed_url(self):
         if self.video:
             return self.video.replace("watch?v=", "embed/")
         return None
-
 
     class Meta:
         verbose_name = _('Game')
@@ -170,33 +151,32 @@ class Games(Base):
     def __str__(self):
         return self.game
 
-
 class GameRating(Base):
     membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
     game = models.ForeignKey(Games, on_delete=models.CASCADE)
-    rating = models.DecimalField(_('Nota'), max_digits=3, decimal_places=1, validators=[MinValueValidator(0), MaxValueValidator(10)])
+    rating = models.DecimalField(_('Nota'), max_digits=3, decimal_places=1,
+                                   validators=[MinValueValidator(0), MaxValueValidator(10)])
     favorito = models.BooleanField(_('Favorito?'), default=False)
 
     class Meta:
         verbose_name = _('Avaliação de Jogo')
         verbose_name_plural = _('Avaliações de Jogos')
-        unique_together = ('membro', 'game')  # Garante que o membro avalie um jogo uma única vez
+        unique_together = ('membro', 'game')
 
     def __str__(self):
         return f'{self.membro} - {self.game} - Nota: {self.rating}'
 
-
 class BlogPost(models.Model):
     titulo = models.CharField(max_length=200)
     conteudo = models.TextField()
-    imagem = StdImageField(upload_to='img/blog', variations={'thumbnail': (700, 400, True)}, blank=False)
+    # Usando ImageField sem geração automática de variações
+    imagem = models.ImageField(_('Imagem'), upload_to='img/blog')
     autor = models.ForeignKey(Membro, on_delete=models.CASCADE)
     publicado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.titulo
-
 
 class BlogComment(models.Model):
     post = models.ForeignKey(BlogPost, related_name='comentarios', on_delete=models.CASCADE)
@@ -206,7 +186,6 @@ class BlogComment(models.Model):
 
     def __str__(self):
         return f'Comentário por {self.membro} no post {self.post}'
-
 
 class Tournament(models.Model):
     game = models.ForeignKey('Games', on_delete=models.CASCADE, verbose_name="Jogo")
@@ -234,12 +213,8 @@ class Tournament(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        """Salva o objeto antes de validar os participantes."""
-        # Salvar o objeto para garantir que ele tenha um ID válido
         is_new = self.pk is None
         super().save(*args, **kwargs)
-
-        # Valida os participantes somente para objetos existentes
         if not is_new and self.participants.count() > self.max_participants:
             raise ValidationError(
                 f"O número de participantes ({self.participants.count()}) excede o limite permitido ({self.max_participants})."
