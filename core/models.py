@@ -1,5 +1,6 @@
 from stdimage.models import StdImageField
 import uuid
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -144,15 +145,19 @@ class Games(Base):
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
     imagem = StdImageField(
-        _('Imagem'), upload_to=get_file_path,
+        _('Imagem'),
+        upload_to=get_file_path,
+        storage=settings.DEFAULT_FILE_STORAGE,  # Força o uso do storage S3
         variations={'thumb': {'width': 560, 'height': 347, 'crop': True}},
-        render_variations=True  # Gera as variações durante o upload
+        render_variations=True
     )
     capa = StdImageField(
-        _('Capa'), upload_to=get_file_path,
+        _('Capa'),
+        upload_to=get_file_path,
+        storage=settings.DEFAULT_FILE_STORAGE,  # Também para a capa, se necessário
         variations={'thumb': {'width': 500, 'height': 723, 'crop': True}},
         blank=True, null=True,
-        render_variations=True  # Gera as variações durante o upload
+        render_variations=True
     )
     video = models.URLField(_('Video URL'), blank=True, null=True)  # Alteração aqui
 
