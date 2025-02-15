@@ -11,6 +11,7 @@ Django==5.1.6
 django-allauth==65.4.1
 django-heroku==0.3.1
 django-requests==0.0.2
+django-sslserver==0.22
 django-stdimage==6.0.2
 django-storages==1.14.4
 gunicorn==23.0.0
