@@ -48,8 +48,6 @@ INSTALLED_APPS = [
     'storages',
 ]
 
-django_heroku.settings(locals())
-
 # Configurações do S3
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
@@ -248,3 +246,6 @@ import dj_database_url
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
+
+
+django_heroku.settings(locals())
