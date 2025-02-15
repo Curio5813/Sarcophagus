@@ -166,17 +166,15 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
+# MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 # E-mail teste console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
 AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
                            'django.contrib.auth.backends.ModelBackend',]
-
-
 
 # Email production
 
