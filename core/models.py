@@ -143,8 +143,17 @@ class Games(Base):
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
-    imagem = StdImageField(_('Imagem'), upload_to=get_file_path, variations={'thumb': {'width': 560, 'height': 347, 'crop': True}})
-    capa = StdImageField(_('Capa'), upload_to=get_file_path, variations={'thumb': {'width': 500, 'height': 723, 'crop': True}}, blank=True, null=True)
+    imagem = StdImageField(
+        _('Imagem'), upload_to=get_file_path,
+        variations={'thumb': {'width': 560, 'height': 347, 'crop': True}},
+        render_variations=True  # Gera as variações durante o upload
+    )
+    capa = StdImageField(
+        _('Capa'), upload_to=get_file_path,
+        variations={'thumb': {'width': 500, 'height': 723, 'crop': True}},
+        blank=True, null=True,
+        render_variations=True  # Gera as variações durante o upload
+    )
     video = models.URLField(_('Video URL'), blank=True, null=True)  # Alteração aqui
 
     @property
