@@ -149,7 +149,7 @@ class Games(Base):
         upload_to=get_file_path,
         storage=settings.DEFAULT_FILE_STORAGE,  # Força o uso do storage S3
         variations={'thumb': {'width': 560, 'height': 347, 'crop': True}},
-        render_variations=False
+        render_variations=True
     )
     capa = StdImageField(
         _('Capa'),
@@ -157,7 +157,7 @@ class Games(Base):
         storage=settings.DEFAULT_FILE_STORAGE,  # Também para a capa, se necessário
         variations={'thumb': {'width': 500, 'height': 723, 'crop': True}},
         blank=True, null=True,
-        render_variations=False
+        render_variations=True
     )
     video = models.URLField(_('Video URL'), blank=True, null=True)  # Alteração aqui
 
