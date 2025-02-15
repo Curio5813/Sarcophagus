@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import django_heroku
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Prodction and developing
 ALLOWED_HOSTS = ['sarco-476c576b92e6.herokuapp.com','sarcophagus.net', 'localhost']
@@ -47,8 +48,7 @@ INSTALLED_APPS = [
     'storages',
 ]
 
-# Configurações do S3
-import os
+django_heroku.settings(locals())
 
 # Configurações do S3
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -248,7 +248,3 @@ import dj_database_url
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
-
-
-import django_heroku
-django_heroku.settings(locals())
