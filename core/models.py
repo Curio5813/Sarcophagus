@@ -1,4 +1,5 @@
 import uuid
+from django.conf import settings  # Importa as configurações para usar DEFAULT_FILE_STORAGE
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -27,7 +28,7 @@ class MembroManager(BaseUserManager):
         user = self.model(email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.is_active = True
-        user.is_staff = False  # Normalmente, usuários regulares não devem ser staff
+        user.is_staff = False
         user.save(using=self._db)
         return user
 
@@ -51,8 +52,10 @@ class Membro(AbstractBaseUser, PermissionsMixin):
         ('O', _('Outro')),
     ]
     genero = models.CharField(max_length=1, choices=GENERO_CHOICES)
-    # Usando ImageField para a imagem do usuário
-    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path, blank=True, null=True)
+    # Força o uso do DEFAULT_FILE_STORAGE (S3)
+    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path,
+                               storage=settings.DEFAULT_FILE_STORAGE,
+                               blank=True, null=True)
     ativo = models.BooleanField(default=True)
     modificado = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)
@@ -106,7 +109,6 @@ class Genero(models.Model):
         ('Sports', 'Sports'),
         ('Strategy', 'Strategy'),
     ]
-
     nome = models.CharField(_('Nome'), max_length=100, choices=GENERO_CHOICES, unique=True)
 
     class Meta:
@@ -133,9 +135,12 @@ class Games(Base):
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
-    # Usando ImageField – sem variações automáticas
-    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path)
-    capa = models.ImageField(_('Capa'), upload_to=get_file_path, blank=True, null=True)
+    # Campos de imagem usando o DEFAULT_FILE_STORAGE (S3)
+    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path,
+                               storage=settings.DEFAULT_FILE_STORAGE)
+    capa = models.ImageField(_('Capa'), upload_to=get_file_path,
+                             storage=settings.DEFAULT_FILE_STORAGE,
+                             blank=True, null=True)
     video = models.URLField(_('Video URL'), blank=True, null=True)
 
     @property
@@ -169,8 +174,9 @@ class GameRating(Base):
 class BlogPost(models.Model):
     titulo = models.CharField(max_length=200)
     conteudo = models.TextField()
-    # Usando ImageField sem geração automática de variações
-    imagem = models.ImageField(_('Imagem'), upload_to='img/blog')
+    # Campo de imagem para blog, usando S3
+    imagem = models.ImageField(_('Imagem'), upload_to='img/blog',
+                               storage=settings.DEFAULT_FILE_STORAGE)
     autor = models.ForeignKey(Membro, on_delete=models.CASCADE)
     publicado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
@@ -205,9 +211,11 @@ class Tournament(models.Model):
         verbose_name="Máximo de Participantes",
         help_text="Número máximo de participantes permitidos."
     )
+    # Campo de capa para torneio, usando S3
     capa = models.ImageField(
         upload_to='tournaments/capas/',
         verbose_name="Capa do Campeonato",
+        storage=settings.DEFAULT_FILE_STORAGE,
         null=True,
         blank=True
     )
