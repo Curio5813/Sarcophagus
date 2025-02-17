@@ -14,6 +14,7 @@ import dj_database_url
 # import django_heroku
 from pathlib import Path
 from dotenv import load_dotenv
+from storages.backends.s3boto3 import S3Boto3Storage
 
 
 load_dotenv()
@@ -72,18 +73,14 @@ MIDDLEWARE = [
 
 # django_heroku.settings(locals())
 
-# Configurações do S3
+# Configuração do AWS S3
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = 'sarcophagus-media'
+AWS_STORAGE_BUCKET_NAME = 'sarcophagus-media'  # Substitua pelo nome correto do seu bucket
 AWS_S3_REGION_NAME = 'us-east-1'
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-# Se não deseja usar uma pasta, não defina AWS_LOCATION ou defina como string vazia:
-# AWS_LOCATION = ''
-
+# Para armazenar arquivos de mídia no S3
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
 
