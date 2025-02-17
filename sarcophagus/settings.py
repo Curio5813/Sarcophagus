@@ -73,16 +73,24 @@ MIDDLEWARE = [
 
 # django_heroku.settings(locals())
 
-# Configuração do AWS S3
+
+# Configuração do AWS S3 para arquivos de mídia
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = 'sarcophagus-media'  # Substitua pelo nome correto do seu bucket
-AWS_S3_REGION_NAME = 'us-east-1'
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
-# Para armazenar arquivos de mídia no S3
+# Arquivos de mídia (uploads do usuário) → Vão para o S3
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+
+# Arquivos estáticos (CSS, JS, imagens da pasta `static/`)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Para garantir que o Django use o Whitenoise para arquivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Adicione/ajuste estas configurações
@@ -97,7 +105,6 @@ STATICFILES_DIRS = [
 ]
 """
 
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'sarcophagus.urls'
 
@@ -127,6 +134,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
 
 # In Developing
+"""
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
@@ -144,16 +152,12 @@ else:
             'PORT': '5432',  # O padrão do PostgreSQL
         }
     }
+"""
 
 
 # Production
 
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-}
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
