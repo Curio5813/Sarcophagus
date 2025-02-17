@@ -79,18 +79,29 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
-# Arquivos de mídia (uploads do usuário) → Vão para o S3
+AWS_S3_CUSTOM_DOMAIN = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_FILE_OVERWRITE = False  # Evita que uploads com o mesmo nome sobrescrevam arquivos existentes
+AWS_DEFAULT_ACL = None  # Evita problemas de permissão
+AWS_QUERYSTRING_AUTH = False  # Remove parâmetros de autenticação das URLs
+
+# Armazenamento de arquivos de mídia no S3
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
+MEDIA_URL = f'{AWS_S3_CUSTOM_DOMAIN}/media/'
 
-# Arquivos estáticos (CSS, JS, imagens da pasta `static/`)
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Para garantir que o Django use o Whitenoise para arquivos estáticos
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+"""
+# Armazenamento de arquivos estáticos no S3
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = f'{AWS_S3_CUSTOM_DOMAIN}/static/'
+"""
+
+
+# Servindo  arquivos estáticos localmente
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 
 
 # Adicione/ajuste estas configurações
@@ -137,10 +148,9 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-"""
 if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL)
+        'default': dj_database_url.config(default=DATABASE_URL)
     }
 else:
     DATABASES = {
@@ -149,11 +159,11 @@ else:
             'NAME': 'sarcophagus',
             'USER': 'curio5813',
             'PASSWORD': 'curio581321',
-            'HOST': 'localhost',  # Pode ser alterado se o banco estiver em outro servidor
-            'PORT': '5432',  # O padrão do PostgreSQL
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
-"""
+
 
 
 # Production
