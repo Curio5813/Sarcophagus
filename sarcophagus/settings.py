@@ -146,6 +146,11 @@ DATABASES = {
 }
 """
 
+# Production
+
+DATABASES = {
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -247,11 +252,3 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
-
-
-# Production
-
-DATABASES = {
-    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-}
-
