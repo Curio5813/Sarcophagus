@@ -130,18 +130,24 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
 
 # In Developing
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sarcophagus',
-        'USER': 'curio5813',
-        'PASSWORD': 'curio581321',
-        'HOST': 'localhost',  # Pode ser alterado se o banco estiver em outro servidor
-        'PORT': '5432',  # O padrão do PostgreSQL
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
     }
-}
-"""
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'sarcophagus',
+            'USER': 'curio5813',
+            'PASSWORD': 'curio581321',
+            'HOST': 'localhost',  # Pode ser alterado se o banco estiver em outro servidor
+            'PORT': '5432',  # O padrão do PostgreSQL
+        }
+    }
+
 
 # Production
 
