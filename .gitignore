@@ -34,3 +34,4 @@ db.pgsql
 # Misc
 *.swp
 .DS_Store
+.env
