@@ -13,6 +13,11 @@ import os
 import dj_database_url
 # import django_heroku
 from pathlib import Path
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +33,7 @@ SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2
 DEBUG = True
 
 # Prodction and developing
-ALLOWED_HOSTS = ['sarco-476c576b92e6.herokuapp.com','sarcophagus.net', '*']
+ALLOWED_HOSTS = ['.onrender.com', 'sarcophagus.net', '127.0.0.1']
 
 # Application definition
 
@@ -65,8 +70,9 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
-"""
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Configurações do S3
@@ -83,7 +89,7 @@ AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/'
-"""
+
 
 # Adicione/ajuste estas configurações
 """
@@ -127,7 +133,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
 
 # In Developing
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -138,7 +144,7 @@ DATABASES = {
         'PORT': '5432',  # O padrão do PostgreSQL
     }
 }
-
+"""
 
 
 # Password validation
@@ -217,7 +223,7 @@ ELASTICSEARCH_DSL = {
 
 
 # In Developing
-
+"""
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_SUBDOMAINS = False
 SECURE_CONTENT_TYPE_NOSNIFF = False
@@ -227,11 +233,11 @@ CSRF_COOKIE_SECURE = False
 CSRF_COOKIE_HTTPONLY = False
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = False
-
+"""
 
 
 # In Production
-"""
+
 SECURE_HSTS_SECONDS = 0
 SECURE_HSTS_SUBDOMAINS = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -241,13 +247,11 @@ CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = True
 # X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
-"""
-
 
 
 # Production
-"""
+
 DATABASES = {
     'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
-"""
+
