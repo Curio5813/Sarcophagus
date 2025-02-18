@@ -96,10 +96,12 @@ AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_AUTH = False
 
 # **Armazenamento de Arquivos Estáticos e Mídia no S3**
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'{AWS_S3_CUSTOM_DOMAIN}/media/'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = f'{AWS_S3_CUSTOM_DOMAIN}/static/'
+
+# Configuração de armazenamento de arquivos de mídia
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
