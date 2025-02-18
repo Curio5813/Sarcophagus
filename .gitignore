@@ -39,6 +39,7 @@ db.pgsql
 # Elastic Beansextensions Files
 .ebextensions/python.config
 .ebextensions/django.config
+.ebextensions/environment.config
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
