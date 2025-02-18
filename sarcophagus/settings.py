@@ -11,32 +11,18 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 import dj_database_url
-# import django_heroku
 from pathlib import Path
 from dotenv import load_dotenv
-from storages.backends.s3boto3 import S3Boto3Storage
-
 
 load_dotenv()
 
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-yz$e2fxwy(wcpo+j^v54=s^&rnuqm(x(ell1=$d0eh4_nx8co2'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-# Prodction and developing
-ALLOWED_HOSTS = ['.onrender.com', 'sarcophagus.net', '127.0.0.1']
-
-# Application definition
+ALLOWED_HOSTS = ['.elasticbeanstalk.com', 'sarcophagus.net', '127.0.0.1']
 
 INSTALLED_APPS = [
     'core',
@@ -56,9 +42,9 @@ INSTALLED_APPS = [
     'sslserver',
 ]
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -67,62 +53,14 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-
-# django_heroku.settings(locals())
-
-
-# Configuração do AWS S3 para arquivos de mídia
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
-
-AWS_S3_CUSTOM_DOMAIN = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_S3_FILE_OVERWRITE = False  # Evita que uploads com o mesmo nome sobrescrevam arquivos existentes
-AWS_DEFAULT_ACL = None  # Evita problemas de permissão
-AWS_QUERYSTRING_AUTH = False  # Remove parâmetros de autenticação das URLs
-
-# Armazenamento de arquivos de mídia no S3
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'{AWS_S3_CUSTOM_DOMAIN}/media/'
-
-
-"""
-# Armazenamento de arquivos estáticos no S3
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATIC_URL = f'{AWS_S3_CUSTOM_DOMAIN}/static/'
-"""
-
-
-# Servindo  arquivos estáticos localmente
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-
-
-# Adicione/ajuste estas configurações
-"""
-SECURE_HSTS_SECONDS = 31536000  # 1 year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-"""
-
 
 ROOT_URLCONF = 'sarcophagus.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Use BASE_DIR para apontar para o diretório de templates
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,135 +77,49 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-
-# In Developing
-
-DATABASE_URL = os.getenv("DATABASE_URL")
-
-if DATABASE_URL:
-    DATABASES = {
-        'default': dj_database_url.config(default=DATABASE_URL)
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'sarcophagus',
-            'USER': 'curio5813',
-            'PASSWORD': 'curio581321',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
-    }
-
-
-
-# Production
-
-# Password validation
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-"""
-STATIC_URL = '/static/'
-# MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
-
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-"""
-
-# E-mail teste console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-SITE_ID = 1
-AUTHENTICATION_BACKENDS = ['core.backends.EmailBackend',
-                           'django.contrib.auth.backends.ModelBackend',]
-
-# Email production
-
-EMAIL_HOST = 'localhost'
-EMAIL_HOST_USER = 'no-reply@sarcophagus.com'
-EMAIL_PORT = 587
-EMIAL_USE_TSL = True
-EMAIL_HOST_PASSWORD = 'curio581321'
-DEFAULT_FROM_EMAIL = 'contato@sarcophagus.com'
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'core.Membro'
-
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
-LOCALE_PATH = (
-    os.path.join(BASE_DIR, 'locale'),
-)
-
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': 'http://localhost:9200'  # Esquema (http), host (localhost) e porta (9200)
-    },
+# **Configuração do Banco de Dados no RDS**
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv("DATABASE_URL", "postgres://usuario:senha@localhost:5432/sarcophagus")
+    )
 }
 
+# **Configuração do AWS S3**
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
+AWS_S3_CUSTOM_DOMAIN = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
-# In Developing
-"""
-SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_SUBDOMAINS = False
-SECURE_CONTENT_TYPE_NOSNIFF = False
-SECURE_BROWSER_XSS_FILTER = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-CSRF_COOKIE_HTTPONLY = False
-# X_FRAME_OPTIONS = 'DENY'
-SECURE_SSL_REDIRECT = False
-"""
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_QUERYSTRING_AUTH = False
 
+# **Armazenamento de Arquivos Estáticos e Mídia no S3**
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = f'{AWS_S3_CUSTOM_DOMAIN}/media/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = f'{AWS_S3_CUSTOM_DOMAIN}/static/'
 
-# In Production
-
-SECURE_HSTS_SECONDS = 0
-SECURE_HSTS_SUBDOMAINS = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
+# **Configuração de Segurança**
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
-# X_FRAME_OPTIONS = 'DENY'
 SECURE_SSL_REDIRECT = True
+
+AUTH_USER_MODEL = 'core.Membro'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# **E-mails**
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sarcophagus.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = 'contato@sarcophagus.com'

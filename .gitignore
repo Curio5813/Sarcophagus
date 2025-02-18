@@ -36,6 +36,10 @@ db.pgsql
 .DS_Store
 .env
 
+# Elastic Beansextensions Files
+.ebextensions/python.config
+.ebextensions/django.config
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
