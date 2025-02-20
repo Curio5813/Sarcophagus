@@ -20,9 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = False
 
-ALLOWED_HOSTS = ['.elasticbeanstalk.com', 'sarcophagus.net', '127.0.0.1']
+ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'www.sarcophagus.net']
 
 INSTALLED_APPS = [
     'core',
@@ -80,27 +80,33 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 # **Configuração do Banco de Dados no RDS**
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL", "postgres://usuario:senha@localhost:5432/sarcophagus")
+        default=os.getenv("DATABASE_URL", "postgres://u29fqucarl5frg:pbf94400ec1d92ffda37fb9beea36a213396ac4b41e281901a019718ee74a32ad@ccpa7stkruda3o.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/de855v2bni0867")
     )
 }
 
-# **Configuração do AWS S3**
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://sarcophagus-mfg.onrender.com",
+    "https://sarcophagus.net"
+]
+
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
+# Configuração do Cloudflare R2
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-west-2")
-AWS_S3_CUSTOM_DOMAIN = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
+AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN", AWS_S3_ENDPOINT_URL)
 
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-AWS_QUERYSTRING_AUTH = False
-
-# **Armazenamento de Arquivos Estáticos e Mídia no S3**
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATIC_URL = f'{AWS_S3_CUSTOM_DOMAIN}/static/'
-
-# Configuração de armazenamento de arquivos de mídia
+# Configurar STATICFILES e MEDIA usando o R2
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+# Caminho para os arquivos estáticos e mídia
+STATIC_URL = f"{AWS_S3_CUSTOM_DOMAIN}/static/"
 MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
