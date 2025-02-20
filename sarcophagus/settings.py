@@ -22,7 +22,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'www.sarcophagus.net']
+ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '127.0.0.1']
 
 INSTALLED_APPS = [
     'core',
