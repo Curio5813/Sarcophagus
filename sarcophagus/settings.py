@@ -117,6 +117,7 @@ MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+PORT = 10000
 
 # **Configuração de Segurança**
 SECURE_HSTS_SECONDS = 31536000
