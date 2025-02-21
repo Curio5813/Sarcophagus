@@ -20,9 +20,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '127.0.0.1']
+ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '*']
 
 INSTALLED_APPS = [
     'core',
@@ -98,7 +98,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "https://72f15a19454f262e262c5f6c1251658d.r2.cloudflarestorage.com")
+AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
 AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN", AWS_S3_ENDPOINT_URL)
 
 # Para garantir que os arquivos sejam servidos corretamente
