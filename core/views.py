@@ -326,7 +326,7 @@ class TesteView(TemplateView):
 
 
 class LoginView(FormView):
-    template_name = 'login/login.html'
+    template_name = 'registration/login.html'
     form_class = MembroLoginForm
 
     def form_valid(self, form):
