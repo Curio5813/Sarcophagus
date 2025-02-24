@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '*']
 
@@ -111,7 +111,7 @@ STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # Caminho para os arquivos estáticos e mídia
-STATIC_URL = f"{AWS_S3_CUSTOM_DOMAIN}/staticfiles/"
+STATIC_URL = f"{AWS_S3_CUSTOM_DOMAIN}/static/"
 MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
 
 
@@ -123,8 +123,7 @@ PORT = 10000
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SESSION_COOKIE_SECURE = True
+SSESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 
