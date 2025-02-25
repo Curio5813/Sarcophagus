@@ -23,13 +23,6 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
 DEBUG = False
 
-if DEBUG:
-    STATIC_URL = '/static/'
-    STATICFILES_DIRS = [BASE_DIR / "static"]
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / "media"
-
-
 ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '*']
 
 INSTALLED_APPS = [
