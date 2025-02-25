@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+from dotenv import load_dotenv
 import os
 import dj_database_url
 from pathlib import Path
-from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '*']
 
@@ -107,15 +108,18 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_QUERYSTRING_AUTH = False
 
 # Configurar STATICFILES e MEDIA usando o R2
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # Caminho para os arquivos estáticos e mídia
-STATIC_URL = f"{AWS_S3_CUSTOM_DOMAIN}/static/"
-MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
+STATIC_URL = f"{AWS_S3_ENDPOINT_URL}/sarcophagus-media/static/"
+MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/sarcophagus-media/media/"
+
 
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_ROOT = BASE_DIR / "media"
+
 
 PORT = 10000
 
