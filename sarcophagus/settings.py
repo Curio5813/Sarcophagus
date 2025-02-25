@@ -21,7 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
-DEBUG = True
+DEBUG = False
+
+if DEBUG:
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [BASE_DIR / "static"]
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = BASE_DIR / "media"
+
 
 ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '*']
 
@@ -100,7 +107,7 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
-AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN", AWS_S3_ENDPOINT_URL)
+AWS_S3_CUSTOM_DOMAIN = "https://cdn.sarcophagus.net"
 
 # Para garantir que os arquivos sejam servidos corretamente
 AWS_S3_ADDRESSING_STYLE = "virtual"
@@ -112,10 +119,8 @@ STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 # Caminho para os arquivos estáticos e mídia
-STATIC_URL = f"{AWS_S3_ENDPOINT_URL}/sarcophagus-media/static/"
-MEDIA_URL = f"{AWS_S3_ENDPOINT_URL}/sarcophagus-media/media/"
-
-
+STATIC_URL = f"{AWS_S3_CUSTOM_DOMAIN}/staticfiles/"
+MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = BASE_DIR / "media"
