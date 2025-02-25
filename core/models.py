@@ -6,10 +6,19 @@ from django.contrib.auth.models import Group, Permission, AbstractBaseUser, Base
 from django.core.exceptions import ValidationError
 from datetime import date
 
-def get_file_path(_instance, filename):
+
+def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
-    filename = f'{uuid.uuid4()}.{ext}'
-    return filename
+    filename = f"{uuid.uuid4()}.{ext}"
+
+    # Definir um diretório adequado para cada tipo de arquivo no R2
+    if isinstance(instance, Membro):
+        return f"media/members/{filename}"  # Imagens de membros
+    elif isinstance(instance, Games):
+        return f"media/games/{filename}"  # Imagens de jogos
+    elif isinstance(instance, BlogPost):
+        return f"media/blog/{filename}"  # Imagens de posts do blog
+    return f"media/others/{filename}"  # Outros arquivos
 
 
 class Base(models.Model):
