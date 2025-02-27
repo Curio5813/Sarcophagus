@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group, Permission, AbstractBaseUser, Base
 from django.core.exceptions import ValidationError
 from datetime import date
 from cloudinary.models import CloudinaryField
-
+import re
 import uuid
 
 
@@ -126,6 +126,16 @@ class Games(Base):
     imagem = CloudinaryField('games')
     capa = CloudinaryField('games_covers', blank=True, null=True)
     video = models.URLField(_('Video URL'), blank=True, null=True)
+
+    @property
+    def embed_video_url(self):
+        """Converte qualquer link do YouTube para a versão embed automaticamente"""
+        if self.video:
+            # Expressão regular para capturar o ID do vídeo
+            match = re.search(r"(?:v=|youtu\.be/|embed/|watch\?.*v=)([A-Za-z0-9_-]+)", self.video)
+            if match:
+                return f"https://www.youtube.com/embed/{match.group(1)}"
+        return None  # Retorna None se não houver vídeo
 
     def __str__(self):
         return self.game
