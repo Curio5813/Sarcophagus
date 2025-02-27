@@ -23,12 +23,13 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com',
-                 'sarcophagus.net',
-                 'www.sarcophagus.net',
-                 '*',
-                 '192.168.1.100'
-                 ]
+ALLOWED_HOSTS = [
+    "sarcophagus-mfg.onrender.com",
+    "sarcophagus.net",
+    "www.sarcophagus.net",
+    "127.0.0.1",
+    "localhost",
+]
 
 INSTALLED_APPS = [
     "cloudinary",
@@ -121,6 +122,12 @@ MEDIA_ROOT = BASE_DIR / "media"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 PORT = 10000
+
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://sarcophagus-mfg.onrender.com",
+    "https://www.sarcophagus.net",
+]
 
 
 SECURE_SSL_REDIRECT = True
