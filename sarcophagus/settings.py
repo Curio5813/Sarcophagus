@@ -97,7 +97,7 @@ DATABASES = {
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
-import os
+SITE_ID = 1
 
 # Configuração do Cloudinary
 CLOUDINARY_STORAGE = {
