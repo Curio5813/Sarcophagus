@@ -15,6 +15,8 @@ import dj_database_url
 from pathlib import Path
 
 
+
+
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +25,12 @@ SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com', 'sarcophagus.net', 'www.sarcophagus.net', '*']
+ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com',
+                 'sarcophagus.net',
+                 'www.sarcophagus.net',
+                 '*',
+                 '192.168.1.100'
+                 ]
 
 INSTALLED_APPS = [
     'core',
@@ -41,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitch',
     'storages',
     'sslserver',
+    "cloudinary_storage"
 ]
 
 MIDDLEWARE = [
@@ -86,34 +94,24 @@ DATABASES = {
 }
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://sarcophagus-mfg.onrender.com",
-    "https://sarcophagus.net"
-]
-
-
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
-# Configuração do Cloudflare R2
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
-AWS_S3_CUSTOM_DOMAIN = "https://cdn.sarcophagus.net"
+import os
 
-# Para garantir que os arquivos sejam servidos corretamente
-AWS_S3_ADDRESSING_STYLE = "virtual"
-AWS_S3_FILE_OVERWRITE = False
-AWS_QUERYSTRING_AUTH = False
+# Configuração do Cloudinary
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
+}
 
-# Configurar STATICFILES e MEDIA usando o R2
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# Definir Cloudinary como armazenamento padrão de mídia
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
-# Caminho para os arquivos estáticos e mídia
-STATIC_URL = f"{AWS_S3_CUSTOM_DOMAIN}/staticfiles/"
-MEDIA_URL = f"{AWS_S3_CUSTOM_DOMAIN}/media/"
+# URLs de mídia
+MEDIA_URL = f"https://res.cloudinary.com/{os.getenv('CLOUDINARY_CLOUD_NAME')}/"
+
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -121,13 +119,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 PORT = 10000
 
-# **Configuração de Segurança**
-SECURE_HSTS_SECONDS = 31536000
+
+SECURE_SSL_REDIRECT = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000  # Força HTTPS por um ano
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-SSESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
 
 AUTH_USER_MODEL = 'core.Membro'
 LOGIN_REDIRECT_URL = 'index'

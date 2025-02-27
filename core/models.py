@@ -1,24 +1,26 @@
-import uuid
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.auth.models import Group, Permission, AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.core.exceptions import ValidationError
 from datetime import date
+from cloudinary.models import CloudinaryField
+
+import uuid
 
 
 def get_file_path(instance, filename):
     ext = filename.split('.')[-1]
     filename = f"{uuid.uuid4()}.{ext}"
 
-    # Definir um diretório adequado para cada tipo de arquivo no R2
     if isinstance(instance, Membro):
-        return f"media/members/{filename}"  # Imagens de membros
+        return f"media/members/{filename}"
     elif isinstance(instance, Games):
-        return f"media/games/{filename}"  # Imagens de jogos
+        return f"media/games/{filename}"
     elif isinstance(instance, BlogPost):
-        return f"media/blog/{filename}"  # Imagens de posts do blog
-    return f"media/others/{filename}"  # Outros arquivos
+        return f"media/blog/{filename}"
+    return f"media/others/{filename}"
+
 
 
 class Base(models.Model):
@@ -29,6 +31,7 @@ class Base(models.Model):
     class Meta:
         abstract = True
 
+
 class MembroManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None):
         if not email:
@@ -37,7 +40,7 @@ class MembroManager(BaseUserManager):
         user = self.model(email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.is_active = True
-        user.is_staff = False  # Normalmente, usuários regulares não devem ser staff
+        user.is_staff = False
         user.save(using=self._db)
         return user
 
@@ -48,6 +51,7 @@ class MembroManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class Membro(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(_('Nome'), max_length=50)
     last_name = models.CharField(_('Sobrenome'), max_length=100)
@@ -55,54 +59,30 @@ class Membro(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('E-mail'), unique=True, max_length=100)
     nascimento = models.DateField(_('Data de Nascimento'), null=True, blank=True)
     bio = models.TextField(_('Bio'), max_length=500, blank=True, null=True)
+
     GENERO_CHOICES = [
         ('M', _('Masculino')),
         ('F', _('Feminino')),
         ('O', _('Outro')),
     ]
     genero = models.CharField(max_length=1, choices=GENERO_CHOICES)
-    # Usando ImageField para a imagem do usuário
-    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path, blank=True, null=True)
+
+    # Armazena a imagem no Cloudinary
+    imagem = CloudinaryField('members', blank=True, null=True)
+
     ativo = models.BooleanField(default=True)
     modificado = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    groups = models.ManyToManyField(
-        Group,
-        related_name='membro_set',
-        blank=True,
-        help_text=_('Os grupos aos quais o usuário pertence.'),
-        verbose_name=_('grupos')
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='membro_permissions_set',
-        blank=True,
-        help_text=_('As permissões específicas para este usuário.'),
-        verbose_name=_('permissões do usuário')
-    )
 
     objects = MembroManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
-    @property
-    def idade(self):
-        if self.nascimento:
-            hoje = date.today()
-            idade = hoje.year - self.nascimento.year
-            if (hoje.month, hoje.day) < (self.nascimento.month, self.nascimento.day):
-                idade -= 1
-            return idade
-        return None
-
-    class Meta:
-        verbose_name = _('Membro')
-        verbose_name_plural = _('Membros')
-
     def __str__(self):
         return self.membro
+
 
 class Genero(models.Model):
     GENERO_CHOICES = [
@@ -126,6 +106,7 @@ class Genero(models.Model):
     def __str__(self):
         return self.nome
 
+
 class Games(Base):
     game = models.CharField(_('Nome'), max_length=100)
     descricao = models.TextField(_('Descrição'), max_length=1500)
@@ -133,39 +114,28 @@ class Games(Base):
     graphics = models.TextField(_('Graphics'), max_length=1500, blank=True, null=True)
     sound_and_music = models.TextField(_('Sound and Music'), max_length=1500, blank=True, null=True)
     conclusion = models.TextField(_('Conclusion'), max_length=1500, blank=True, null=True)
+
     generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))
-    rating = models.DecimalField(
-        _('Rating'),
-        max_digits=3,
-        decimal_places=1,
-        validators=[MinValueValidator(0), MaxValueValidator(10)]
-    )
+    rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=1,
+                                 validators=[MinValueValidator(0), MaxValueValidator(10)])
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
-    # Usando ImageField – sem variações automáticas
-    imagem = models.ImageField(_('Imagem'), upload_to=get_file_path)
-    capa = models.ImageField(_('Capa'), upload_to=get_file_path, blank=True, null=True)
+
+    # Substituindo ImageField por CloudinaryField
+    imagem = CloudinaryField('games')
+    capa = CloudinaryField('games_covers', blank=True, null=True)
     video = models.URLField(_('Video URL'), blank=True, null=True)
-
-    @property
-    def video_embed_url(self):
-        if self.video:
-            return self.video.replace("watch?v=", "embed/")
-        return None
-
-    class Meta:
-        verbose_name = _('Game')
-        verbose_name_plural = _('Games')
 
     def __str__(self):
         return self.game
+
 
 class GameRating(Base):
     membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
     game = models.ForeignKey(Games, on_delete=models.CASCADE)
     rating = models.DecimalField(_('Nota'), max_digits=3, decimal_places=1,
-                                   validators=[MinValueValidator(0), MaxValueValidator(10)])
+                                 validators=[MinValueValidator(0), MaxValueValidator(10)])
     favorito = models.BooleanField(_('Favorito?'), default=False)
 
     class Meta:
@@ -176,17 +146,21 @@ class GameRating(Base):
     def __str__(self):
         return f'{self.membro} - {self.game} - Nota: {self.rating}'
 
+
 class BlogPost(models.Model):
     titulo = models.CharField(max_length=200)
     conteudo = models.TextField()
-    # Usando ImageField sem geração automática de variações
-    imagem = models.ImageField(_('Imagem'), upload_to='img/blog')
+
+    # Cloudinary para imagem do post
+    imagem = CloudinaryField('blog')
+
     autor = models.ForeignKey(Membro, on_delete=models.CASCADE)
     publicado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.titulo
+
 
 class BlogComment(models.Model):
     post = models.ForeignKey(BlogPost, related_name='comentarios', on_delete=models.CASCADE)
@@ -196,6 +170,7 @@ class BlogComment(models.Model):
 
     def __str__(self):
         return f'Comentário por {self.membro} no post {self.post}'
+
 
 class Tournament(models.Model):
     game = models.ForeignKey('Games', on_delete=models.CASCADE, verbose_name="Jogo")
@@ -215,12 +190,9 @@ class Tournament(models.Model):
         verbose_name="Máximo de Participantes",
         help_text="Número máximo de participantes permitidos."
     )
-    capa = models.ImageField(
-        upload_to='tournaments/capas/',
-        verbose_name="Capa do Campeonato",
-        null=True,
-        blank=True
-    )
+
+    # Cloudinary para capa do campeonato
+    capa = CloudinaryField('tournament_covers', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
@@ -232,8 +204,3 @@ class Tournament(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.game.game}"
-
-    class Meta:
-        verbose_name = "Campeonato"
-        verbose_name_plural = "Campeonatos"
-        ordering = ['start_date']
