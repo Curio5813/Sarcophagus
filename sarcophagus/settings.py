@@ -15,8 +15,6 @@ import dj_database_url
 from pathlib import Path
 
 
-
-
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -111,11 +109,15 @@ DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # URLs de mídia
 MEDIA_URL = f"https://res.cloudinary.com/{os.getenv('CLOUDINARY_CLOUD_NAME')}/"
+# URL dos arquivos estáticos
+STATIC_URL = "/static/"
 
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
+# Diretório onde os arquivos coletados pelo collectstatic serão armazenados
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Configuração do armazenamento de arquivos estáticos no WhiteNoise
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 PORT = 10000
 
