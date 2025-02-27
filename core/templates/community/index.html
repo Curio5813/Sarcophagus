@@ -48,7 +48,7 @@
                 <li>
                     <div class="community-post">
                         <a href="{% url 'membro-details' m.id %}">
-                            <div class="author-avator set-bg" data-setbg="{{ m.imagem.thumb.url }}"></div>
+                            <div class="author-avator set-bg" data-setbg="{{ m.imagem.url }}"></div>
                         </a>
                         <div class="post-content">
                             <a href="{% url 'membro-details' m.id %}">
@@ -76,7 +76,7 @@
                             <p>{{ favorito.game.descricao|truncatewords:20 }}</p>
                         </div>
                         <div class="game-thumb">
-                            <img src="{{ favorito.game.imagem.thumb.url }}" alt="{{ favorito.game.game }}">
+                            <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}">
                         </div>
                     </div>
                 </li>

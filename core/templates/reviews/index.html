@@ -6,7 +6,7 @@
             <div class="col-md-6 review-item-wrapper">
                 <a href="{% url 'game-details' g.id %}" style="text-decoration: none; color: inherit;">
                     <div class="review-item">
-                        <div class="review-cover set-bg" data-setbg="{{ g.imagem.thumb.url }}">
+                        <div class="review-cover set-bg" data-setbg="{{ g.imagem.url }}">
                             <div class="score yellow">
                                 {{ g.media_rating|floatformat:1 }}
                             </div> <!-- Mostra a média da nota -->

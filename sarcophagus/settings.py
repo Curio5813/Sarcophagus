@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY", "chave-secreta")
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com',
                  'sarcophagus.net',
@@ -31,6 +31,8 @@ ALLOWED_HOSTS = ['sarcophagus-mfg.onrender.com',
                  ]
 
 INSTALLED_APPS = [
+    "cloudinary",
+    "cloudinary_storage",
     'core',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,7 +48,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitch',
     'storages',
     'sslserver',
-    "cloudinary_storage"
 ]
 
 MIDDLEWARE = [
