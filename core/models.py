@@ -77,8 +77,8 @@ class Membro(AbstractBaseUser, PermissionsMixin):
 
     objects = MembroManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = ["first_name", "last_name", "membro"]
 
     @property
     def idade(self):
