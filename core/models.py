@@ -80,6 +80,15 @@ class Membro(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
+    @property
+    def idade(self):
+        """Calcula a idade do membro com base na data de nascimento."""
+        if self.nascimento:
+            hoje = date.today()
+            return hoje.year - self.nascimento.year - (
+                        (hoje.month, hoje.day) < (self.nascimento.month, self.nascimento.day))
+        return None  # Retorna None caso não tenha data de nascimento
+
     def __str__(self):
         return self.membro
 
