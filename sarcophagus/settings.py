@@ -149,10 +149,13 @@ SECURE_HSTS_SECONDS = 31536000  # Força HTTPS por um ano
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+
 AUTH_USER_MODEL = 'core.Membro'
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"  # Se já está logado, redireciona para home
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Indica que o modelo não tem username
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_EMAIL_REQUIRED = True  # O e-mail é obrigatório
