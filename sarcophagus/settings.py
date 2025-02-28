@@ -162,6 +162,7 @@ ACCOUNT_EMAIL_REQUIRED = True  # O e-mail é obrigatório
 ACCOUNT_USERNAME_REQUIRED = False  # Não exige username
 ACCOUNT_SIGNUP = False  # Impede que o formulário extra de cadastro apareça
 ACCOUNT_ADAPTER = "core.adapters.MyAccountAdapter"
+SOCIALACCOUNT_ADAPTER = "core.adapters.MySocialAccountAdapter"
 
 
 # **E-mails**
