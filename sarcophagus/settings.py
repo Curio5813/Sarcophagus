@@ -160,6 +160,8 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Indica que o modelo não tem usernam
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_EMAIL_REQUIRED = True  # O e-mail é obrigatório
 ACCOUNT_USERNAME_REQUIRED = False  # Não exige username
+ACCOUNT_SIGNUP = False  # Impede que o formulário extra de cadastro apareça
+ACCOUNT_ADAPTER = "core.adapters.MyAccountAdapter"
 
 
 # **E-mails**

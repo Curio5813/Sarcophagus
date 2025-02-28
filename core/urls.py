@@ -6,7 +6,13 @@ from .views import (HomeView, DownloadView, CommunityView, ContactView,
                     GameSearchView, BlogView, TesteView, LoginView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView)
 from .views import BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView
+from django.shortcuts import redirect
+from allauth.socialaccount.views import SignupView
 
+
+class CustomSignupView(SignupView):
+    def dispatch(self, request, *args, **kwargs):
+        return redirect("/")  # Redireciona imediatamente para a home
 
 urlpatterns = [
     path('', HomeView.as_view(), name='index'),
@@ -28,6 +34,7 @@ urlpatterns = [
     path('blog/<int:pk>/edit/', BlogPostEditView.as_view(), name='blog_post_edit'),
     path('tournament/<int:pk>/', TournamentDetailView.as_view(), name='tournament_detail'),
     path('tournament/<int:pk>/join/', JoinTournamentView.as_view(), name='join_tournament'),
+    path("accounts/signup/", CustomSignupView.as_view(), name="account_signup"),
 ]
 
 if settings.DEBUG:
