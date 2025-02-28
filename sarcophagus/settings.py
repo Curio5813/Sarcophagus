@@ -129,6 +129,17 @@ CSRF_TRUSTED_ORIGINS = [
     "https://www.sarcophagus.net",
 ]
 
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": "<SEU_CLIENT_ID>",
+            "secret": "<SUA_SECRET_KEY>",
+            "key": ""
+        },
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "online"},
+    }
+}
 
 SECURE_SSL_REDIRECT = True
 CSRF_COOKIE_SECURE = True
