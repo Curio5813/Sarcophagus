@@ -12,7 +12,8 @@ from allauth.socialaccount.views import SignupView
 
 class CustomSignupView(SignupView):
     def dispatch(self, request, *args, **kwargs):
-        return redirect("/")  # Redireciona imediatamente para a home
+        """Redireciona automaticamente usuários para a home"""
+        return redirect("/")
 
 urlpatterns = [
     path('', HomeView.as_view(), name='index'),
