@@ -153,6 +153,11 @@ AUTH_USER_MODEL = 'core.Membro'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # Indica que o modelo não tem username
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_EMAIL_REQUIRED = True  # O e-mail é obrigatório
+ACCOUNT_USERNAME_REQUIRED = False  # Não exige username
+
 
 # **E-mails**
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

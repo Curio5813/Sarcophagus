@@ -90,7 +90,7 @@ class Membro(AbstractBaseUser, PermissionsMixin):
         return None  # Retorna None caso não tenha data de nascimento
 
     def __str__(self):
-        return self.membro
+        return self.membro if self.membro else self.email
 
 
 class Genero(models.Model):
