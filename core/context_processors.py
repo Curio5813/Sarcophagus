@@ -15,9 +15,6 @@ def latest_comments(request):
     }
 
 
-import feedparser
-from django.core.cache import cache
-
 def gamespot_rss_feed(request):
     """
     Obtém as últimas notícias de jogos da GameSpot e armazena em cache.
