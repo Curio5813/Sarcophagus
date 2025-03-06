@@ -1,22 +1,22 @@
-{% load static %}
 {% if steam_news %}
-<div class="latest-news-section">
-    <div class="ln-title"><span>Steam News</span></div>
-    <div class="news-ticker">
-        <div class="news-ticker-contant">
-            {% for news in steam_news %}
-            <div class="nt-item">
-                <a href="{{ news.link }}" target="_blank">
-                    <span class="new">New</span> {{ news.title }}
-                </a>
-                <br>
-                <small>{{ news.published }}</small>
+    <div class="latest-news-section">
+        <div class="ln-title"><span>Steam News</span></div>
+        <div class="news-ticker">
+            <div class="news-ticker-contant">
+                {% for news in steam_news %}
+                <div class="nt-item">
+                    <a href="{{ news.link }}" target="_blank">
+                        <span class="new">New</span> {{ news.title }}
+                    </a>
+                    <br>
+                    <small>{{ news.published }}</small>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
-</div>
 {% else %}
-<p>Não há notícias disponíveis no momento.</p>
+    <p>Não há notícias disponíveis no momento.</p>
 {% endif %}
+
 
