@@ -19,7 +19,7 @@ def rps_rss_feed(request):
     """
     Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
-    feed_url = "https://www.rockpapershotgun.com/feed"
+    feed_url = "https://www.rockpapershotgun.com/feeds"
     cache_timeout = 1800  # Cache de 30 minutos
 
     # Verifica se já há notícias no cache
