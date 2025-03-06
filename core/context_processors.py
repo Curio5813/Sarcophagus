@@ -15,7 +15,7 @@ def latest_comments(request):
     }
 
 
-def rps_rss_feed(request):
+def pci_rss_feed(request):
     """
     Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
@@ -23,14 +23,14 @@ def rps_rss_feed(request):
     cache_timeout = 1800  # Cache de 30 minutos
 
     # Verifica se já há notícias no cache
-    rps_news = cache.get("rps_rss_feed")
+    pci_news = cache.get("rps_rss_feed")
 
-    if not rps_news:
+    if not pci_news:
         feed = feedparser.parse(feed_url)
-        rps_news = []
+        pci_news = []
 
         for entry in feed.entries[:6]:  # Pegando as 6 notícias mais recentes
-            rps_news.append({
+            pci_news.append({
                 "title": entry.title,
                 "link": entry.link,
                 "published": entry.published,
@@ -38,6 +38,6 @@ def rps_rss_feed(request):
             })
 
         # Armazena no cache para evitar múltiplas requisições
-        cache.set("rps_rss_feed", rps_news, cache_timeout)
+        cache.set("rps_rss_feed", pci_news, cache_timeout)
 
-    return {"rps_news": rps_news}
+    return {"rps_news": pci_news}
