@@ -15,22 +15,22 @@ def latest_comments(request):
     }
 
 
-def gamespot_rss_feed(request):
+def rps_rss_feed(request):
     """
-    Obtém as últimas notícias de jogos da GameSpot e armazena em cache.
+    Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
-    feed_url = "https://www.gamespot.com/feeds/game-news/"
+    feed_url = "https://www.rockpapershotgun.com/feed"
     cache_timeout = 1800  # Cache de 30 minutos
 
-    # Verifica se o cache já tem as notícias
-    gamespot_news = cache.get("gamespot_rss_feed")
+    # Verifica se já há notícias no cache
+    rps_news = cache.get("rps_rss_feed")
 
-    if not gamespot_news:
+    if not rps_news:
         feed = feedparser.parse(feed_url)
-        gamespot_news = []
+        rps_news = []
 
         for entry in feed.entries[:6]:  # Pegando as 6 notícias mais recentes
-            gamespot_news.append({
+            rps_news.append({
                 "title": entry.title,
                 "link": entry.link,
                 "published": entry.published,
@@ -38,7 +38,6 @@ def gamespot_rss_feed(request):
             })
 
         # Armazena no cache para evitar múltiplas requisições
-        cache.set("gamespot_rss_feed", gamespot_news, cache_timeout)
+        cache.set("rps_rss_feed", rps_news, cache_timeout)
 
-    return {"gamespot_news": gamespot_news}
-
+    return {"rps_news": rps_news}
