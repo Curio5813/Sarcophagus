@@ -15,31 +15,33 @@ def latest_comments(request):
     }
 
 
-def steam_rss_feed(request):
+import feedparser
+from django.core.cache import cache
+
+def gamespot_rss_feed(request):
     """
-    Obtém as últimas notícias do feed RSS da Steam com cache para evitar muitas requisições.
+    Obtém as últimas notícias de jogos da GameSpot e armazena em cache.
     """
-    feed_url = "https://store.steampowered.com/feeds/news.xml"
+    feed_url = "https://www.gamespot.com/feeds/game-news/"
+    cache_timeout = 1800  # Cache de 30 minutos
 
-    # Define um tempo de cache (ex: 30 minutos)
-    cache_timeout = 1800  # 1800 segundos = 30 minutos
+    # Verifica se o cache já tem as notícias
+    gamespot_news = cache.get("gamespot_rss_feed")
 
-    # Verifica se já temos o feed no cache
-    steam_news = cache.get("steam_rss_feed")
-
-    if not steam_news:
+    if not gamespot_news:
         feed = feedparser.parse(feed_url)
-        steam_news = []
+        gamespot_news = []
 
-        for entry in feed.entries[:2]:  # Pega os 2 primeiros posts
-            steam_news.append({
+        for entry in feed.entries[:6]:  # Pegando as 6 notícias mais recentes
+            gamespot_news.append({
                 "title": entry.title,
                 "link": entry.link,
                 "published": entry.published,
                 "summary": entry.summary,
             })
 
-        # Armazena no cache por 30 minutos
-        cache.set("steam_rss_feed", steam_news, cache_timeout)
+        # Armazena no cache para evitar múltiplas requisições
+        cache.set("gamespot_rss_feed", gamespot_news, cache_timeout)
 
-    return {"steam_news": steam_news}
+    return {"gamespot_news": gamespot_news}
+
