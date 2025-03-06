@@ -1,15 +1,18 @@
 {% if pci_news %}
 <div class="latest-news-section">
     <div class="ln-title"><span>Latest News</span></div>
-    <div class="news-container">
-        {% for news in pci_news %}
-        <div class="news-item">
-            <a href="{{ news.link }}" target="_blank">
-                <h3>{{ news.title }}</h3>
-            </a>
-            <small>{{ news.published }}</small>
+    <div class="news-ticker">
+        <div class="news-ticker-contant">
+            {% for news in pci_news %}
+            <div class="nt-item">
+                <a href="{{ news.link }}" target="_blank">
+                    <span class="new">New</span> {{ news.title }}
+                </a>
+                <br>
+                <small>{{ news.published }}</small>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
 {% else %}
