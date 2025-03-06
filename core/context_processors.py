@@ -29,7 +29,7 @@ def steam_rss_feed(request):
         feed = feedparser.parse(feed_url)
         steam_news = []
 
-        for entry in feed.entries[:6]:  # Pegando as 6 notícias mais recentes
+        for entry in feed.entries:  # Pegando as 6 notícias mais recentes
             steam_news.append({
                 "title": entry.title,
                 "link": entry.link,
