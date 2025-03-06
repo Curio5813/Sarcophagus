@@ -31,7 +31,7 @@ def steam_rss_feed(request):
         feed = feedparser.parse(feed_url)
         steam_news = []
 
-        for entry in feed.entries:  # Pega os 5 primeiros posts
+        for entry in feed.entries[:2]:  # Pega os 2 primeiros posts
             steam_news.append({
                 "title": entry.title,
                 "link": entry.link,
