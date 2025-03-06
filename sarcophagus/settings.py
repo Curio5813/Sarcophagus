@@ -79,7 +79,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.latest_posts',
                 'core.context_processors.latest_comments',
-                'core.context_processors.steam_rss_feed',
                 'core.context_processors.gamespot_rss_feed',
             ],
         },
@@ -125,14 +124,12 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 PORT = 10000
 
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'TIMEOUT': 1800,  # Tempo de expiração padrão do cache (30 minutos)
     }
 }
-
 
 CSRF_TRUSTED_ORIGINS = [
     "https://sarcophagus-mfg.onrender.com",
