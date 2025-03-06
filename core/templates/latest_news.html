@@ -1,9 +1,9 @@
-{% if pci_news %}
+{% if steam_news %}
 <div class="latest-news-section">
     <div class="ln-title"><span>Latest News</span></div>
     <div class="news-ticker">
         <div class="news-ticker-contant">
-            {% for news in pci_news %}
+            {% for news in steam_news %}
             <div class="nt-item">
                 <a href="{{ news.link }}" target="_blank">
                     <span class="new">New</span> {{ news.title }}
