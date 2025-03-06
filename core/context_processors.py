@@ -19,11 +19,11 @@ def steam_rss_feed(request):
     """
     Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
-    feed_url = "https://www.pcinvasion.com/feed/"
+    feed_url = "https://store.steampowered.com/feeds/news.xml"
     cache_timeout = 1800  # Cache de 30 minutos
 
     # Verifica se já há notícias no cache
-    steam_news = cache.get("rps_rss_feed")
+    steam_news = cache.get("steam_rss_feed")
 
     if not steam_news:
         feed = feedparser.parse(feed_url)
@@ -38,6 +38,6 @@ def steam_rss_feed(request):
             })
 
         # Armazena no cache para evitar múltiplas requisições
-        cache.set("rps_rss_feed", steam_news, cache_timeout)
+        cache.set("steam_rss_feed", steam_news, cache_timeout)
 
-    return {"rps_news": steam_news}
+    return {"steam_news": steam_news}
