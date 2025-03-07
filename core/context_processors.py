@@ -15,22 +15,22 @@ def latest_comments(request):
     }
 
 
-def steam_rss_feed(request):
+def pcgn_rss_feed(request):
     """
     Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
-    feed_url = "https://store.steampowered.com/feeds/news.xml"
+    feed_url = "https://pcgamesn.com/mainrss.xml"
     cache_timeout = 1800  # Cache de 30 minutos
 
     # Verifica se já há notícias no cache
-    steam_news = cache.get("steam_rss_feed")
+    pcgn_news = cache.get("pcgn_rss_feed")
 
-    if not steam_news:
+    if not pcgn_news:
         feed = feedparser.parse(feed_url)
-        steam_news = []
+        pcgn_news = []
 
-        for entry in feed.entries[:2]:  # Pegando as 6 notícias mais recentes
-            steam_news.append({
+        for entry in feed.entries[:6]:  # Pegando as 6 notícias mais recentes
+            pcgn_news.append({
                 "title": entry.title,
                 "link": entry.link,
                 "published": entry.published,
@@ -38,6 +38,6 @@ def steam_rss_feed(request):
             })
 
         # Armazena no cache para evitar múltiplas requisições
-        cache.set("steam_rss_feed", steam_news, cache_timeout)
+        cache.set("pcgn_rss_feed", pcgn_news, cache_timeout)
 
-    return {"steam_news": steam_news}
+    return {"pcgn_news": pcgn_news}
