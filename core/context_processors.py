@@ -15,22 +15,22 @@ def latest_comments(request):
     }
 
 
-def pcgn_rss_feed(request):
+def wpcg_rss_feed(request):
     """
     Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
-    feed_url = "https://pcgamesn.com/mainrss.xml"
+    feed_url = "worldofpcgames.com/feed"
     cache_timeout = 1800  # Cache de 30 minutos
 
     # Verifica se já há notícias no cache
-    pcgn_news = cache.get("pcgn_rss_feed")
+    wpcg_news = cache.get("wpcg_rss_feed")
 
-    if not pcgn_news:
+    if not wpcg_news:
         feed = feedparser.parse(feed_url)
-        pcgn_news = []
+        wpcg_news = []
 
         for entry in feed.entries[:6]:  # Pegando as 6 notícias mais recentes
-            pcgn_news.append({
+            wpcg_news.append({
                 "title": entry.title,
                 "link": entry.link,
                 "published": entry.published,
@@ -38,6 +38,6 @@ def pcgn_rss_feed(request):
             })
 
         # Armazena no cache para evitar múltiplas requisições
-        cache.set("pcgn_rss_feed", pcgn_news, cache_timeout)
+        cache.set("wpcg_rss_feed", wpcg_news, cache_timeout)
 
-    return {"pcgn_news": pcgn_news}
+    return {"wpcg_news": wpcg_news}
