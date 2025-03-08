@@ -19,7 +19,7 @@ def fs_rss_feed(request):
     """
     Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
-    feed_url = "https://rss.feedspot.com/folder/5hrKt2Ua4w==/rss/rsscombiner"
+    feed_url = "https://rss.feedspot.com/folder/5hrKt2Ua4w==/rss/rsscombinerformat=xml"
     cache_timeout = 1800  # Cache de 30 minutos
 
     # Verifica se já há notícias no cache
