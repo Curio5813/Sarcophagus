@@ -29,7 +29,7 @@ def fs_rss_feed(request):
         feed = feedparser.parse(feed_url)
         fs_news = []
 
-        for entry in feed.entries[:2]:  # Pegando as 6 notícias mais recentes
+        for entry in feed.entries:  # Pegando as 6 notícias mais recentes
             fs_news.append({
                 "title": entry.title,
                 "link": entry.link,
