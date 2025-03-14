@@ -46,8 +46,8 @@
 				<div class="user-panel">
 					{% if user.is_authenticated %}
 						<a href="{% url 'membro-details' user.id %}">
-							<img src="{% if user.imagem %}{{ user.imagem.url|slice:':-4' }}w_128,h_128,c_fill.jpg{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
-     							alt="{{ user.first_name }}">
+							<img src="{% if user.imagem %}{{ user.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+								alt="{{ user.first_name }}">
 						</a>
 						<a href="{% url 'login' %}" class="logout-btn">{% trans 'Logout' %}</a>
 					{% else %}
