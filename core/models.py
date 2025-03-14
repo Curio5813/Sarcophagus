@@ -68,8 +68,10 @@ class Membro(AbstractBaseUser, PermissionsMixin):
     genero = models.CharField(max_length=1, choices=GENERO_CHOICES)
 
     # Armazena a imagem no Cloudinary
-    imagem = CloudinaryField('members', blank=True, null=True)
-
+    imagem = CloudinaryField('members',
+                             transformation=[{'width': 128, 'height': 128, 'crop': 'fill'}],
+                             blank=True,
+                             null=True)
     ativo = models.BooleanField(default=True)
     modificado = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)
