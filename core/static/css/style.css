@@ -457,7 +457,7 @@ ol {
 .ln-title {
 	position: absolute;
 	height: 100%;
-	width: 29%;
+	width: 20%;
 	left: 0;
 	top: 0;
 	text-align: right;
@@ -493,7 +493,7 @@ ol {
 	font-size: 12px;
 	font-weight: 500;
 	color: #fff;
-	padding: 4px 4px;
+	padding: 4px 20px;
 	font-family: sans-serif; /* Fonte aplicada aos spans */
 }
 
