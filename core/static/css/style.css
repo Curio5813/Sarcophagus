@@ -449,7 +449,7 @@ ol {
 	display: block;
 	clear: both;
 	background: #131313;
-	padding: 5px 0;
+	padding: 10px 0;
 	position: relative;
 	font-family: sans-serif; /* Fonte aplicada globalmente à seção */
 }
@@ -461,8 +461,8 @@ ol {
 	left: 0;
 	top: 0;
 	text-align: right;
-	padding-top: 24px;
-	padding-right: 66px;
+	padding-top: 10px;
+	padding-right: 50px;
 	font-size: 18px;
 	font-weight: 500;
 	color: #fff;
