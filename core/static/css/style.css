@@ -310,7 +310,7 @@ ol {
 .main-menu {
 	float: right;
 	margin-right: 170px;
-	width: 100%
+	width: 100vw;
 	background: #5A6978;
 }
 
