@@ -318,7 +318,7 @@ ol {
     justify-content: center; /* Centraliza horizontalmente */
     align-items: center; /* Centraliza verticalmente */
     text-align: center; /* Garante que o texto fique centralizado */
-    height: 32px; /* Defina uma altura adequada */
+    height: 33px; /* Defina uma altura adequada */
 }
 
 .main-menu ul {
