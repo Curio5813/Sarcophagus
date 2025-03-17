@@ -312,8 +312,13 @@ ol {
     top: 100px;
     left: 0;
     width: 110%;
-    padding: 8px 8px 8px 8px;
+    padding: 8px;
 	background-color: #5A6978;
+	display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+    text-align: center; /* Garante que o texto fique centralizado */
+    height: 50px; /* Defina uma altura adequada */
 }
 
 .main-menu ul {
