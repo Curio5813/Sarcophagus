@@ -308,11 +308,11 @@ ol {
 }
 
 .main-menu {
-	position: relative;
+	position: absolute;
     top: 100px;
     left: 0;
     width: 110%;
-    padding: 8px 8px;
+    padding: 8px 8px 8px 8px;
 	background-color: #5A6978;
 }
 
