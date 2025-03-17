@@ -310,6 +310,7 @@ ol {
 .main-menu {
 	float: right;
 	margin-right: 170px;
+	background: #5A6978;
 }
 
 .main-menu ul {
@@ -318,6 +319,7 @@ ol {
 
 .main-menu ul li {
 	display: inline;
+
 }
 
 .main-menu ul li a {
