@@ -277,22 +277,32 @@ class BlogView(TemplateView):
 
 
 class GameSearchView(TemplateView):
-    template_name = 'game-details.html'  # Assuming this displays search results
+    template_name = 'game-search-results.html'  # Template para exibir os resultados
 
     def get_context_data(self, **kwargs):
-        context = super(GameSearchView, self).get_context_data(**kwargs)
-        query = self.request.GET.get('q', '')  # Get the search query from URL parameter
-        if query:
-            games = Games.objects.filter(game__icontains=query).order_by('-rating')  # Filter by game name
-        else:
-            games = Games.objects.all().order_by('game')  # Display all games if no query
-        context['game'] = games  # Add games to context
-        context['query'] = query  # Add search query to context (optional)
-        return context
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q', '').strip()
 
-    def get(self, request, *args, **kwargs):  # Override the default GET method
-        context = self.get_context_data(**kwargs)
-        return render(request, self.template_name, context)
+        if query:
+            games = Games.objects.filter(
+                Q(game__icontains=query) |
+                Q(descricao__icontains=query) |
+                Q(gameplay__icontains=query) |
+                Q(graphics__icontains=query) |
+                Q(sound_and_music__icontains=query) |
+                Q(conclusion__icontains=query) |
+                Q(desenvolvedor__icontains=query) |
+                Q(distribuidor__icontains=query) |
+                Q(ano__icontains=query) |
+                Q(generos__nome__icontains=query)
+            ).distinct().order_by('-ano')  # Ordenar por ano
+
+        else:
+            games = Games.objects.none()
+
+        context['games'] = games
+        context['query'] = query
+        return context
 
 
 class GameDetailView(TemplateView):

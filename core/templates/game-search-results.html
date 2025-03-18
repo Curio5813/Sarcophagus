@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% include 'latest_news.html' %}
+<div class="search-results-container">
+    <h2>Search Results</h2>
+    {% if games %}
+        <ul class="search-results-list">
+            {% for game in games %}
+                <li>
+                    <a href="{% url 'game-details' id=game.id %}">
+                        <img src="{{ game.imagem.url }}" alt="{{ game.game }}">
+                        <div class="search-results-info">
+                            <strong>{{ game.game }}</strong>
+                            <span>Gender: {{ game.generos.all|join:", " }}</span>
+                            <span>Year: {{ game.ano }}</span>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-results">No games found for "{{ query }}".</p>
+    {% endif %}
+</div>
+{% include 'footer.html' %}
+{% endblock %}

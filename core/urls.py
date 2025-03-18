@@ -36,6 +36,7 @@ urlpatterns = [
     path('tournament/<int:pk>/', TournamentDetailView.as_view(), name='tournament_detail'),
     path('tournament/<int:pk>/join/', JoinTournamentView.as_view(), name='join_tournament'),
     path("accounts/signup/", CustomSignupView.as_view(), name="account_signup"),
+    path('search/', GameSearchView.as_view(), name='game_search'),
 ]
 
 if settings.DEBUG:

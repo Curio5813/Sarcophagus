@@ -9,7 +9,12 @@
 /* Template default CSS
 /*---------------------------*/
 
-html,
+html, body {
+    overflow-x: hidden; /* Remove rolagem horizontal */
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
 
 @font-face {
     font-family: sans-serif;
@@ -265,23 +270,76 @@ ol {
   Header section
 ---------------------*/
 
-.header-section {
-	background: #131313;
-	clear: both;
-	overflow: hidden;
-	padding: 18px 0;
-	border-bottom: 1px solid #ffb320;
-}
-
-.user-panel {
+.header-content {
     display: flex;
     align-items: center;
-    gap: 20px; /* Espaçamento entre o avatar e o botão */
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    justify-content: space-between; /* Distribui os elementos */
+    width: 100%; /* Garante que ocupa toda a largura disponível */
+    max-width: 1200px; /* Mantém um limite */
+    margin: 0 auto;
+    padding: 10px 20px; /* Adiciona padding para evitar elementos colados */
+    box-sizing: border-box; /* Garante que padding não afete largura total */
 }
 
+/* Estilo da Logo */
+.site-logo {
+    /*flex: 1; /* Ocupa o espaço à esquerda */
+    display: flex;
+    justify-content: flex-start;
+}
+
+.site-logo img {
+    height: 60px; /* Ajuste conforme necessário */
+}
+
+/* Barra de busca - Centralizada */
+.search-container {
+    /*flex: 1.5; /* Ocupa espaço central */
+    display: flex;
+    justify-content: center; /* Mantém a barra de busca centralizada */
+}
+
+/* Estilo da Barra de Busca */
+.search-form {
+    display: flex;
+    align-items: center;
+    background-color: #ffb320;
+    border-radius: 30px;
+    padding: 5px 10px;
+    width: 300px;
+}
+
+/* Input da busca */
+.search-form input {
+    border: none;
+    background: #ffb320;
+    outline: none;
+    font-size: 14px;
+    flex: 1;
+    padding: 5px;
+    color: #131313;
+    border-radius: 30px;
+}
+
+/* Botão da busca */
+.search-form button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+}
+
+/* Painel do Usuário - Alinhado à Direita */
+.user-panel {
+    /*flex: 1; /* Ocupa o espaço à direita */
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Avatar */
 .user-panel img {
     width: 50px;
     height: 50px;
@@ -290,7 +348,7 @@ ol {
     border: 2px solid #fff;
 }
 
-/* Botão de logout com fundo amarelo */
+/* Botão de Login */
 .logout-btn {
     background: #ffb320;
     padding: 8px 14px;
@@ -298,53 +356,53 @@ ol {
     color: #ffffff;
     font-weight: bold;
     transition: color 0.3s ease, background 0.3s ease;
-    text-decoration: none; /* Remover sublinhado */
+    text-decoration: none;
 }
 
-/* Efeito hover no logout */
 .logout-btn:hover {
     background: #ffaf20;
     color: #000000;
 }
 
 .main-menu {
-	position: absolute;
-    top: 100px;
-    left: 0;
-    width: 100%;
-    padding: 15px;
-	background-color: #5A6978;
-	display: flex;
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: center; /* Centraliza verticalmente */
-    text-align: center; /* Garante que o texto fique centralizado */
-    height: 33px; /* Defina uma altura adequada */
+    width: 100vw; /* Garante que ocupa toda a largura da tela */
+    height: auto; /* Ajustável conforme o conteúdo */
+    /*background-color: #5A6978;*/
+    padding: 10px 0;
+    display: flex;
+    justify-content: center; /* Centraliza os itens horizontalmente */
+    align-items: center; /* Alinha os itens verticalmente */
+    text-align: center;
+    position: relative; /* Mantém dentro do fluxo normal */
 }
 
 .main-menu ul {
-	list-style: none;
+    list-style: none;
+    display: flex;
+    gap: 25px; /* Espaçamento entre os itens */
+    padding: 0;
+    margin: 0;
 }
 
 .main-menu ul li {
-	display: inline;
-
+    display: inline;
 }
 
 .main-menu ul li a {
-	display: inline-block;
-	font-size: 16px;
-	color: #fff;
-	margin-left: 35px;
-	font-weight: 500;
+    display: inline-block;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
 .main-menu ul li a:hover {
-	color: #ffaf20;
+    color: #ffaf20;
 }
 
 .main-menu ul li.active a {
-  color: #ffb320; /* Cor do item ativo */
-  font-weight: bold;
+    color: #ffb320;
+    font-weight: bold;
 }
 
 .header-btn {
@@ -1743,48 +1801,84 @@ ol {
     margin-right: 8px;
 }
 
-/* -------------------------------
-   Download page | Search section
----------------------------------*/
+/* ==============================
+   Estilos para a Página de Resultados da Busca
+   ============================== */
 
-.search-widget {
-    display: flex; /* Altera para flexbox para permitir alinhamento horizontal */
-    justify-content: center; /* Centraliza os itens dentro do widget */
-    flex-wrap: wrap; /* Permite que os itens que não cabem na linha atual se movam para a linha seguinte */
+.search-results-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff5e6; /* Fundo leve */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.search-results-container h2 {
+    font-size: 28px;
+    color: #131313;
     margin-bottom: 20px;
 }
 
-.search-widget input {
-    margin: 0 5px; /* Margem entre os inputs */
-    border-radius: 30px; /* Bordas arredondadas */
-    padding: 10px;
-    border: none;
-    background-color: #ffb320;
-    width: 150px; /* Largura fixa ou ajustável conforme necessário */
+.search-results-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.search-widget select { /* Aplica o mesmo estilo aos campos input e select */
-    margin: 0 5px; /* Margem entre os campos */
-    border-radius: 30px; /* Bordas arredondadas */
-    padding: 10px;
-    border: none;
-    background-color: #ffb320;
-    width: 150px; /* Largura fixa ou ajustável conforme necessário */
-    font-family: sans-serif; /* Fonte padrão dos campos */
-    font-size: 12px; /* Tamanho da fonte para manter a legibilidade */
-    color: #878787; /* Cor do texto */
+.search-results-list li {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.search-widget button {
-    margin: 0 5px;
-    border-radius: 30px;
-    padding: 10px 15px;
-    border: none;
-    background-color: #ffb320; /* Cor do botão */
-    color: white;
-    cursor: pointer;
+.search-results-list li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.search-widget button:hover {
-    background-color: #0056b3; /* Cor do botão ao passar o mouse */
+.search-results-list li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #131313;
+    font-weight: bold;
+    width: 100%;
 }
+
+.search-results-list img {
+    width: 100px; /* Defina um tamanho fixo para a largura */
+    height: auto; /* Mantém a proporção original */
+    max-height: 100px; /* Evita que a imagem fique muito alta */
+    border-radius: 10px;
+    object-fit: contain; /* Mantém a proporção sem cortar a imagem */
+    margin-right: 15px;
+    border: 2px solid #ffb320;
+}
+
+.search-results-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.search-results-info strong {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.no-results {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    padding: 20px;
+    background: #ffe0b3;
+    border-radius: 10px;
+    font-weight: bold;
+}
+

@@ -38,11 +38,21 @@
 	<!-- Header section -->
 	<header class="header-section">
 		<div class="container">
-			<!-- logo -->
-			<a class="site-logo" href="{% url 'index' %}">
-				<img src="{% static 'img/logo7.png' %}" alt="">
-			</a>
-			<br><br>
+			<div class="header-content">
+				<!-- Logo à esquerda -->
+				<a class="site-logo" href="{% url 'index' %}">
+					<img src="{% static 'img/logo7.png' %}" alt="Logo">
+				</a>
+
+				<!-- Barra de busca centralizada -->
+				<div class="search-container">
+					<form action="{% url 'game_search' %}" method="GET" class="search-form">
+						<input type="text" name="q" placeholder="Search games..." value="{{ request.GET.q }}">
+						<button type="submit"><i class="fas fa-search"></i></button>
+					</form>
+				</div>
+
+				<!-- Painel do usuário à direita -->
 				<div class="user-panel">
 					{% if user.is_authenticated %}
 						<a href="{% url 'membro-details' user.id %}">
@@ -55,16 +65,14 @@
 						<a href="{% url 'register' %}" class="logout-btn">{% trans 'Register' %}</a>
 					{% endif %}
 				</div>
-			<!-- responsive -->
-			<div class="nav-switch">
-				<i class="fa fa-bars"></i>
 			</div>
-			<!-- site menu -->
+
+			<!-- Menu de navegação -->
 			<nav class="main-menu">
 				<ul>
 					<li><a class="nostalgia-text" href="{% url 'index' %}">{% trans 'Start' %}</a></li>
 					<li><a class="nostalgia-text" href="{% url 'reviews' %}">{% trans 'Reviews' %}</a></li>
-					<li><a class="nostalgia-text" href="{% url 'download' %}">{% trans 'Games' %}</a><li>
+					<li><a class="nostalgia-text" href="{% url 'download' %}">{% trans 'Games' %}</a></li>
 					<li><a class="nostalgia-text" href="{% url 'community' %}">{% trans 'Community' %}</a></li>
 					<li><a class="nostalgia-text" href="{% url 'blog' %}">{% trans 'Blog' %}</a></li>
 					<li><a class="nostalgia-text" href="{% url 'contact' %}">{% trans 'Contact' %}</a></li>
@@ -72,6 +80,7 @@
 			</nav>
 		</div>
 	</header>
+
 	<!-- Header section end -->
     {% block content %} {% endblock %}
 
