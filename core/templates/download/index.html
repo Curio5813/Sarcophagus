@@ -8,27 +8,25 @@
                 <h4 style="text-align: center;">Find Your Game!</h4>
                 <br><br><br>
                 <form class="search-widget" method="get" action="{% url 'download' %}">
-                    <input type="text" name="game" placeholder="Game Name">
-
-                    <!-- Dropdowns -->
-                    <select name="ano">
-                        <option value="">Select Year</option>
-                        {% for year in anos %}
-                            <option value="{{ year }}">{{ year }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <select name="genero">
-                        <option value="">Select Genre</option>
-                        {% for genero in generos %}
-                            <option value="{{ genero.id }}">{{ genero.nome }}</option>
-                        {% endfor %}
-                    </select>
-
-                    <input type="text" name="descricao" placeholder="Theme">
-                    <input type="text" name="desenvolvedor" placeholder="Developer">
-                    <input type="text" name="distribuidor" placeholder="Publisher">
-                    <button type="submit"><i class="fa fa-search"></i></button>
+                    <div class="search-group">
+                        <input type="text" name="game" placeholder="Game Name">
+                        <select name="ano">
+                            <option value="">Select Year</option>
+                            {% for year in anos %}
+                                <option value="{{ year }}">{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="genero">
+                            <option value="">Select Genre</option>
+                            {% for genero in generos %}
+                                <option value="{{ genero.id }}">{{ genero.nome }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="text" name="descricao" placeholder="Theme">
+                        <input type="text" name="desenvolvedor" placeholder="Developer">
+                        <input type="text" name="distribuidor" placeholder="Publisher">
+                        <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
+                    </div>
                 </form>
                 <br><br>
 
@@ -44,7 +42,6 @@
                                 <div class="cata">{{ game.genero }}</div>
                             </div>
                             <div class="rgi-content">
-                                <!-- Seção de Favoritos Corrigida -->
                                 <p>
                                     Favorite:
                                     <span class="favorite-btn {% if game.user_favorito %}active{% endif %}"
@@ -52,14 +49,9 @@
                                         <i class="{% if game.user_favorito %}fas{% else %}far{% endif %} fa-heart"></i>
                                     </span>
                                 </p>
-
-                                <!-- Conteúdo restante do jogo -->
                                 <h5>{{ game.game }}</h5>
                                 <p><strong>{{ game.ano }}</strong></p>
                                 <p>Genre(s): {{ game.generos.all|join:", " }}</p>
-                                <!-- ... demais campos do jogo ... -->
-
-                                <!-- Sistema de Estrelas -->
                                 <div class="star-rating" data-game-id="{{ game.id }}"
                                      data-current-rating="{{ game.user_rating|default:0 }}">
                                     {% for i in "12345" %}
@@ -78,6 +70,45 @@
         </div>
     </div>
 </section>
+
+<!-- CSS -->
+<style>
+    .search-widget {
+        display: flex;
+        justify-content: center;
+    }
+
+    .search-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: nowrap;
+        align-items: center;
+        border-radius: 35px;
+    }
+
+    .search-group input, .search-group select {
+        padding: 12px 20px;
+        border-radius: 35px;
+        font-size: 16px;
+        background-color: #ffb320;
+    }
+
+    /* Botão de pesquisa */
+    .search-btn {
+        background-color: #ffb320;
+        border: none;
+        color: #131313;
+        font-weight: bold;
+        cursor: pointer;
+        padding: 12px 20px;
+        border-radius: 50px;
+        font-size: 16px;
+    }
+
+    .search-btn:hover {
+        background-color: #e0a10d;
+    }
+</style>
 
 <!-- CSS -->
 <style>
