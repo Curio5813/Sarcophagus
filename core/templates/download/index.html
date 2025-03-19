@@ -51,6 +51,8 @@
                                 </p>
                                 <h5>{{ game.game }}</h5>
                                 <p><strong>{{ game.ano }}</strong></p>
+                                <p><strong>Developer: {{ game.desenvolvedor }}</strong></p>
+                                <p><strong>Publisher: {{ game.distribuidor }}</strong></p>
                                 <p>Genre(s): {{ game.generos.all|join:", " }}</p>
                                 <div class="star-rating" data-game-id="{{ game.id }}"
                                      data-current-rating="{{ game.user_rating|default:0 }}">
