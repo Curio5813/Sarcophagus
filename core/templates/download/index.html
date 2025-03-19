@@ -53,7 +53,7 @@
                                 <p><strong>{{ game.ano }}</strong></p>
                                 <p><strong>Developer: {{ game.desenvolvedor }}</strong></p>
                                 <p><strong>Publisher: {{ game.distribuidor }}</strong></p>
-                                <p>Genre(s): {{ game.generos.all|join:", " }}</p>
+                                <p><strong>Genre(s): {{ game.generos.all|join:", " }}</strong></p>
                                 <div class="star-rating" data-game-id="{{ game.id }}"
                                      data-current-rating="{{ game.user_rating|default:0 }}">
                                     {% for i in "12345" %}
