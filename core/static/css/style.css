@@ -1436,18 +1436,25 @@ ol {
 /* ========================
    Estilos para Jogos Favoritos
 ======================== */
+
 .favorite-games-list {
-    list-style: none;
+    display: flex; /* Itens um ao lado do outro */
+    flex-wrap: wrap; /* Permite quebra de linha caso a tela seja pequena */
+    gap: 15px; /* Espaço entre os flash-cards */
+    justify-content: center; /* Centraliza os itens na tela */
     padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
 .favorite-games-list li {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* Distribui imagem e informações */
     background: #2c2f33;
     border-radius: 10px;
     padding: 15px;
-    margin-bottom: 10px;
+    width: 250px; /* Tamanho fixo para manter os cards uniformes */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -1456,46 +1463,63 @@ ol {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Estilo do flash-card */
 .game-card {
-    display: flex; /* Permite que a imagem e as informações fiquem lado a lado */
-    align-items: center; /* Alinha os itens verticalmente */
-    gap: 15px; /* Espaçamento entre imagem e informações */
-    padding: 10px;
+    display: flex;
+    flex-direction: column; /* Mantém a imagem em cima e o texto abaixo */
+    align-items: center;
+    width: 220px; /* Tamanho fixo dos flash-cards */
     background: #fff;
     border-radius: 8px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    text-align: center;
+    word-wrap: break-word; /* 🔥 Quebra textos longos automaticamente */
+    overflow: hidden;
     transition: transform 0.2s ease-in-out;
 }
 
 .game-card:hover {
-    transform: scale(1.02);
+    transform: scale(1.05);
+}
+
+/* Ajuste do container da imagem */
+.game-thumb {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .game-thumb img {
-    width: 120px; /* Tamanho reduzido */
-    height: auto; /* Mantém a proporção */
-    object-fit: contain; /* Garante que a imagem não seja cortada */
+    width: 120px; /* 🔥 Reduz o tamanho sem perder a proporção */
+    height: auto;
+    object-fit: contain; /* 🔥 Garante que a imagem não seja cortada */
     border-radius: 8px;
     border: 2px solid #ffb320;
 }
 
+/* Ajuste das informações do jogo */
 .game-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-align: left; /* 🔥 Mantém um alinhamento mais natural */
+    padding-left: 10px;
 }
 
 .game-info h5 {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     margin: 0;
-    color: #131313;
+    color: #ffb320;
 }
 
 .game-info p {
     font-size: 14px;
-    color: #555;
-    margin: 5px 0;
+    color: #dcdcdc;
+    margin: 3px 0;
+    white-space: normal; /* Permite quebras de linha */
+    word-wrap: break-word; /* 🔥 Impede textos longos de quebrar layout */
 }
 
 /*-----------------
