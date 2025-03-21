@@ -46,11 +46,11 @@
 
 				<!-- Barra de busca centralizada -->
 				<div class="search-container">
-					<form action="{% url 'game_search' %}" method="GET" class="search-form" autocomplete="off">
-						<input type="text" id="search-game" name="q" placeholder="Search games..." value="{{ request.GET.q }}">
+					<form action="{% url 'game_search' %}" method="GET" class="search-form">
+						<input type="text" id="search-game" name="q" placeholder="Search games..." autocomplete="off">
 						<button type="submit"><i class="fas fa-search"></i></button>
 					</form>
-					<ul id="autocomplete-results" class="autocomplete-list"></ul>
+					<ul id="autocomplete-results" class="autocomplete-list"></ul> <!-- 🔥 A LISTA DE SUGESTÕES DEVE ESTAR AQUI! -->
 				</div>
 
 				<!-- Painel do usuário à direita -->
