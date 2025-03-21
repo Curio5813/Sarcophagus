@@ -348,7 +348,7 @@ ol {
 }
 
 /* Lista de sugestões (oculta por padrão, sem espaço reservado) */
-.autocomplete-list {
+/*.autocomplete-list {
     position: absolute;
     top: 100%;
     left: 0;
@@ -365,12 +365,11 @@ ol {
     margin: 0;
     display: none; /* 🔥 AGORA SIM, NÃO RESERVA ESPAÇO ENQUANTO NÃO PRECISA */
 }
-
-/* Quando a lista tiver sugestões, ela aparece */
+/*
 .autocomplete-list.show {
     display: block; /* 🔥 ATIVA A LISTA QUANDO PRECISO */
 }
-
+/*
 .autocomplete-list li {
     padding: 10px 15px;
     font-size: 14px;
@@ -378,12 +377,12 @@ ol {
     color: #131313;
     cursor: pointer;
     transition: background 0.2s ease;
-}
-
+}*/
+/*
 .autocomplete-list li:hover {
     background: #ffb320;
     color: white;
-}
+}*/
 
 /* Painel do Usuário - Alinhado à Direita */
 .user-panel {
