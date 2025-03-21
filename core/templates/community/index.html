@@ -54,7 +54,7 @@
                             <a href="{% url 'membro-details' m.id %}">
                                 <h5>{{ m.membro }}<span> posted an update</span></h5>
                             </a>
-                            <div class="post-date">{{ m.nascimento|date:"F j, Y" }}</div>
+                            <div class="post-date">{{ m.idade }}</div>
                             <p>{{ m.bio|truncatewords:50 }}</p>
                         </div>
                     </div>
