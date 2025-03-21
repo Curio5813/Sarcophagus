@@ -148,5 +148,15 @@
 		});
 	});
 	</script>
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const avatar = document.querySelector(".user-panel img");
+
+		if (avatar) {
+			avatar.style.display = "block"; // 🔥 Força a exibição do avatar
+			avatar.style.visibility = "visible";
+		}
+	});
+	</script>
     </body>
 </html>

@@ -396,11 +396,12 @@ ol {
 
 /* Avatar */
 .user-panel img {
-    width: 50px;
+    display: block; /* Garante que a imagem fique visível */
+    visibility: visible;
+    width: 50px; /* Ajuste conforme necessário */
     height: 50px;
-    border-radius: 10%;
     object-fit: cover;
-    border: 2px solid #fff;
+    border-radius: 50%;
 }
 
 /* Botão de Login */
