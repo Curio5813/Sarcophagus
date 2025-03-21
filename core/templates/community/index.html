@@ -73,7 +73,9 @@
                     <div class="game-card">
                         <div class="game-info">
                             <h5>{{ favorito.game.game }}</h5>
-                            <p>{{ favorito.game.descricao|truncatewords:20 }}</p>
+                            <p>Genre(s): {{ favorito.game.generos.all|join:", " }}</p>
+                            <p>Developer: {{ favorito.game.desenvolvedor }}</p>
+                            <p>Year: {{ favorito.game.ano }}</p>
                         </div>
                         <div class="game-thumb">
                             <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}">
