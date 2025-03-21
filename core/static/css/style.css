@@ -289,62 +289,45 @@ ol {
 }
 
 .site-logo img {
-    width: auto;      /* Mantém a proporção */
-    height: 100px;     /* Ajuste conforme necessário */
-    object-fit: contain; /* Garante que a imagem não seja cortada */
+    height: 60px; /* Ajuste conforme necessário */
 }
 
 /* Barra de busca - Centralizada */
-/* Estilização do campo de pesquisa */
 .search-container {
+    /*flex: 1.5; /* Ocupa espaço central */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin: 10px 0;
-    position: relative;
+    justify-content: center; /* Mantém a barra de busca centralizada */
 }
 
+/* Estilo da Barra de Busca */
 .search-form {
-    position: relative;
     display: flex;
     align-items: center;
     background-color: #ffb320;
     border-radius: 30px;
-    padding: 5px 15px;
-    width: 350px; /* Ajuste conforme necessário */
-    max-width: 100%;
-    border: 2px solid #131313;
+    padding: 5px 10px;
+    width: 300px;
 }
 
+/* Input da busca */
 .search-form input {
     border: none;
-    background: transparent;
+    background: #ffb320;
     outline: none;
-    font-size: 16px;
+    font-size: 14px;
     flex: 1;
-    padding: 8px;
+    padding: 5px;
     color: #131313;
     border-radius: 30px;
 }
 
-.search-form input:focus {
-    border: none;
-    outline: none;
-    box-shadow: none;
-}
-
+/* Botão da busca */
 .search-form button {
     background: none;
     border: none;
     cursor: pointer;
     color: #fff;
-    font-size: 18px;
-    padding: 8px;
-}
-
-.search-form button:hover {
-    color: #131313;
+    font-size: 16px;
 }
 
 /* Painel do Usuário - Alinhado à Direita */
