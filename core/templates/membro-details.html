@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 {% include 'latest_news.html' %}
+<!-- Page info section -->
 <section class="page-info-section set-bg" data-setbg="{% static 'img/page-top-bg/4.jpg' %}">
     <div class="pi-content">
         <div class="container">
@@ -15,6 +16,7 @@
     </div>
 </section>
 
+<!-- Member Profile Section -->
 <section class="page-section community-page">
     <div class="container">
         <br>
@@ -30,18 +32,24 @@
             </div>
         </div>
         <br>
+
         <!-- Seção de jogos favoritos -->
         {% if jogos_favoritos %}
         <div class="favorite-games">
-            <h5 style="color: #A8A8A8"><strong>Favorite Games</strong></h5>
+            <h5 style="font-size: 28px; font-weight: bold; color: #ffb320;">Favorite Games</h5>
             <br>
-            <ul style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: flex-start; list-style: none; padding-left: 0;">
+            <ul class="favorite-games-list">
                 {% for favorito in jogos_favoritos %}
-                <li style="flex: 0 0 150px; text-align: center;">
-                    <a href="{% url 'game-details' favorito.game.id %}" style="text-decoration: none;">
-                        <div>
-                            <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}" style="border-radius: 10px; width: 150px;">
-                            <h6 style="color: #A8A8A8; margin-top: 5px;"><strong>{{ favorito.game.game }}</strong></h6>
+                <li class="game-card">
+                    <a href="{% url 'game-details' favorito.game.id %}" class="game-link">
+                        <div class="game-thumb">
+                            <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}">
+                        </div>
+                        <div class="game-info">
+                            <h5>{{ favorito.game.game }}</h5>
+                            <p><strong>Genre(s):</strong> {{ favorito.game.generos.all|join:", " }}</p>
+                            <p><strong>Developer:</strong> {{ favorito.game.desenvolvedor }}</p>
+                            <p><strong>Year:</strong> {{ favorito.game.ano }}</p>
                         </div>
                     </a>
                 </li>
@@ -52,6 +60,5 @@
     </div>
     <div style="padding-bottom: 30px;"></div>
 </section>
-
 {% include 'footer.html' %}
 {% endblock %}
