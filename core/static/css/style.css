@@ -396,8 +396,8 @@ ol {
 
 /* Avatar */
 .user-panel img {
-    display: block; /* Garante que a imagem fique visível */
-    visibility: visible;
+    display: block !important; /* 🔥 Garante que a imagem fique visível */
+    visibility: visible !important;
     width: 50px; /* Ajuste conforme necessário */
     height: 50px;
     object-fit: cover;
