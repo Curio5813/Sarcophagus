@@ -1322,119 +1322,161 @@ ol {
   Community page
 --------------------*/
 
-.community-page .site-pagination {
-	padding-top: 62px;
+/* Estiliza a seção principal */
+.community-page {
+    background: #1f2225; /* Cor de fundo da comunidade */
+    padding: 60px 0;
 }
 
+/* Contêiner centralizado */
 .community-warp {
-	max-width: 1367px;
-	margin: 0 auto;
-	background: rgba(0, 0, 0, 0.28);
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.28);
+    padding: 40px;
+    border-radius: 10px;
 }
 
+/* Título principal */
+.community-top-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffb320;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Barra de pesquisa de membros */
+.community-filter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.community-filter input {
+    padding: 10px;
+    width: 200px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.community-filter button {
+    padding: 10px 15px;
+    border-radius: 30px;
+    background-color: #ffb320;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: 0.3s;
+}
+
+.community-filter button:hover {
+    background-color: #e0a10d;
+}
+
+/* Lista de Membros */
 .community-post-list {
-	list-style: none;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
 }
 
 .community-post-list li {
-	padding: 33px 55px 65px;
-	margin-bottom: 21px;
-	overflow: hidden;
-	border: 1px solid #878787;
-	background: #1f2225;
-}
-
-.community-post-list .community-post .author-avator {
-	width: 86px;
-	height: 86px;
-	border-radius: 50%;
-	float: left;
-}
-
-.community-post-list .community-post .post-content {
-	padding-left: 100px;
-}
-
-.community-post-list .community-post .post-content h5 {
-	font-size: 16px;
-	color: #ff205f;
-	font-weight: 400;
-	margin-bottom: 10px;
-}
-
-.community-post-list .community-post .post-content h5 span {
-	color: #7a7a7a;
-	padding-left: 18px;
-}
-
-.community-post-list .community-post .post-content p {
-	color: #fff;
-	margin-bottom: 5px;
-}
-
-.community-post-list .community-post .post-content .post-date {
-	font-size: 12px;
-	color: #ffb320;
-	margin-bottom: 18px;
-}
-
-.community-post-list .attachment-file {
-	padding-top: 60px;
-	max-width: 435px;
-}
-
-.community-top-title {
-	margin-bottom: 50px;
-}
-
-.community-filter {
-	margin-bottom: 80px;
-}
-
-.community-filter label {
-	font-size: 18px;
-	color: #1f2225;
-	font-weight: 500;
-	padding-right: 10px;
-}
-
-.community-filter select {
-	width: 201px;
-	height: 42px;
-	font-size: 14px;
-	padding: 0 18px;
-	color: #1f2225;
-	font-weight: 500;
-}
-
-/* Estilo para a imagem dos jogos favoritados */
-.game-thumb {
-    width: 150px; /* Largura da imagem */
-    height: 150px; /* Altura da imagem */
-    background-size: cover; /* Faz a imagem cobrir totalmente o contêiner */
-    background-position: center; /* Centraliza a imagem dentro do contêiner */
-    border-radius: 10px; /* Bordas arredondadas */
-    margin-right: 15px; /* Espaçamento entre a imagem e o texto */
-}
-
-
-/* Estilo para o conteúdo das informações dos jogos */
-.game-info {
     display: flex;
-    flex-direction: column;
-    justify-content: center; /* Centraliza o conteúdo verticalmente */
+    align-items: center;
+    background: #252525;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.community-post-list li:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Avatar do membro */
+.author-avator {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    margin-right: 15px;
+}
+
+/* Conteúdo do membro */
+.post-content {
+    flex-grow: 1;
+    color: white;
+}
+
+.post-content h5 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffb320;
+}
+
+.post-content p {
+    font-size: 14px;
+    color: #d3d3d3;
+}
+
+/* Estilizando a Data */
+.post-date {
+    font-size: 12px;
+    color: #ffb320;
+    margin-bottom: 5px;
+}
+
+/* ========================
+   Estilos para Jogos Favoritos
+======================== */
+.favorite-games-list {
+    list-style: none;
+    padding: 0;
+}
+
+.favorite-games-list li {
+    display: flex;
+    align-items: center;
+    background: #2c2f33;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorite-games-list li:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Imagem do jogo */
+.game-thumb img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ffb320;
+    margin-right: 15px;
+}
+
+/* Nome do Jogo */
 .game-info h5 {
     font-size: 18px;
     font-weight: bold;
-    margin: 0;
+    color: #ffb320;
 }
 
 .game-info p {
     font-size: 14px;
-    color: #777;
-    margin: 5px 0 0 0;
+    color: #d3d3d3;
+    margin: 0;
 }
 
 /*-----------------

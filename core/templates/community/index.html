@@ -16,7 +16,7 @@
 <!-- Page info section -->
 
 <!-- Page section -->
-<section class="page-section community-page set-bg" data-setbg="">
+<section class="page-section community-page set-bg">
     <div class="community-warp spad">
         <div class="container">
             <div class="row">
@@ -35,20 +35,19 @@
                     <form class="community-filter" method="GET">
                         <label for="membro">Search Member:</label>
                         <input type="text" name="membro" id="membro" placeholder="Member name"
-                               value="{{ request.GET.membro|default:'' }}" style="margin: 0 5px; border-radius: 30px; padding: 10px; border: 1px solid #ccc; background-color: #fff; width: 150px;">
-                        <button type="submit" style="border-radius: 30px; padding: 10px 15px; border: 1px solid #ccc; background-color: #ffb320; color: white; cursor: pointer;">
-                            Search
-                        </button>
+                               value="{{ request.GET.membro|default:'' }}">
+                        <button type="submit">Search</button>
                     </form>
                 </div>
             </div>
 
+            <!-- Lista de Membros -->
             <ul class="community-post-list">
                 {% for m in membros %}
                 <li>
                     <div class="community-post">
                         <a href="{% url 'membro-details' m.id %}">
-                            <div class="author-avator set-bg" data-setbg="{{ m.imagem.url }}"></div>
+                            <div class="author-avator set-bg" style="background-image: url('{{ m.imagem.url }}');"></div>
                         </a>
                         <div class="post-content">
                             <a href="{% url 'membro-details' m.id %}">
@@ -61,23 +60,22 @@
                 </li>
                 {% endfor %}
             </ul>
+
             <br><br>
 
-            <!-- Seção de jogos favoritados -->
+            <!-- Seção de Jogos Favoritos -->
             {% if jogos_favoritos %}
-            <h4>Favorites Games</h4>
+            <h4 class="community-top-title">Favorite Games</h4>
             <br>
-            <ul class="favorite-games-list" style="list-style: none; padding-left: 0;">
+            <ul class="favorite-games-list">
                 {% for favorito in jogos_favoritos %}
-                <li style="margin-bottom: 15px;">
-                    <div class="game-card">
-                        <div class="game-info">
-                            <h5>{{ favorito.game.game }}</h5>
-                            <p>{{ favorito.game.descricao|truncatewords:20 }}</p>
-                        </div>
-                        <div class="game-thumb">
-                            <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}">
-                        </div>
+                <li>
+                    <div class="game-thumb">
+                        <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}">
+                    </div>
+                    <div class="game-info">
+                        <h5>{{ favorito.game.game }}</h5>
+                        <p>{{ favorito.game.descricao|truncatewords:20 }}</p>
                     </div>
                 </li>
                 {% endfor %}
