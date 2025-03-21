@@ -354,9 +354,8 @@ ol {
     transform: translateX(-50%); /* 🔥 Corrige o deslocamento */
     width: 100%; /* 🔥 Faz a lista ter a mesma largura do campo */
     background: white;
-    border: 2px solid #ffb320;
     border-top: none;
-    border-radius: 0 0 10px 10px;
+    border-radius: 10px 10px 10px 10px;
     z-index: 1000;
     list-style: none;
     max-height: 200px;
