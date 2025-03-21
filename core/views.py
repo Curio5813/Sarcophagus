@@ -23,14 +23,6 @@ from django.contrib import messages
 from django.urls import reverse
 
 
-def autocomplete_games(request):
-    if 'term' in request.GET:
-        query = request.GET.get('term')
-        games = Games.objects.filter(game__icontains=query).values_list('game', flat=True)[:10]
-        return JsonResponse(list(games), safe=False)
-    return JsonResponse([], safe=False)
-
-
 class HomeView(TemplateView):
     template_name = 'index/index.html'
 
