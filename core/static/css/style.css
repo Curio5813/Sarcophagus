@@ -289,45 +289,100 @@ ol {
 }
 
 .site-logo img {
-    height: 60px; /* Ajuste conforme necessário */
+    width: auto;      /* Mantém a proporção */
+    height: 100px;     /* Ajuste conforme necessário */
+    object-fit: contain; /* Garante que a imagem não seja cortada */
 }
 
 /* Barra de busca - Centralizada */
+/* Estilização do campo de pesquisa */
 .search-container {
-    /*flex: 1.5; /* Ocupa espaço central */
     display: flex;
-    justify-content: center; /* Mantém a barra de busca centralizada */
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 10px 0;
+    position: relative;
 }
 
-/* Estilo da Barra de Busca */
 .search-form {
+    position: relative;
     display: flex;
     align-items: center;
     background-color: #ffb320;
     border-radius: 30px;
-    padding: 5px 10px;
-    width: 300px;
+    padding: 5px 15px;
+    width: 350px; /* Ajuste conforme necessário */
+    max-width: 100%;
+    border: 2px solid #131313;
 }
 
-/* Input da busca */
 .search-form input {
     border: none;
-    background: #ffb320;
+    background: transparent;
     outline: none;
-    font-size: 14px;
+    font-size: 16px;
     flex: 1;
-    padding: 5px;
+    padding: 8px;
     color: #131313;
     border-radius: 30px;
 }
 
-/* Botão da busca */
+.search-form input:focus {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
 .search-form button {
     background: none;
     border: none;
     cursor: pointer;
     color: #fff;
-    font-size: 16px;
+    font-size: 18px;
+    padding: 8px;
+}
+
+.search-form button:hover {
+    color: #131313;
+}
+
+/* Lista de sugestões (oculta por padrão, sem espaço reservado) */
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 2px solid #ffb320;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    z-index: 1000;
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+    display: none; /* 🔥 AGORA SIM, NÃO RESERVA ESPAÇO ENQUANTO NÃO PRECISA */
+}
+
+/* Quando a lista tiver sugestões, ela aparece */
+.autocomplete-list.show {
+    display: block; /* 🔥 ATIVA A LISTA QUANDO PRECISO */
+}
+
+.autocomplete-list li {
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #131313;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.autocomplete-list li:hover {
+    background: #ffb320;
+    color: white;
 }
 
 /* Painel do Usuário - Alinhado à Direita */

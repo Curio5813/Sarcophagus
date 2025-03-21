@@ -46,10 +46,11 @@
 
 				<!-- Barra de busca centralizada -->
 				<div class="search-container">
-					<form action="{% url 'game_search' %}" method="GET" class="search-form">
-						<input type="text" name="q" placeholder="Search games..." value="{{ request.GET.q }}">
+					<form action="{% url 'game_search' %}" method="GET" class="search-form" autocomplete="off">
+						<input type="text" id="search-game" name="q" placeholder="Search games..." value="{{ request.GET.q }}">
 						<button type="submit"><i class="fas fa-search"></i></button>
 					</form>
+					<ul id="autocomplete-results" class="autocomplete-list"></ul>
 				</div>
 
 				<!-- Painel do usuário à direita -->
@@ -102,6 +103,50 @@
 			link.parentNode.classList.add('active'); // Adiciona a classe "active" ao elemento <li>
 		  }
 		});
+	</script>
+
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const searchInput = document.getElementById("search-game");
+		const resultsList = document.getElementById("autocomplete-results");
+
+		searchInput.addEventListener("input", function () {
+			let query = searchInput.value.trim();
+
+			if (query.length < 2) {
+				resultsList.classList.remove("show"); // 🔥 OCULTA A LISTA SE A PESQUISA FOR MUITO CURTA
+				return;
+			}
+
+			fetch(`/autocomplete/?term=${query}`)
+				.then(response => response.json())
+				.then(data => {
+					resultsList.innerHTML = "";
+
+					if (data.length > 0) {
+						data.forEach(game => {
+							let item = document.createElement("li");
+							item.textContent = game;
+							item.addEventListener("click", function () {
+								searchInput.value = game;
+								resultsList.classList.remove("show"); // 🔥 OCULTA A LISTA APÓS CLIQUE
+							});
+							resultsList.appendChild(item);
+						});
+
+						resultsList.classList.add("show"); // 🔥 MOSTRA A LISTA SOMENTE SE TIVER RESULTADOS
+					} else {
+						resultsList.classList.remove("show"); // 🔥 OCULTA SE NÃO TIVER RESULTADOS
+					}
+				});
+		});
+
+		document.addEventListener("click", function (e) {
+			if (!searchInput.contains(e.target) && !resultsList.contains(e.target)) {
+				resultsList.classList.remove("show"); // 🔥 GARANTE QUE A LISTA SUMA AO CLICAR FORA
+			}
+		});
+	});
 	</script>
     </body>
 </html>
