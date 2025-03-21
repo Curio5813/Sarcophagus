@@ -1456,27 +1456,46 @@ ol {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-/* Imagem do jogo */
-.game-thumb img {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
+.game-card {
+    display: flex; /* Permite que a imagem e as informações fiquem lado a lado */
+    align-items: center; /* Alinha os itens verticalmente */
+    gap: 15px; /* Espaçamento entre imagem e informações */
+    padding: 10px;
+    background: #fff;
     border-radius: 8px;
-    border: 2px solid #ffb320;
-    margin-right: 15px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
 }
 
-/* Nome do Jogo */
+.game-card:hover {
+    transform: scale(1.02);
+}
+
+.game-thumb img {
+    width: 120px; /* Tamanho reduzido */
+    height: auto; /* Mantém a proporção */
+    object-fit: contain; /* Garante que a imagem não seja cortada */
+    border-radius: 8px;
+    border: 2px solid #ffb320;
+}
+
+.game-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .game-info h5 {
     font-size: 18px;
     font-weight: bold;
-    color: #ffb320;
+    margin: 0;
+    color: #131313;
 }
 
 .game-info p {
     font-size: 14px;
-    color: #d3d3d3;
-    margin: 0;
+    color: #555;
+    margin: 5px 0;
 }
 
 /*-----------------

@@ -71,14 +71,14 @@
                 {% for favorito in jogos_favoritos %}
                 <li style="margin-bottom: 15px;">
                     <div class="game-card">
-                        <div class="game-info">
-                            <h5>{{ favorito.game.game }}</h5>
-                            <p>Genre(s): {{ favorito.game.generos.all|join:", " }}</p>
-                            <p>Developer: {{ favorito.game.desenvolvedor }}</p>
-                            <p>Year: {{ favorito.game.ano }}</p>
-                        </div>
                         <div class="game-thumb">
                             <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}">
+                        </div>
+                        <div class="game-info">
+                            <h5>{{ favorito.game.game }}</h5>
+                            <p><strong>Genre(s):</strong> {{ favorito.game.generos.all|join:", " }}</p>
+                            <p><strong>Developer:</strong> {{ favorito.game.desenvolvedor }}</p>
+                            <p><strong>Year:</strong> {{ favorito.game.ano }}</p>
                         </div>
                     </div>
                 </li>
