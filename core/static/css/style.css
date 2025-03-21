@@ -1438,8 +1438,8 @@ ol {
 ======================== */
 
 .favorite-games-list {
-    display: flex; /* Itens um ao lado do outro */
-    flex-wrap: wrap; /* Permite quebra de linha caso a tela seja pequena */
+    display: flex; /* Permite que os itens fiquem um ao lado do outro */
+    flex-wrap: wrap; /* Faz com que os itens quebrem para a linha de baixo se não couberem */
     gap: 15px; /* Espaço entre os flash-cards */
     justify-content: center; /* Centraliza os itens na tela */
     padding: 0;
@@ -1447,43 +1447,35 @@ ol {
     list-style: none;
 }
 
-.favorite-games-list li {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Distribui imagem e informações */
-    background: #2c2f33;
-    border-radius: 10px;
-    padding: 15px;
-    width: 250px; /* Tamanho fixo para manter os cards uniformes */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.favorite-games-list li:hover {
-    transform: scale(1.02);
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Estilo do flash-card */
 .game-card {
     display: flex;
     flex-direction: column; /* Mantém a imagem em cima e o texto abaixo */
     align-items: center;
-    width: 220px; /* Tamanho fixo dos flash-cards */
+    width: 220px; /* Define um tamanho fixo para cada flash-card */
     background: #fff;
     border-radius: 8px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     padding: 10px;
     text-align: center;
-    word-wrap: break-word; /* 🔥 Quebra textos longos automaticamente */
+    word-wrap: break-word;
     overflow: hidden;
     transition: transform 0.2s ease-in-out;
+    position: relative;
 }
 
 .game-card:hover {
     transform: scale(1.05);
 }
 
-/* Ajuste do container da imagem */
+/* 🔥 Faz o link cobrir todo o flash-card */
+.game-link {
+    text-decoration: none; /* Remove o sublinhado */
+    color: inherit; /* Mantém a cor do texto */
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 .game-thumb {
     width: 100%;
     display: flex;
@@ -1498,12 +1490,11 @@ ol {
     border: 2px solid #ffb320;
 }
 
-/* Ajuste das informações do jogo */
 .game-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: left; /* 🔥 Mantém um alinhamento mais natural */
+    text-align: left;
     padding-left: 10px;
 }
 
@@ -1516,10 +1507,10 @@ ol {
 
 .game-info p {
     font-size: 14px;
-    color: #dcdcdc;
+    color: #555;
     margin: 3px 0;
-    white-space: normal; /* Permite quebras de linha */
-    word-wrap: break-word; /* 🔥 Impede textos longos de quebrar layout */
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 /*-----------------
