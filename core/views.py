@@ -255,7 +255,7 @@ class ReviewView(TemplateView):
                 media_rating = 0
 
             # Estrelas cheias e meia estrela
-            full_stars = int(media_rating // 2) + 0.5 # Estrelas completas
+            full_stars = int(media_rating // 2) + 1 # Estrelas completas
             has_half_star = (media_rating % 2) >= 0.5  # Verifica se há meia estrela
 
             # Atribuir valores ao objeto do jogo
