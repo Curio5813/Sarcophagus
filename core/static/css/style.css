@@ -2187,7 +2187,7 @@ ol {
     }
 
     .video-container iframe {
-        height: 240px;
+        height: auto;
     }
 }
 
@@ -2206,13 +2206,73 @@ ol {
     opacity: 1 !important;
 }
 
+/* Estrelas inativas */
 .star {
     cursor: pointer;
     font-size: 24px;
     color: #ccc;
     padding: 0 2px;
+    transition: color 0.3s ease;
 }
 
-.star.active {
-    color: #ffd700;
+/* Estrelas ativas (selecionadas pelo usuário ou já salvas) */
+.star.active,
+.star.selected {
+    color: #ffb320 !important; /* Cor laranja igual à das reviews */
+}
+
+.star.active i,
+.star.selected i {
+    color: #ffb320 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover opcional (destaque ao passar o mouse) */
+.star:hover {
+    color: #ffaa00;
+}
+
+.game-media-wrapper {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: stretch;
+}
+
+/* Imagem do jogo */
+.game-cover {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    background: #fff;
+    border: 2px solid #ffb320;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.game-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Pode usar 'contain' se preferir menos corte */
+    border-radius: 10px;
+}
+
+/* Vídeo do jogo */
+.video-container {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.video-container iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border: none;
 }
