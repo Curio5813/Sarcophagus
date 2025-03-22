@@ -67,7 +67,7 @@
 </div>
     <!-- JavaScript -->
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('load', function () {
     // CSRF Token
     function getCookie(name) {
         let cookieValue = null;
@@ -179,6 +179,5 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-
 {% include 'footer.html' %}
 {% endblock %}
