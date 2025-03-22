@@ -1302,7 +1302,6 @@ ol {
     gap: 5px; /* Espaçamento entre os ícones */
 }
 
-.recent-game-item .rgi-content .rgi-extra .rgi-star,
 .recent-game-item .rgi-content .rgi-extra .rgi-heart {
     height: 35px;
     width: 35px;
@@ -1316,6 +1315,80 @@ ol {
 
 .recent-game-item .rgi-extra .rgi-heart {
     background-color: #c71f2d; /* Cor rubro para o coração */
+}
+.review-page .review-item-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.review-page .review-item {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.review-page .review-item:hover {
+    transform: translateY(-5px);
+}
+
+.review-page .review-cover {
+    position: relative;
+    width: 100%;
+}
+
+.review-page .review-cover img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.review-page .score.yellow {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 54px;
+    height: 54px;
+    background: #ffb320;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #131313;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.review-page .review-text {
+    padding: 20px;
+    background-color: #fff5e6;
+    text-align: left;
+}
+
+.review-page .review-text h4 {
+    color: #ffb320;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.review-page .review-text p {
+    color: #444;
+    font-size: 14px;
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.review-page .rating {
+    margin-bottom: 15px;
+}
+
+.review-page .rating i {
+    font-size: 14px;
+    margin-right: 2px;
 }
 
 /*-----------------
@@ -2010,5 +2083,111 @@ ol {
     background: #ffe0b3;
     border-radius: 10px;
     font-weight: bold;
+}
+
+/*--------------------------------
+        GAME DETAILS
+---------------------------------*/
+
+/* Container principal */
+.game-detail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff5e6;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Título do jogo */
+.game-detail-container h1 {
+    font-size: 28px;
+    color: #131313;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Capa + vídeo lado a lado */
+.game-media-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Imagem do jogo */
+.game-cover {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    background: #fff;
+    border: 2px solid #ffb320;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.game-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Mantém a proporção */
+    display: block;
+    border-radius: 10px;
+}
+
+/* Container de vídeo */
+.video-container {
+    flex: 1;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.video-container iframe {
+    width: 100%;
+    height: 315px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* Detalhes do jogo */
+.game-details-text {
+    width: 100%;
+    margin-top: 30px;
+    color: #131313;
+}
+
+.game-details-text p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #444;
+}
+
+/* Informações como ano, dev, pub */
+.game-meta {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Seções de review */
+.game-details-text h3 {
+    color: #ffb320;
+    font-size: 18px;
+    margin-top: 30px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .game-media-wrapper {
+        flex-direction: column;
+    }
+
+    .video-container iframe {
+        height: 240px;
+    }
 }
 
