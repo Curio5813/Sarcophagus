@@ -67,114 +67,118 @@
 </div>
     <!-- JavaScript -->
 <script>
+document.addEventListener('DOMContentLoaded', function () {
     // CSRF Token
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.startsWith(name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
         }
-        const csrftoken = getCookie('csrftoken');
+        return cookieValue;
+    }
 
-        // Sistema de Favoritos
-        document.querySelectorAll('.favorite-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const gameId = this.dataset.gameId;
-                const isActive = this.classList.contains('active');
-                const icon = this.querySelector('i');
+    const csrftoken = getCookie('csrftoken');
 
-                fetch("{% url 'favoritar_jogo' %}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": csrftoken
-                    },
-                    body: JSON.stringify({
-                        "game_id": gameId,
-                        "favorito": !isActive
-                    })
+    // Sistema de Favoritos
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const gameId = this.dataset.gameId;
+            const isActive = this.classList.contains('active');
+            const icon = this.querySelector('i');
+
+            fetch("{% url 'favoritar_jogo' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken
+                },
+                body: JSON.stringify({
+                    "game_id": gameId,
+                    "favorito": !isActive
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        this.classList.toggle('active');
-                        icon.classList.toggle('far');
-                        icon.classList.toggle('fas');
-                    }
-                })
-                .catch(error => console.error("Erro:", error));
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.classList.toggle('active');
+                    icon.classList.toggle('far');
+                    icon.classList.toggle('fas');
+                }
+            })
+            .catch(error => console.error("Erro:", error));
+        });
+    });
+
+    // Sistema de Estrelas
+    document.querySelectorAll('.star-rating .star').forEach(star => {
+        star.addEventListener('mouseover', function () {
+            const hoverValue = parseInt(this.dataset.value) * 2;
+            const stars = this.parentNode.querySelectorAll('.star');
+
+            stars.forEach(s => {
+                const starValue = parseInt(s.dataset.value) * 2;
+                s.classList.remove('selected');
+                if (starValue <= hoverValue) {
+                    s.classList.add('selected');
+                }
             });
         });
 
-        // Sistema de Estrelas
-        document.querySelectorAll('.star-rating .star').forEach(star => {
-            star.addEventListener('mouseover', function() {
-                const hoverValue = parseInt(this.dataset.value) * 2; // Multiplica por 2
-                const stars = this.parentNode.querySelectorAll('.star');
+        star.addEventListener('mouseout', function () {
+            const currentRating = parseInt(this.parentNode.dataset.currentRating);
+            const stars = this.parentNode.querySelectorAll('.star');
 
-                stars.forEach(s => {
-                    const starValue = parseInt(s.dataset.value) * 2;
-                    s.classList.remove('selected');
-                    if (starValue <= hoverValue) {
-                        s.classList.add('selected');
-                    }
-                });
-            });
-
-            star.addEventListener('mouseout', function() {
-                const currentRating = parseInt(this.parentNode.dataset.currentRating);
-                const stars = this.parentNode.querySelectorAll('.star');
-
-                stars.forEach(s => {
-                    const starValue = parseInt(s.dataset.value) * 2;
-                    s.classList.remove('selected');
-                    if (starValue <= currentRating) {
-                        s.classList.add('active');
-                    }
-                });
-            });
-
-            star.addEventListener('click', function() {
-                const gameId = this.parentNode.dataset.gameId;
-                const ratingValue = parseInt(this.dataset.value) * 2; // Multiplica por 2 aqui
-
-                fetch("{% url 'avaliar_jogo' %}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": csrftoken
-                    },
-                    body: JSON.stringify({
-                        "game_id": gameId,
-                        "rating": ratingValue
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const stars = this.parentNode.querySelectorAll('.star');
-                        this.parentNode.dataset.currentRating = ratingValue;
-
-                        stars.forEach(s => {
-                            const starValue = parseInt(s.dataset.value) * 2;
-                            s.classList.remove('active');
-                            if (starValue <= ratingValue) {
-                                s.classList.add('active');
-                            }
-                        });
-                    }
-                })
-                .catch(error => console.error("Erro:", error));
+            stars.forEach(s => {
+                const starValue = parseInt(s.dataset.value) * 2;
+                s.classList.remove('selected');
+                if (starValue <= currentRating) {
+                    s.classList.add('active');
+                }
             });
         });
-    </script>
+
+        star.addEventListener('click', function () {
+            const gameId = this.parentNode.dataset.gameId;
+            const ratingValue = parseInt(this.dataset.value) * 2;
+
+            fetch("{% url 'avaliar_jogo' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken
+                },
+                body: JSON.stringify({
+                    "game_id": gameId,
+                    "rating": ratingValue
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const stars = this.parentNode.querySelectorAll('.star');
+                    this.parentNode.dataset.currentRating = ratingValue;
+
+                    stars.forEach(s => {
+                        const starValue = parseInt(s.dataset.value) * 2;
+                        s.classList.remove('active');
+                        if (starValue <= ratingValue) {
+                            s.classList.add('active');
+                        }
+                    });
+                }
+            })
+            .catch(error => console.error("Erro:", error));
+        });
+    });
+});
+</script>
+
 {% include 'footer.html' %}
 {% endblock %}
