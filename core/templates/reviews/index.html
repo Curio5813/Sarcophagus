@@ -18,9 +18,9 @@
                             <div class="rating">
                                 {% for i in "12345" %}
                                     {% if i|add:0 < g.full_stars %}
-                                        <i class="fa fa-star" style="color: yellow;"></i> <!-- Estrela cheia -->
+                                        <i class="fa fa-star" style="color: #ffb320;"></i>
                                     {% elif i|add:0 == g.full_stars and g.has_half_star %}
-                                        <i class="fa fa-star-half-alt" style="color: yellow;"></i> <!-- Estrela meia -->
+                                        <i class="fa fa-star-half-alt" style="color: #ffb320;"></i>
                                     {% else %}
                                         <i class="fa fa-star" style="color: gray; opacity: 0.3;"></i> <!-- Estrela apagada -->
                                     {% endif %}

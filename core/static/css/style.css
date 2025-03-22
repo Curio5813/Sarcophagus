@@ -2191,7 +2191,16 @@ ol {
     }
 }
 
-.favorite-btn, .star-rating {
+.favorite-btn {
+    cursor: pointer;
+}
+
+.favorite-btn i {
+    font-size: 24px;
+    color: #ff4444;
+}
+
+.star-rating {
     display: inline-block !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -2202,13 +2211,8 @@ ol {
     font-size: 24px;
     color: #ccc;
     padding: 0 2px;
-
 }
+
 .star.active {
     color: #ffd700;
-}
-
-.favorite-btn i {
-    font-size: 24px;
-    color: #ff4444;
 }
