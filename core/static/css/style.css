@@ -2276,3 +2276,21 @@ ol {
     object-fit: cover;
     border: none;
 }
+
+.rating-favorite-box {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.rating-favorite-box p {
+    margin: 10px 0;
+}
+
+/* Ajuste para alinhar estrelas */
+.star-rating {
+    display: inline-flex;
+    justify-content: center;
+    margin-top: 5px;
+}

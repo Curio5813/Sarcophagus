@@ -57,8 +57,9 @@
                                 <div class="star-rating" data-game-id="{{ game.id }}"
                                      data-current-rating="{{ game.user_rating|default:0 }}">
                                     {% for i in "12345" %}
-                                        <span class="star {% if game.user_rating >= i|add:'0'|mul:2 %}active{% endif %}"
-                                              data-value="{{ i }}">&#9733;</span>
+                                        <span class="star {% if game.user_rating >= i|add:'0'|mul:2 %}active{% endif %}" data-value="{{ i }}">
+                                            <i class="fa fa-star"></i>
+                                        </span>
                                     {% endfor %}
                                 </div>
                             </div>
