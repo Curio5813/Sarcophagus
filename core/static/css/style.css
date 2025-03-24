@@ -865,7 +865,7 @@ ol {
 }
 
 /*----------------------
-  Footer top Section
+  Footer Section
 ------------------------*/
 
 .footer-top-section {
@@ -966,10 +966,6 @@ ol {
 	font-size: 12px;
 	color: #ffb320;
 }
-
-/*----------------------
-  Footer Section
-------------------------*/
 
 .footer-section {
 	padding: 18px 0 16px;
@@ -1892,30 +1888,6 @@ ol {
    Login | Logout page
 -----------------------*/
 
-.background-image-login {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Background image styling */
-.login-bg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;
-}
-
-/* ---------------------
-   Login | Logout page
------------------------*/
-
 /* Background container */
 .background-image-login {
     position: relative;
@@ -2004,9 +1976,9 @@ ol {
     margin-right: 8px;
 }
 
-/* ==============================
+/* =============================================
    Estilos para a Página de Resultados da Busca
-   ============================== */
+================================================ */
 
 .search-results-container {
     max-width: 900px;
@@ -2293,4 +2265,103 @@ ol {
     display: inline-flex;
     justify-content: center;
     margin-top: 5px;
+}
+
+/* ============================
+        GAMES SECTION
+============================ */
+
+.search-widget {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+    align-items: center;
+    border-radius: 35px;
+}
+
+.search-group input,
+.search-group select {
+    padding: 12px 20px;
+    border-radius: 35px;
+    font-size: 16px;
+    background-color: #ffb320;
+    border: none;
+    color: #131313;
+}
+
+.search-btn {
+    background-color: #ffb320;
+    border: none;
+    color: #131313;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-size: 16px;
+}
+
+.search-btn:hover {
+    background-color: #e0a10d;
+}
+
+.favorite-btn {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: inline-block;
+}
+
+.favorite-btn i {
+    font-size: 1.5rem;
+    color: #666;
+    transition: all 0.3s ease;
+}
+
+.favorite-btn.active i {
+    color: #ff4444 !important;
+    text-shadow: 0 2px 4px rgba(255, 68, 68, 0.3);
+}
+
+.favorite-btn:hover i {
+    transform: scale(1.2);
+    color: #ff4444;
+}
+
+.star-rating {
+    display: inline-block;
+    font-size: 0;
+    margin: 10px 0;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 24px;
+    color: #ddd;
+    display: inline-block;
+    transition: color 0.3s ease;
+    padding: 0 2px;
+}
+
+.star.active,
+.star.selected {
+    color: #ffd700;
+}
+
+.recent-game-item {
+    background: #fff5e6;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.recent-game-item:hover {
+    transform: translateY(-5px);
 }
