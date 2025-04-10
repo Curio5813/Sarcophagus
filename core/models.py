@@ -33,19 +33,19 @@ class Base(models.Model):
 
 
 class MembroManager(BaseUserManager):
-    def create_user(self, email, first_name, last_name, password=None):
+    def create_user(self, email, first_name, last_name, membro, password=None):
         if not email:
             raise ValueError("O campo Email é obrigatório")
         email = self.normalize_email(email)
-        user = self.model(email=email, first_name=first_name, last_name=last_name)
+        user = self.model(email=email, first_name=first_name, last_name=last_name, membro=membro)
         user.set_password(password)
         user.is_active = True
         user.is_staff = False
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, first_name, last_name, password=None):
-        user = self.create_user(email, first_name, last_name, password)
+    def create_superuser(self, email, first_name, last_name, membro, password=None):
+        user = self.create_user(email, first_name, last_name, membro, password)
         user.is_staff = True
         user.is_superuser = True
         user.save(using=self._db)
@@ -96,16 +96,18 @@ class Membro(AbstractBaseUser, PermissionsMixin):
 
 
 class Genero(models.Model):
-    GENERO_CHOICES = [
-        ('Action', 'Action'),
-        ('Adventure', 'Adventure'),
-        ('Puzzle', 'Puzzle'),
-        ('Racing', 'Racing'),
-        ('RPG', 'RPG'),
-        ('Shooter', 'Shooter'),
-        ('Simulation', 'Simulation'),
-        ('Sports', 'Sports'),
-        ('Strategy', 'Strategy'),
+    GENRE_CHOICES = [
+        ('ADVENTURE', 'Adventure'),
+        ('RTS', 'Real-Time Strategy'),
+        ('TBS', 'Turn-Based Strategy / Tactics'),
+        ('RPG', 'Role-Playing Game'),
+        ('FPS', 'First-Person Shooter'),
+        ('SIMULATION', 'Simulation'),
+        ('PLATFORMER', 'Platformer'),
+        ('RACING', 'Racing'),
+        ('WAR_SIM', 'War Simulation / Military Strategy'),
+        ('SURVIVAL_HORROR', 'Survival Horror'),
+        ('MMORPG', 'Massively Multiplayer Online RPG'),
     ]
 
     nome = models.CharField(_('Nome'), max_length=100, choices=GENERO_CHOICES, unique=True)
