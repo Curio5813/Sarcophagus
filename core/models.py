@@ -110,7 +110,7 @@ class Genero(models.Model):
         ('MMORPG', 'Massively Multiplayer Online RPG'),
     ]
 
-    nome = models.CharField(_('Nome'), max_length=100, choices=GENERO_CHOICES, unique=True)
+    nome = models.CharField(_('Nome'), max_length=100, choices=GENRE_CHOICES, unique=True)
 
     class Meta:
         verbose_name = _('Gênero')
