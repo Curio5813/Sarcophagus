@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 # **Configuração do Banco de Dados no RDS**
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL", "postgres://u29fqucarl5frg:pbf94400ec1d92ffda37fb9beea36a213396ac4b41e281901a019718ee74a32ad@ccpa7stkruda3o.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/de855v2bni0867")
+        default=os.getenv("DATABASE_URL")
     )
 }
 
