@@ -45,22 +45,25 @@
 
             <ul class="community-post-list">
                 {% for m in membros %}
-                <li>
-                    <div class="community-post">
-                        <a href="{% url 'membro-details' m.id %}">
-                            <div class="author-avator set-bg" data-setbg="{{ m.imagem.url }}"></div>
-                        </a>
-                        <div class="post-content">
+                    {% if m.membro != 'system' %}
+                    <li>
+                        <div class="community-post">
                             <a href="{% url 'membro-details' m.id %}">
-                                <h5>{{ m.membro }}<span> posted an update</span></h5>
+                                <div class="author-avator set-bg" data-setbg="{{ m.imagem.url }}"></div>
                             </a>
-                            <div class="post-date">{{ m.idade }} anos</div>
-                            <p>{{ m.bio|truncatewords:50 }}</p>
+                            <div class="post-content">
+                                <a href="{% url 'membro-details' m.id %}">
+                                    <h5>{{ m.membro }}<span> posted an update</span></h5>
+                                </a>
+                                <div class="post-date">{{ m.idade }} anos</div>
+                                <p>{{ m.bio|truncatewords:50 }}</p>
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                    {% endif %}
                 {% endfor %}
             </ul>
+
             <br><br>
 
             <!-- Seção de jogos favoritados -->

@@ -33,6 +33,10 @@ class MembroAdmin(admin.ModelAdmin):
     form = MembroForm  # Use o formulário personalizado
     list_display = ('membro', 'ativo', 'modificado')
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.exclude(membro='system')
+
 @admin.register(GameRating)
 class GameRatingAdmin(admin.ModelAdmin):
     list_display = ('membro', 'game', 'rating', 'favorito')

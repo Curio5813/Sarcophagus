@@ -161,15 +161,16 @@ class Games(Base):
         if is_new:
             from .models import Membro, GameRating  # Import interno para evitar erro circular
 
-            membro_admin = Membro.objects.filter(is_superuser=True).first()
-            if membro_admin:
-                # Cria a avaliação inicial
+            try:
+                system_user = Membro.objects.get(email='system@sarcophagus.com')
                 GameRating.objects.create(
-                    membro=membro_admin,
+                    membro=system_user,
                     game=self,
                     rating=self.rating,
                     favorito=False
                 )
+            except Membro.DoesNotExist:
+                print("Usuário 'system@sarcophagus.com' não encontrado. A nota inicial não foi criada.")
 
     def __str__(self):
         return self.game

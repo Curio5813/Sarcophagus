@@ -154,7 +154,7 @@ class CommunityView(TemplateView):
                             Q(first_name__icontains=search_query) |
                             Q(last_name__icontains=search_query) |
                             Q(membro__icontains=search_query)
-                        )
+                        ).exclude(membro='system')
                         context['show_all_members_title'] = False  # Pesquisa ativa
                     else:
                         membros = Membro.objects.all()
@@ -165,7 +165,7 @@ class CommunityView(TemplateView):
                             Q(first_name__icontains=search_query) |
                             Q(last_name__icontains=search_query) |
                             Q(membro__icontains=search_query)
-                        )
+                        ).exlcude(membro='system')
                     else:
                         membros = Membro.objects.filter(id=self.request.user.id)
 
