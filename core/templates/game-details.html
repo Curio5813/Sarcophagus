@@ -44,6 +44,11 @@
     <!-- Informações do jogo -->
     <div class="game-meta">
         <p><strong>Year:</strong> {{ game.ano }}</p>
+        <p><strong>Genre:</strong>
+            {% for genero in game.generos.all %}
+                {{ genero.nome }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
         <p><strong>Developer:</strong> {{ game.desenvolvedor }}</p>
         <p><strong>Publisher:</strong> {{ game.distribuidor }}</p>
     </div>
