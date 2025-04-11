@@ -108,6 +108,7 @@ class Genero(models.Model):
         ('WAR_SIM', 'War Simulation / Military Strategy'),
         ('SURVIVAL_HORROR', 'Survival Horror'),
         ('MMORPG', 'Massively Multiplayer Online RPG'),
+        ('SPORT', 'Sport'),
     ]
 
     nome = models.CharField(_('Nome'), max_length=100, choices=GENRE_CHOICES, unique=True)
