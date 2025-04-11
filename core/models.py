@@ -130,13 +130,16 @@ class Games(Base):
     conclusion = models.TextField(_('Conclusion'), max_length=1500, blank=True, null=True)
 
     generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))
-    rating = models.DecimalField(_('Rating'), max_digits=3, decimal_places=1,
-                                 validators=[MinValueValidator(0), MaxValueValidator(10)])
+    rating = models.DecimalField(
+        _('Rating'),
+        max_digits=3,
+        decimal_places=1,
+        validators=[MinValueValidator(0), MaxValueValidator(10)]
+    )
     ano = models.IntegerField(_('Ano'))
     desenvolvedor = models.CharField(_('Desenvolvedor'), max_length=100)
     distribuidor = models.CharField(_('Distribuído'), max_length=100)
 
-    # Substituindo ImageField por CloudinaryField
     imagem = CloudinaryField('games')
     capa = CloudinaryField('games_covers', blank=True, null=True)
     video = models.URLField(_('Video URL'), blank=True, null=True)
@@ -145,11 +148,28 @@ class Games(Base):
     def embed_video_url(self):
         """Converte qualquer link do YouTube para a versão embed automaticamente"""
         if self.video:
-            # Expressão regular para capturar o ID do vídeo
             match = re.search(r"(?:v=|youtu\.be/|embed/|watch\?.*v=)([A-Za-z0-9_-]+)", self.video)
             if match:
                 return f"https://www.youtube.com/embed/{match.group(1)}"
-        return None  # Retorna None se não houver vídeo
+        return None
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        # Cria avaliação inicial apenas se for um jogo novo
+        if is_new:
+            from .models import Membro, GameRating  # Import interno para evitar erro circular
+
+            membro_admin = Membro.objects.filter(is_superuser=True).first()
+            if membro_admin:
+                # Cria a avaliação inicial
+                GameRating.objects.create(
+                    membro=membro_admin,
+                    game=self,
+                    rating=self.rating,
+                    favorito=False
+                )
 
     def __str__(self):
         return self.game

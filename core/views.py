@@ -252,7 +252,7 @@ class ReviewView(TemplateView):
 
             # Se não houver média, defina como 0
             if media_rating is None:
-                media_rating = 0
+                media_rating = r.rating
 
             # Estrelas cheias e meia estrela
             full_stars = int(media_rating // 2) + 1 # Estrelas completas
