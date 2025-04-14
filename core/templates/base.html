@@ -61,6 +61,7 @@
 								<img src="{% if user.imagem %}{{ user.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" alt="{{ user.first_name }}">
 							</button>
 							<div class="dropdown-menu" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="{% url 'membro-details' user.id %}">{% trans "View Profile" %}</a>
 								<a class="dropdown-item" href="{% url 'membro-edit' %}">{% trans "Edit Profile" %}</a>
 								<a class="dropdown-item" href="{% url 'login' %}">{% trans "Logout" %}</a>
 							</div>
