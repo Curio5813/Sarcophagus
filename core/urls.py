@@ -5,7 +5,7 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     ReviewView, AvaliarJogoView, FavoritarJogoView,
                     GameSearchView, BlogView, TesteView, LoginView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView,
-                    autocomplete_games)
+                    MembroEditView, autocomplete_games)
 from .views import BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView
 from django.shortcuts import redirect
 from allauth.socialaccount.views import SignupView
@@ -39,6 +39,7 @@ urlpatterns = [
     path("accounts/signup/", CustomSignupView.as_view(), name="account_signup"),
     path('search/', GameSearchView.as_view(), name='game_search'),
     path('autocomplete/', autocomplete_games, name='autocomplete_games'),
+    path('membro/edit/', MembroEditView.as_view(), name='membro-edit'),
 ]
 
 if settings.DEBUG:

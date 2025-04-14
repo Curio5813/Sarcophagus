@@ -56,11 +56,15 @@
 				<!-- Painel do usuário à direita -->
 				<div class="user-panel">
 					{% if user.is_authenticated %}
-						<a href="{% url 'membro-details' user.id %}">
-							<img src="{% if user.imagem %}{{ user.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
-								alt="{{ user.first_name }}">
-						</a>
-						<a href="{% url 'login' %}" class="logout-btn">{% trans 'Logout' %}</a>
+						<div class="dropdown">
+							<button class="dropdown-toggle" id="userDropdown">
+								<img src="{% if user.imagem %}{{ user.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" alt="{{ user.first_name }}">
+							</button>
+							<div class="dropdown-menu" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="{% url 'membro-edit' %}">{% trans "Edit Profile" %}</a>
+								<a class="dropdown-item" href="{% url 'login' %}">{% trans "Logout" %}</a>
+							</div>
+						</div>
 					{% else %}
 						<a href="{% url 'login' %}" class="logout-btn">{% trans 'Login' %}</a> /
 						<a href="{% url 'register' %}" class="logout-btn">{% trans 'Register' %}</a>

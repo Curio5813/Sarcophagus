@@ -21,6 +21,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import DetailView
 from django.contrib import messages
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def autocomplete_games(request):
@@ -498,3 +499,13 @@ class JoinTournamentView(TemplateView):
         else:
             messages.error(request, "Não foi possível realizar a inscrição.")
         return redirect(reverse('tournament_detail', args=[pk]))
+
+
+class MembroEditView(LoginRequiredMixin, UpdateView):
+    model = Membro
+    fields = ['first_name', 'last_name', 'membro', 'bio', 'imagem', 'genero', 'nascimento']
+    template_name = 'membro-edit.html'
+    success_url = reverse_lazy('index')
+
+    def get_object(self, queryset=None):
+        return self.request.user  # só permite editar o próprio perfil
