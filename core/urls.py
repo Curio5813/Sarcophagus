@@ -5,7 +5,7 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     ReviewView, AvaliarJogoView, FavoritarJogoView,
                     GameSearchView, BlogView, TesteView, LoginView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView,
-                    MembroEditView, autocomplete_games)
+                    MembroEditView, autocomplete_games, logout_view)
 from .views import BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView
 from django.shortcuts import redirect
 from allauth.socialaccount.views import SignupView
@@ -30,6 +30,7 @@ urlpatterns = [
     path('blog/', BlogView.as_view(), name='blog'),
     path('teste/', TesteView.as_view(), name='teste'),
     path('login/', LoginView.as_view(), name='login'),  # Corrigido
+    path('logout/', logout_view, name='logout'),
     path('register/', RegisterView.as_view(), name='register'),  # Corrigido
     path('blog/create/', BlogPostCreateView.as_view(), name='blog_create'),
     path('blog/<int:pk>/', BlogPostDetailView.as_view(), name='blog_post_detail'),

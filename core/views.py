@@ -22,6 +22,7 @@ from django.views.generic import DetailView
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout
 
 
 def autocomplete_games(request):
@@ -369,11 +370,21 @@ class RegisterForm(forms.ModelForm):
         fields = ['email', 'first_name', 'last_name', 'membro', 'password']
 
     def save(self, commit=True):
-        membro = super(RegisterForm, self).save(commit=False)
-        membro.set_password(self.cleaned_data['password'])  # Usa o método set_password
-        if commit:
-            membro.save()
-        return membro
+        email = self.cleaned_data['email']
+        first_name = self.cleaned_data['first_name']
+        last_name = self.cleaned_data['last_name']
+        membro_name = self.cleaned_data['membro']
+        password = self.cleaned_data['password']
+
+        user = Membro.objects.create_user(
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            membro=membro_name,
+            password=password
+        )
+
+        return user
 
 
 class RegisterView(FormView):
@@ -381,8 +392,19 @@ class RegisterView(FormView):
     form_class = RegisterForm
 
     def form_valid(self, form):
-        form.save()  # Salva o novo membro
-        return redirect('index')  # Redireciona para a página de login após o registro
+        user = form.save()
+        login(self.request, user)
+        messages.success(self.request, "Conta criada com sucesso! Bem-vindo(a), %s." % user.membro)
+        return redirect('index')
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Ocorreu um erro no registro. Verifique os dados e tente novamente.")
+        return super().form_invalid(form)
+
+
+def logout_view(request):
+    logout(request)  # Termina a sessão
+    return redirect('login')  # Redireciona para login
 
 
 @method_decorator(login_required, name='dispatch')
