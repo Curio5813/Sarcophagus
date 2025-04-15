@@ -386,7 +386,6 @@ class RegisterForm(forms.ModelForm):
 
         return user
 
-
 class RegisterView(FormView):
     template_name = 'registration/register.html'
     form_class = RegisterForm
