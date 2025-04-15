@@ -22,7 +22,15 @@
                         <div class="lb-item" style="display: flex; align-items: flex-start; gap: 15px; padding: 10px; background-color: #333; border-radius: 8px; overflow: hidden; width: 100%;">
                             <a href="{% url 'blog_post_detail' post.pk %}" class="lb-thumb" style="min-width: 120px; height: 120px; background-image: url({{ post.imagem.url }}); background-size: cover; background-position: center; border-radius: 8px; flex-shrink: 0;"></a>
                             <div class="lb-content" style="flex-grow: 1; color: #aeaeae; display: flex; flex-direction: column; justify-content: space-between; padding-left: 10px;">
-                                <div class="lb-date" style="font-size: 12px; margin-bottom: 8px; color: #B8860B;">{{ post.publicado_em|date:"F d, Y" }}</div>
+                                <div class="lb-date" style="font-size: 12px; margin-bottom: 8px; color: #B8860B;">
+                                    <div class="lb-date" style="font-size: 12px; margin-bottom: 8px; color: #B8860B;">
+                                        {% if post.publicado_em|timesince == "0 minutes" %}
+                                            Agora mesmo
+                                        {% else %}
+                                            Há {{ post.publicado_em|timesince }}
+                                        {% endif %}
+                                    </div>
+                                </div>
                                 <a href="{% url 'blog_post_detail' post.pk %}" style="color: #aeaeae; font-size: 14px; margin: 0; line-height: 1.6; text-decoration: none;">
                                     {{ post.titulo|truncatewords:10 }}
                                 </a>
@@ -52,7 +60,13 @@
                                         <a href="{% url 'blog_post_detail' comment.post.pk %}">{{ comment.post.titulo|truncatewords:5 }}</a>
                                     </p>
                                     <p style="font-size: 14px; margin: 0; line-height: 1.2;">{{ comment.comentario|truncatewords:15 }}</p>
-                                    <div class="tc-date" style="font-size: 12px; color: #B8860B; margin-top: 5px;">{{ comment.publicado_em|date:"F d, Y" }}</div>
+                                    <div class="tc-date" style="font-size: 12px; color: #B8860B; margin-top: 5px;">
+                                        {% if comment.publicado_em|timesince == "0 minutes" %}
+                                            Agora mesmo
+                                        {% else %}
+                                            Há {{ comment.publicado_em|timesince }}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </li>

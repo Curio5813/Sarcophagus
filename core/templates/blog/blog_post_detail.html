@@ -24,7 +24,6 @@
                         <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 100%; height: auto; border-radius: 8px;">
                     </div>
                     {% endif %}
-
                     <p>{{ post.conteudo }}</p>
                 </div>
 
@@ -62,7 +61,13 @@
                                 </strong>: {{ comentario.comentario }}
                             </p>
                             <p style="color: #737373; font-size: 12px; margin: 0;">
-                                <small>{{ comentario.publicado_em|date:"d/m/Y H:i" }}</small>
+                                <small>
+                                    {% if comentario.publicado_em|timesince == "0 minutes" %}
+                                        Agora mesmo
+                                    {% else %}
+                                        {{ comentario.publicado_em|timesince }} atrás
+                                    {% endif %}
+                                </small>
                             </p>
                         </div>
                         {% empty %}
