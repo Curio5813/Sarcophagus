@@ -5,7 +5,8 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     ReviewView, AvaliarJogoView, FavoritarJogoView,
                     GameSearchView, BlogView, TesteView, LoginView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView,
-                    MembroEditView, autocomplete_games, logout_view)
+                    MembroEditView, autocomplete_games, logout_view,
+                    SolicitarAmizadeView, AceitarAmizadeView, SolicitacoesPendentesView)
 from .views import BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView
 from django.shortcuts import redirect
 from allauth.socialaccount.views import SignupView
@@ -41,6 +42,9 @@ urlpatterns = [
     path('search/', GameSearchView.as_view(), name='game_search'),
     path('autocomplete/', autocomplete_games, name='autocomplete_games'),
     path('membro/edit/', MembroEditView.as_view(), name='membro-edit'),
+    path('solicitar/<int:id>/', SolicitarAmizadeView.as_view(), name='solicitar_amizade'),
+    path('amizade/aceitar/<int:amizade_id>/', AceitarAmizadeView.as_view(), name='aceitar_amizade'),
+    path('amizade/solicitacoes/', SolicitacoesPendentesView.as_view(), name='solicitacoes_pendentes'),
 ]
 
 if settings.DEBUG:

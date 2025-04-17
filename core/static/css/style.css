@@ -2367,7 +2367,7 @@ ol {
 }
 
 /*========================
-     PAGE EDIT PERFIL
+     Page Edit Perfil
 =========================*/
 
 .dropdown {
@@ -2422,7 +2422,10 @@ ol {
 	display: block;
 }
 
-/* ==== Mensagens de sucesso e erro ==== */
+/* =====================================
+    Mensagens de sucesso e erro
+=======================================*/
+
 .alert {
     padding: 10px;
     margin-bottom: 15px;
@@ -2442,7 +2445,10 @@ ol {
     border: 1px solid #f5c6cb;
 }
 
-/* ==== Lista de erros do formulário de registro ==== */
+/* ============================================
+    Lista de erros do formulário de registro
+==============================================*/
+
 .form-errors {
     background-color: #ffe6e6;
     border: 1px solid #ff4d4d;
@@ -2464,3 +2470,19 @@ ol {
     padding-left: 20px;
     margin: 0;
 }
+
+/*==========================
+    Amizades Styles
+===========================*/
+
+.amizade-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+

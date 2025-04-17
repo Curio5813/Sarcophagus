@@ -1,6 +1,7 @@
 from .models import BlogPost, BlogComment
 from django.core.cache import cache
 import feedparser
+from .models import Amizade
 
 
 def latest_posts(request):
@@ -41,3 +42,14 @@ def fs_rss_feed(request):
         cache.set("fs_rss_feed", fs_news, cache_timeout)
 
     return {"fs_news": fs_news}
+
+
+def solicitacoes_pendentes_context(request):
+    if request.user.is_authenticated:
+        solicitacoes_pendentes = Amizade.objects.filter(
+            para_membro=request.user, aceita=False
+        )
+    else:
+        solicitacoes_pendentes = []
+
+    return {'solicitacoes_pendentes': solicitacoes_pendentes}

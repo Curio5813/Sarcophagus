@@ -23,6 +23,10 @@ from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import logout
+from .models import Amizade
+from django.views import View
+from django.http import HttpResponseRedirect
+from django.views.generic import ListView
 
 
 def autocomplete_games(request):
@@ -167,7 +171,7 @@ class CommunityView(TemplateView):
                             Q(first_name__icontains=search_query) |
                             Q(last_name__icontains=search_query) |
                             Q(membro__icontains=search_query)
-                        ).exlcude(membro='system')
+                        ).exclude(membro='system')
                     else:
                         membros = Membro.objects.filter(id=self.request.user.id)
 
@@ -192,6 +196,26 @@ class MembroDetailView(TemplateView):
         membro_id = kwargs['id']
         membro = get_object_or_404(Membro, id=membro_id)
         context['membro'] = membro
+
+        # Amigos (amizades aceitas)
+        amigos = Amizade.objects.filter(
+            Q(de_membro=membro) | Q(para_membro=membro),
+            aceita=True
+        ).select_related('de_membro', 'para_membro')[:12]
+
+        lista_amigos = [
+            a.para_membro if a.de_membro == membro else a.de_membro for a in amigos
+        ]
+        context['amigos'] = lista_amigos
+
+        # Verificar status de amizade com o membro logado
+        user = self.request.user
+        if user.is_authenticated and user != membro:
+            amizade = Amizade.objects.filter(
+                Q(de_membro=user, para_membro=membro) |
+                Q(de_membro=membro, para_membro=user)
+            ).first()
+            context['amizade'] = amizade
 
         # Buscar jogos favoritos do membro
         jogos_favoritos = GameRating.objects.filter(membro=membro, favorito=True).select_related('game')
@@ -530,3 +554,36 @@ class MembroEditView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user  # só permite editar o próprio perfil
+
+
+class SolicitarAmizadeView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        para_id = kwargs.get('id')
+        de_membro = request.user
+        para_membro = get_object_or_404(Membro, id=para_id)
+
+        if de_membro != para_membro:
+            Amizade.objects.get_or_create(de_membro=de_membro, para_membro=para_membro)
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'mensagem': 'Solicitação enviada com sucesso!'})
+        else:
+            return HttpResponseRedirect(reverse('membro-details', args=[para_id]))
+
+
+class AceitarAmizadeView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        amizade_id = kwargs.get('amizade_id')
+        amizade = get_object_or_404(Amizade, id=amizade_id, para_membro=request.user)
+        amizade.aceita = True
+        amizade.save()
+        return HttpResponseRedirect(reverse('membro-details', args=[request.user.id]))
+
+
+class SolicitacoesPendentesView(LoginRequiredMixin, ListView):
+    model = Amizade
+    template_name = 'amizade/solicitacoes_pendentes.html'
+    context_object_name = 'solicitacoes'
+
+    def get_queryset(self):
+        return Amizade.objects.filter(para_membro=self.request.user, aceita=False).select_related('de_membro')

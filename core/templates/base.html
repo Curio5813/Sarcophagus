@@ -8,54 +8,44 @@
 	<meta name="description" content="Game Warrior Template">
 	<meta name="keywords" content="warrior, game, creative, html">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Favicon -->
-
 	<link href="{% static 'img/icone4.png' %}" rel="shortcut icon" sizes="192x192"/>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-	<!-- Google Fonts -->
-
 	<script src="{% static 'js/map.js' %}"></script>
-
-	<!-- Stylesheets -->
 	<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"/>
 	<link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}"/>
 	<link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 	<link rel="stylesheet" href="{% static 'css/animate.css' %}"/>
-
-
-	<!--[if lt IE 9]>
-	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
-
+	<meta name="csrf-token" content="{{ csrf_token }}">
 </head>
 <body>
-	<!-- Page Preloder -->
 	<div id="preloder">
 		<div class="loader"></div>
 	</div>
 
-	<!-- Header section -->
 	<header class="header-section">
 		<div class="container">
 			<div class="header-content">
-				<!-- Logo à esquerda -->
 				<a class="site-logo" href="{% url 'index' %}">
 					<img src="{% static 'img/logo7.png' %}" alt="Logo">
 				</a>
-
-				<!-- Barra de busca centralizada -->
 				<div class="search-container">
 					<form action="{% url 'game_search' %}" method="GET" class="search-form">
 						<input type="text" id="search-game" name="q" placeholder="Search games..." autocomplete="off">
 						<button type="submit"><i class="fas fa-search"></i></button>
 					</form>
-					<ul id="autocomplete-results" class="autocomplete-list"></ul> <!-- 🔥 A LISTA DE SUGESTÕES DEVE ESTAR AQUI! -->
+					<ul id="autocomplete-results" class="autocomplete-list"></ul>
 				</div>
-
-				<!-- Painel do usuário à direita -->
 				<div class="user-panel">
 					{% if user.is_authenticated %}
+						<div style="position: relative; display: inline-block; margin-left: 10px;">
+							<a href="{% url 'solicitacoes_pendentes' %}">
+								<img src="{% static 'img/icone4.png' %}" alt="Solicitações de amizade" width="80" height="80"
+								 	style="filter: {% if solicitacoes_pendentes %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
+								{% if solicitacoes_pendentes %}
+							  		<span class="amizade-badge">{{ solicitacoes_pendentes.count }}</span>
+								{% endif %}
+						  	</a>
+						</div>
 						<div class="dropdown">
 							<button class="dropdown-toggle" id="userDropdown">
 								<img src="{% if user.imagem %}{{ user.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}" alt="{{ user.first_name }}">
@@ -73,7 +63,6 @@
 				</div>
 			</div>
 
-			<!-- Menu de navegação -->
 			<nav class="main-menu">
 				<ul>
 					<li><a class="nostalgia-text" href="{% url 'index' %}">{% trans 'Start' %}</a></li>
@@ -87,71 +76,82 @@
 		</div>
 	</header>
 
-	<!-- Header section end -->
-    {% block content %} {% endblock %}
+	{% block content %} {% endblock %}
 
-	<!--====== Javascripts & Jquery ======-->
 	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
 	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
 	<script src="{% static 'js/jquery.marquee.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
+
 	<script>
 		const currentUrl = window.location.href;
-
-		// Encontra todos os links de menu
 		const navLinks = document.querySelectorAll('.main-menu ul li a');
-
-		// Percorre cada link e verifica se o href coincide com a URL atual
 		navLinks.forEach(link => {
-		  if (link.href === currentUrl) {
-			link.parentNode.classList.add('active'); // Adiciona a classe "active" ao elemento <li>
-		  }
+			if (link.href === currentUrl) {
+				link.parentNode.classList.add('active');
+			}
 		});
 	</script>
 
 	<script>
-	document.addEventListener("DOMContentLoaded", function () {
-		const searchInput = document.getElementById("search-game");
-		const resultsList = document.getElementById("autocomplete-results");
+		document.addEventListener("DOMContentLoaded", function () {
+			const searchInput = document.getElementById("search-game");
+			const resultsList = document.getElementById("autocomplete-results");
 
-		searchInput.addEventListener("input", function () {
-			let query = searchInput.value.trim();
+			searchInput.addEventListener("input", function () {
+				let query = searchInput.value.trim();
 
-			if (query.length < 2) {
-				resultsList.classList.remove("show"); // 🔥 OCULTA A LISTA SE A PESQUISA FOR MUITO CURTA
-				return;
-			}
+				if (query.length < 2) {
+					resultsList.classList.remove("show");
+					return;
+				}
 
-			fetch(`/autocomplete/?term=${query}`)
-				.then(response => response.json())
-				.then(data => {
-					resultsList.innerHTML = "";
-
-					if (data.length > 0) {
-						data.forEach(game => {
-							let item = document.createElement("li");
-							item.textContent = game;
-							item.addEventListener("click", function () {
-								searchInput.value = game;
-								resultsList.classList.remove("show"); // 🔥 OCULTA A LISTA APÓS CLIQUE
+				fetch(`/autocomplete/?term=${query}`)
+					.then(response => response.json())
+					.then(data => {
+						resultsList.innerHTML = "";
+						if (data.length > 0) {
+							data.forEach(game => {
+								let item = document.createElement("li");
+								item.textContent = game;
+								item.addEventListener("click", function () {
+									searchInput.value = game;
+									resultsList.classList.remove("show");
+								});
+								resultsList.appendChild(item);
 							});
-							resultsList.appendChild(item);
-						});
+							resultsList.classList.add("show");
+						} else {
+							resultsList.classList.remove("show");
+						}
+					});
+			});
 
-						resultsList.classList.add("show"); // 🔥 MOSTRA A LISTA SOMENTE SE TIVER RESULTADOS
-					} else {
-						resultsList.classList.remove("show"); // 🔥 OCULTA SE NÃO TIVER RESULTADOS
-					}
-				});
+			document.addEventListener("click", function (e) {
+				if (!searchInput.contains(e.target) && !resultsList.contains(e.target)) {
+					resultsList.classList.remove("show");
+				}
+			});
 		});
-
-		document.addEventListener("click", function (e) {
-			if (!searchInput.contains(e.target) && !resultsList.contains(e.target)) {
-				resultsList.classList.remove("show"); // 🔥 GARANTE QUE A LISTA SUMA AO CLICAR FORA
-			}
-		});
-	});
 	</script>
-    </body>
+
+	<script>
+		function getCookie(name) {
+			let cookieValue = null;
+			if (document.cookie && document.cookie !== '') {
+				const cookies = document.cookie.split(';');
+				for (let i = 0; i < cookies.length; i++) {
+					const cookie = cookies[i].trim();
+					if (cookie.substring(0, name.length + 1) === (name + '=')) {
+						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+						break;
+					}
+				}
+			}
+			return cookieValue;
+		}
+		const csrftoken = getCookie('csrftoken');
+	</script>
+</body>
 </html>

@@ -249,3 +249,17 @@ class Tournament(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.game.game}"
+
+
+class Amizade(models.Model):
+    de_membro = models.ForeignKey(Membro, on_delete=models.CASCADE, related_name='amizades_enviadas')
+    para_membro = models.ForeignKey(Membro, on_delete=models.CASCADE, related_name='amizades_recebidas')
+    aceita = models.BooleanField(default=False)
+    solicitada_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('de_membro', 'para_membro')
+
+    def __str__(self):
+        return f"{self.de_membro} -> {self.para_membro} ({'Aceita' if self.aceita else 'Pendente'})"
+

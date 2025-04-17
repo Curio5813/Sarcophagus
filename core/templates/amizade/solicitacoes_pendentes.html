@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'latest_news.html' %}
+<section class="page-section">
+  <div class="container">
+    <h3 style="color: #ffb320;">Pending Friend Requests</h3>
+    <hr>
+    {% if solicitacoes %}
+      <ul class="favorite-games-list">
+        {% for amizade in solicitacoes %}
+          <li class="game-card">
+            <div class="game-thumb">
+              <img src="{{ amizade.de_membro.imagem.url }}" width="100" height="100" style="border-radius: 10px;">
+            </div>
+            <div class="game-info">
+              <h5>{{ amizade.de_membro.first_name }} {{ amizade.de_membro.last_name }}</h5>
+              <p>@{{ amizade.de_membro.membro }}</p>
+              <form method="post" action="{% url 'aceitar_amizade' amizade.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Accept</button>
+              </form>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No pending requests.</p>
+    {% endif %}
+  </div>
+</section>
+{% include 'footer.html' %}
+{% endblock %}
