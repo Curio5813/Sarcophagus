@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 {% include 'latest_news.html' %}
+<div class="text-center">
+    <img src="{% static 'img/slider-3.jpg' %}" alt="Solicitacoes Page">
+</div>
 <section class="page-section">
     <div class="container">
         <h3 style="color: #ffb320;">Pending Friend Requests</h3>
