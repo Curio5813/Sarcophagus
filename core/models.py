@@ -110,6 +110,7 @@ class Genero(models.Model):
         ('MMORPG', 'Massively Multiplayer Online RPG'),
         ('SPORT', 'Sport'),
         ('POINT_AND_CLICK', 'Point-and-Click'),
+        ('PUZZLE', 'Puzzle'),
     ]
 
     nome = models.CharField(_('Nome'), max_length=100, choices=GENRE_CHOICES, unique=True)
