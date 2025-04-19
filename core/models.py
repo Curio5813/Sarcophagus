@@ -95,25 +95,28 @@ class Membro(AbstractBaseUser, PermissionsMixin):
         return self.membro if self.membro else self.email
 
 
-class Genero(models.Model):
-    GENRE_CHOICES = [
-        ('ADVENTURE', 'Adventure'),
-        ('RTS', 'Real-Time Strategy'),
-        ('TBS', 'Turn-Based Strategy / Tactics'),
-        ('RPG', 'Role-Playing Game'),
-        ('FPS', 'First-Person Shooter'),
-        ('SIMULATION', 'Simulation'),
-        ('PLATFORMER', 'Platformer'),
-        ('RACING', 'Racing'),
-        ('WAR_SIM', 'War Simulation / Military Strategy'),
-        ('SURVIVAL_HORROR', 'Survival Horror'),
-        ('MMORPG', 'Massively Multiplayer Online RPG'),
-        ('SPORT', 'Sport'),
-        ('POINT_AND_CLICK', 'Point-and-Click'),
-        ('PUZZLE', 'Puzzle'),
-    ]
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
-    nome = models.CharField(_('Nome'), max_length=100, choices=GENRE_CHOICES, unique=True)
+class Genero(models.Model):
+    class GenreChoices(models.TextChoices):
+        ADVENTURE = 'ADVENTURE', _('Adventure')
+        RTS = 'RTS', _('Real-Time Strategy')
+        TBS = 'TBS', _('Turn-Based Strategy / Tactics')
+        RPG = 'RPG', _('Role-Playing Game')
+        FPS = 'FPS', _('First-Person Shooter')
+        SIMULATION = 'SIMULATION', _('Simulation')
+        PLATFORMER = 'PLATFORMER', _('Platformer')
+        RACING = 'RACING', _('Racing')
+        WAR_SIM = 'WAR_SIM', _('War Simulation / Military Strategy')
+        SURVIVAL_HORROR = 'SURVIVAL_HORROR', _('Survival Horror')
+        MMORPG = 'MMORPG', _('Massively Multiplayer Online RPG')
+        SPORT = 'SPORT', _('Sport')
+        POINT_AND_CLICK = 'POINT_AND_CLICK', _('Point-and-Click')
+        PUZZLE = 'PUZZLE', _('Puzzle')
+
+    nome = models.CharField(_('Nome'), max_length=100, choices=GenreChoices.choices, unique=True)
+
 
     class Meta:
         verbose_name = _('Gênero')
