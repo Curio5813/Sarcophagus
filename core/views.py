@@ -519,7 +519,7 @@ class BlogPostDetailView(TemplateView):
 
 class BlogPostEditView(UserPassesTestMixin, UpdateView):
     model = BlogPost
-    fields = ['titulo', 'conteudo', 'imagem']  # Campos permitidos para edição
+    form_class = BlogForm  # Use o formulário completo com o campo "jogo"
     template_name = 'blog/blog_post_form.html'  # Template para edição
     success_url = reverse_lazy('blog')  # Redireciona para a página do blog após edição
 

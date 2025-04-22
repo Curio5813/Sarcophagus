@@ -1,74 +1,88 @@
 {% load static %}
+{% load widget_tweaks %}
 <section class="page-section single-blog-page spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
 
-                <!-- Exibir o formulário de criação de post apenas para superusuários -->
+                <!-- Formulário de criação de post para superusuários -->
                 {% if user.is_authenticated and user.is_superuser %}
                 <div class="create-post">
                     <h4>Create New Post</h4>
-                    <br><br>
+                    <br>
                     <form method="post" action="{% url 'blog_create' %}" enctype="multipart/form-data" class="comment-form">
                         {% csrf_token %}
 
-                        <!-- Título do Post -->
-                        <input type="text" name="titulo" placeholder="Post Title" required>
+                        <!-- Título -->
+                        <div class="form-group">
+                            <label for="id_titulo">Post Title</label>
+                            {{ form.titulo|add_class:"form-control" }}
+                        </div>
 
-                        <!-- Conteúdo do Post -->
-                        <textarea name="conteudo" placeholder="Post Content" required></textarea>
+                        <!-- Conteúdo -->
+                        <div class="form-group">
+                            <label for="id_conteudo">Post Content</label>
+                            {{ form.conteudo|add_class:"form-control" }}
+                        </div>
 
-                        <!-- Upload de Imagem -->
-                        <input type="file" name="imagem" id="imageUpload" accept="image/*" onchange="updateFileName()" required style="display: none;">
-                        <label for="imageUpload" id="fileLabel" class="file-label">Choose an image</label>
-                        <span id="fileName">No image chosen</span>
+                        <!-- Imagem -->
+                        <div class="form-group">
+                            <label for="id_imagem">Upload Image</label>
+                            {{ form.imagem|add_class:"form-control-file" }}
+                        </div>
 
-                        <!-- Botão de Publicar -->
+                        <!-- Jogo com Select2 -->
+                        <div class="form-group">
+                            <label for="id_jogo">Select Game</label>
+                            {{ form.jogo|add_class:"form-control" }}
+                        </div>
+
+                        <!-- Botão de envio -->
                         <button type="submit" class="site-btn btn-sm" style="margin-top: 10px;">Publish Post</button>
                     </form>
                 </div>
                 <hr>
                 {% endif %}
 
-                <!-- Loop através dos posts do blog -->
+                <!-- Posts do blog -->
                 {% for post in posts %}
-                    <div class="blog-post">
-                        <h3>{{ post.titulo }}</h3>
-                        <br>
-
-                        <!-- Exibição da imagem do post -->
-                        {% if post.imagem %}
-                        <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}">
+                <div class="blog-post">
+                    <h3>
+                        {{ post.titulo }}
+                        {% if post.jogo %}
+                            <small style="font-size: 16px; font-weight: normal;">
+                                – <a href="{% url 'game-details' post.jogo.id %}">{{ post.jogo.game }}</a>
+                            </small>
                         {% endif %}
+                    </h3>
+                    <br>
 
-                        <!-- Exibir o conteúdo resumido -->
-                        <p>{{ post.conteudo|truncatewords:200 }}</p>
+                    {% if post.imagem %}
+                    <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}">
+                    {% endif %}
 
-                        <!-- Exibir o número de comentários como um link para a comunidade -->
-                        <p>
-                            <a href="{% url 'community' %}?post_id={{ post.pk }}">
-                                {{ post.comment_count }} {{ post.comment_count|pluralize:"comment,comments" }}
-                            </a>
-                        </p>
+                    <p>{{ post.conteudo|truncatewords:200 }}</p>
 
-                        <!-- Link para os detalhes do post -->
-                        <a href="{% url 'blog_post_detail' post.pk %}">Leave a Comment</a>
+                    <p>
+                        <a href="{% url 'community' %}?post_id={{ post.pk }}">
+                            {{ post.comment_count }} {{ post.comment_count|pluralize:"comment,comments" }}
+                        </a>
+                    </p>
 
-                        <!-- Link de edição para o autor administrador -->
-                        {% if user.is_authenticated and user.is_superuser and post.autor == user %}
-                        <a href="{% url 'blog_post_edit' post.pk %}" class="edit-link">Edit Post</a>
-                        {% endif %}
-                    </div>
-                    <hr>
+                    <a href="{% url 'blog_post_detail' post.pk %}">Leave a Comment</a>
+
+                    {% if user.is_authenticated and user.is_superuser and post.autor == user %}
+                    <a href="{% url 'blog_post_edit' post.pk %}" class="edit-link">Edit Post</a>
+                    {% endif %}
+                </div>
+                <hr>
                 {% empty %}
-                    <p>No posts available at the moment.</p>
+                <p>No posts available at the moment.</p>
                 {% endfor %}
-
             </div>
 
-            <!-- Sidebar -->
+            <!-- Sidebar com últimos posts -->
             <div class="col-lg-4 col-md-7 sidebar pt-5 pt-lg-0">
-                <!-- Widget de últimos posts -->
                 <div class="widget-item">
                     <h4 class="widget-title">Latest Posts</h4>
                     <div class="latest-blog">
@@ -78,7 +92,7 @@
                                 <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 86px; height: 86px; object-fit: cover;">
                             </div>
                             <div class="lb-content">
-                               <div class="lb-date">
+                                <div class="lb-date">
                                     {% if post.publicado_em|timesince == "0 minutes" %}
                                         Agora mesmo
                                     {% else %}
@@ -97,18 +111,33 @@
     </div>
 </section>
 
+<!-- Select2 JS -->
+<script>
+    $(document).ready(function() {
+        $('#id_jogo').select2({
+            placeholder: 'Search a game...',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+
+<!-- Mostrar nome da imagem -->
 <script>
     function updateFileName() {
         const fileInput = document.getElementById('imageUpload');
         const fileNameDisplay = document.getElementById('fileName');
-        if (fileInput.files.length > 0) {
-            fileNameDisplay.textContent = fileInput.files[0].name;
-        } else {
-            fileNameDisplay.textContent = 'No image chosen';
+        if (fileInput && fileNameDisplay) {
+            if (fileInput.files.length > 0) {
+                fileNameDisplay.textContent = fileInput.files[0].name;
+            } else {
+                fileNameDisplay.textContent = 'No image chosen';
+            }
         }
     }
 </script>
 
+<!-- Estilos personalizados -->
 <style>
     .file-label {
         display: inline-block;

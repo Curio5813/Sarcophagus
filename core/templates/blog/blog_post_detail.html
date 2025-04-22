@@ -10,6 +10,15 @@
                 <div class="blog-post">
                     <h2>{{ post.titulo }}</h2>
 
+                     <!-- Exibir o jogo relacionado -->
+                    {% if post.jogo %}
+                        <p><strong>Game:</strong>
+                            <a href="{% url 'game-details' post.jogo.id %}">
+                                {{ post.jogo.game }}
+                            </a>
+                        </p>
+                    {% endif %}
+
                     <!-- Exibir o número de comentários -->
                     <p>{{ post.comentarios.count }} {{ post.comentarios.count|pluralize:"comment,comments" }}</p>
 

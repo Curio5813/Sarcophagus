@@ -2489,3 +2489,23 @@ ol {
   align-items: center;
   justify-content: center;
 }
+
+/*============================
+     SELECIONAR JOGO NO BLOG
+=============================*/
+
+#id_jogo {
+    padding: 10px;
+    font-size: 14px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.select2-container .select2-selection--single {
+    height: 38px;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+

@@ -50,10 +50,11 @@ class ContatoForm(forms.Form):
 class BlogForm(forms.ModelForm):
     class Meta:
         model = BlogPost
-        fields = ['titulo', 'conteudo', 'imagem']
+        fields = ['titulo', 'conteudo', 'imagem', 'jogo']
         widgets = {
             'titulo': forms.TextInput(attrs={'placeholder': 'Post Title'}),
             'conteudo': forms.Textarea(attrs={'placeholder': 'Post Content'}),
+            'jogo': forms.Select(),
         }
 
     def clean_imagem(self):

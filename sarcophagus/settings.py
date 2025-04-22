@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.twitch',
     'storages',
     'sslserver',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

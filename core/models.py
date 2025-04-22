@@ -200,13 +200,11 @@ class GameRating(Base):
 class BlogPost(models.Model):
     titulo = models.CharField(max_length=200)
     conteudo = models.TextField()
-
-    # Cloudinary para imagem do post
     imagem = CloudinaryField('blog')
-
     autor = models.ForeignKey(Membro, on_delete=models.CASCADE)
     publicado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
+    jogo = models.ForeignKey(Games, on_delete=models.CASCADE, verbose_name="Jogo relacionado")
 
     def __str__(self):
         return self.titulo

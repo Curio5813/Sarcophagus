@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block content %}
 {% include 'latest_news.html' %}
 <section class="page-section single-blog-page spad">
@@ -37,9 +38,24 @@
                         {% endif %}
                     </div>
 
+                    <!-- Seleção do Jogo -->
+                    <div class="form-group">
+                        <label for="id_jogo">Select Game</label>
+                        {{ form.jogo|add_class:"form-control" }}
+                    </div>
+
                     <!-- Botão de Atualizar -->
                     <button type="submit" class="site-btn btn-sm" style="margin-top: 10px;">Update Post</button>
                 </form>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        $('#id_jogo').select2({
+                            placeholder: 'Search a game...',
+                            allowClear: true,
+                            width: '100%'
+                        });
+                    });
+                </script>
             </div>
 
             <!-- Sidebar (últimos posts) -->
@@ -95,4 +111,14 @@
         margin-top: 10px;
     }
 </style>
+
+<script>
+    $(document).ready(function() {
+        $('#id_jogo').select2({
+            placeholder: 'Search a game...',
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
 {% endblock %}
