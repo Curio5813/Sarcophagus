@@ -181,6 +181,16 @@ class Games(Base):
         return self.game
 
 
+class GameComment(models.Model):
+    game = models.ForeignKey(Games, related_name='comentarios', on_delete=models.CASCADE)
+    membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
+    comentario = models.TextField()
+    publicado_em = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.membro} comentou em {self.game}'
+
+
 class GameRating(Base):
     membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
     game = models.ForeignKey(Games, on_delete=models.CASCADE)

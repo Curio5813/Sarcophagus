@@ -2,7 +2,7 @@ from django import forms
 from django.core.mail.message import EmailMessage
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import authenticate
-from .models import BlogComment, BlogPost
+from .models import BlogComment, BlogPost, GameComment
 
 
 class MembroLoginForm(forms.Form):
@@ -45,6 +45,13 @@ class ContatoForm(forms.Form):
             headers={'Reply-To': email},
         )
         mail.send()
+
+
+class GameCommentForm(forms.ModelForm):
+    class Meta:
+        model = GameComment
+        fields = ['comentario']
+        labels = {'comentario': 'Comment'}
 
 
 class BlogForm(forms.ModelForm):

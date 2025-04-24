@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
-from .forms import ContatoForm, MembroLoginForm, BlogCommentForm
-from .models import Membro, GameRating, Tournament
+from .forms import ContatoForm, MembroLoginForm, BlogCommentForm, GameCommentForm
+from .models import Membro, GameRating, Tournament, GameComment
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.utils import translation
@@ -348,7 +348,6 @@ class GameDetailView(TemplateView):
         game_id = self.kwargs['id']
         game = get_object_or_404(Games, id=game_id)
 
-        # Inicializa os atributos do usuário
         game.user_rating = None
         game.user_favorito = False
 
@@ -360,10 +359,26 @@ class GameDetailView(TemplateView):
                     game.user_rating = game_rating.rating
                     game.user_favorito = game_rating.favorito
             except Membro.DoesNotExist:
-                pass  # Ou lidar com exceção se necessário
+                pass
 
         context['game'] = game
+        context['comentarios'] = game.comentarios.select_related('membro').order_by('-publicado_em')
+        context['comment_form'] = GameCommentForm()
         return context
+
+    def post(self, request, *args, **kwargs):
+        game = get_object_or_404(Games, id=kwargs['id'])
+
+        if request.user.is_authenticated:
+            form = GameCommentForm(request.POST)
+            if form.is_valid():
+                comentario = form.save(commit=False)
+                comentario.game = game
+                comentario.membro = request.user
+                comentario.save()
+                return redirect('game-details', id=game.id)
+
+        return self.get(request, *args, **kwargs)
 
 
 class TesteView(TemplateView):

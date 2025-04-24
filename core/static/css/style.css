@@ -2509,3 +2509,76 @@ ol {
     border: 1px solid #ccc;
 }
 
+/*===============================================
+     FORMULARIO DE COMENTÁRIO SOBRE OS JOGOS
+================================================*/
+
+.comment-box {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    padding: 25px;
+    background-color: #f7f7f7;
+    border-radius: 30px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.comment-box h3 {
+    font-family: sans-serif;
+    font-size: 18px;
+    color: #131313;
+    margin-bottom: 20px;
+}
+
+.comment-box textarea,
+.comment-box .form-control {
+    width: 100%;
+    height: 100px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    resize: none;
+    font-family: inherit;
+    font-size: 14px;
+    color: #131313;
+    background-color: #fff;
+    margin-bottom: 15px;
+}
+
+.comment-box .site-btn {
+    background-color: #ffb320;
+    color: #131313;
+    font-weight: bold;
+    border-radius: 30px;
+    border: none;
+    padding: 10px 25px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.comment-item {
+    margin-bottom: 25px;
+    padding: 15px 20px;
+    background-color: #fff;
+    border-radius: 20px;
+    border: 1px solid #e0e0e0;
+}
+
+.comment-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.comment-item small {
+    color: #888;
+    font-size: 12px;
+}
+
+.comment-item a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.comment-item a:hover {
+    text-decoration: underline;
+}
