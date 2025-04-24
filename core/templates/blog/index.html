@@ -13,31 +13,26 @@
                     <form method="post" action="{% url 'blog_create' %}" enctype="multipart/form-data" class="comment-form">
                         {% csrf_token %}
 
-                        <!-- Título -->
                         <div class="form-group">
                             <label for="id_titulo">Post Title</label>
                             {{ form.titulo|add_class:"form-control" }}
                         </div>
 
-                        <!-- Conteúdo -->
                         <div class="form-group">
                             <label for="id_conteudo">Post Content</label>
                             {{ form.conteudo|add_class:"form-control" }}
                         </div>
 
-                        <!-- Imagem -->
                         <div class="form-group">
                             <label for="id_imagem">Upload Image</label>
                             {{ form.imagem|add_class:"form-control-file" }}
                         </div>
 
-                        <!-- Jogo com Select2 -->
                         <div class="form-group">
                             <label for="id_jogo">Select Game</label>
                             {{ form.jogo|add_class:"form-control" }}
                         </div>
 
-                        <!-- Botão de envio -->
                         <button type="submit" class="site-btn btn-sm" style="margin-top: 10px;">Publish Post</button>
                     </form>
                 </div>
@@ -74,6 +69,36 @@
                     {% if user.is_authenticated and user.is_superuser and post.autor == user %}
                     <a href="{% url 'blog_post_edit' post.pk %}" class="edit-link">Edit Post</a>
                     {% endif %}
+
+                    <!-- Comentários do post -->
+                    <div class="comments" style="margin-top: 20px;">
+                        <h5 style="font-family: sans-serif; color: #131313;">Comments</h5>
+                        <div class="comment-list">
+                            {% for comentario in post.all_comments %}
+                            <div class="comment-item" style="width: 100%; margin-bottom: 15px; padding: 10px 15px; border: 1px solid #ccc; border-radius: 30px; background-color: #f9f9f9;">
+                                <p style="font-size: 14px; margin-bottom: 5px;">
+                                    <strong>
+                                        <a href="{% url 'membro-details' comentario.membro.id %}" style="color: #007bff; text-decoration: none;">
+                                            {{ comentario.membro }}
+                                        </a>
+                                    </strong>: {{ comentario.comentario }}
+                                </p>
+                                <p style="font-size: 12px; color: #888;">
+                                    <small>
+                                        {% if comentario.publicado_em|timesince == "0 minutes" %}
+                                            Agora mesmo
+                                        {% else %}
+                                            {{ comentario.publicado_em|timesince }} atrás
+                                        {% endif %}
+                                    </small>
+                                </p>
+                            </div>
+                            {% empty %}
+                            <p style="color: #777;">No comments yet.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
                 </div>
                 <hr>
                 {% empty %}
@@ -122,22 +147,6 @@
     });
 </script>
 
-<!-- Mostrar nome da imagem -->
-<script>
-    function updateFileName() {
-        const fileInput = document.getElementById('imageUpload');
-        const fileNameDisplay = document.getElementById('fileName');
-        if (fileInput && fileNameDisplay) {
-            if (fileInput.files.length > 0) {
-                fileNameDisplay.textContent = fileInput.files[0].name;
-            } else {
-                fileNameDisplay.textContent = 'No image chosen';
-            }
-        }
-    }
-</script>
-
-<!-- Estilos personalizados -->
 <style>
     .file-label {
         display: inline-block;

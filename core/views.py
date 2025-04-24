@@ -303,6 +303,7 @@ class BlogView(TemplateView):
         posts = BlogPost.objects.all().order_by('-publicado_em')
         for post in posts:
             post.comment_count = post.comentarios.count()
+            post.all_comments = post.comentarios.order_by('-publicado_em')
         context['posts'] = posts
         context['latest_posts'] = posts[:3]
         if self.request.user.is_authenticated and self.request.user.is_superuser:
@@ -493,7 +494,7 @@ class BlogPostDetailView(TemplateView):
         context = super().get_context_data(**kwargs)
         post = get_object_or_404(BlogPost, pk=kwargs['pk'])
         context['post'] = post
-        context['comentarios'] = post.comentarios.all()
+        context['comentarios'] = post.comentarios.order_by('-publicado_em')
         context['latest_posts'] = BlogPost.objects.order_by('-publicado_em')[:3]
 
         # Verifique se o usuário está autenticado e não é superusuário
