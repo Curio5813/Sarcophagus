@@ -396,6 +396,7 @@ class GameDetailView(TemplateView):
                 )
                 return JsonResponse({
                     'success': True,
+                    'id': comentario.id,
                     'membro': comentario.membro.membro,
                     'comentario': comentario.comentario,
                     'tempo': "Agora mesmo",

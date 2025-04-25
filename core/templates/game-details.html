@@ -85,7 +85,6 @@
 
         <div id="comentarios-container">
             {% for comentario in comentarios %}
-                {{ comentario.comentario }}
                 <div class="comment-item" data-id="{{ comentario.id }}">
                     <p>
                         <strong><a href="{% url 'membro-details' comentario.membro.id %}">{{ comentario.membro }}</a></strong>:
@@ -113,7 +112,6 @@
 
                     <div id="replies-{{ comentario.id }}" class="replies">
                         {% for resposta in comentario.replies %}
-                            {{ resposta.comentario }}
                             <div class="reply-item">
                                 <p><strong><a href="{% url 'membro-details' resposta.membro.id %}">{{ resposta.membro }}</a></strong>: {{ resposta.comentario }}</p>
                                 <p><small>
@@ -137,47 +135,140 @@
 document.addEventListener('DOMContentLoaded', function () {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    // Favoritar jogo
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const gameId = this.dataset.gameId;
-            fetch("{% url 'favoritar_jogo' %}", {
-                method: 'POST',
-                headers: { "X-CSRFToken": csrftoken },
-                body: JSON.stringify({ game_id: gameId, favorito: !this.classList.contains('active') })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.classList.toggle('active');
-                    this.querySelector('i').classList.toggle('far');
-                    this.querySelector('i').classList.toggle('fas');
-                }
-            });
+    function attachCommentActions() {
+        document.querySelectorAll('.like-btn').forEach(btn => {
+            btn.onclick = function () {
+                const id = this.dataset.id;
+                fetch(`/comentario/${id}/curtir/`, {
+                    method: 'POST',
+                    headers: { "X-CSRFToken": csrftoken }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.querySelector('.like-count').textContent = data.likes;
+                    }
+                });
+            };
         });
-    });
 
-    // Avaliação
-    document.querySelectorAll('.star-rating .star').forEach(star => {
-        star.addEventListener('click', function () {
-            const rating = parseInt(this.dataset.value) * 2;
-            const gameId = this.parentNode.dataset.gameId;
+        document.querySelectorAll('.reply-btn').forEach(btn => {
+            btn.onclick = function () {
+                const commentId = this.dataset.id;
+                const replyContainer = document.getElementById(`replies-${commentId}`);
+                let replyBox = replyContainer.querySelector('.reply-box');
 
-            fetch("{% url 'avaliar_jogo' %}", {
-                method: 'POST',
-                headers: { "X-CSRFToken": csrftoken },
-                body: JSON.stringify({ game_id: gameId, rating: rating })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.parentNode.dataset.currentRating = rating;
+                if (replyBox) {
+                    replyBox.remove();
+                } else {
+                    replyBox = document.createElement('div');
+                    replyBox.className = 'reply-box';
+                    const textarea = document.createElement('textarea');
+                    textarea.className = 'form-control';
+                    textarea.placeholder = 'Reply...';
+                    textarea.style.marginTop = '10px';
+
+                    const sendButton = document.createElement('button');
+                    sendButton.className = 'site-btn';
+                    sendButton.textContent = 'Send Reply';
+                    sendButton.style.marginTop = '5px';
+
+                    sendButton.onclick = function () {
+                        const text = textarea.value.trim();
+                        if (text) {
+                            fetch(`/comentario/${commentId}/responder/`, {
+                                method: 'POST',
+                                headers: { "X-CSRFToken": csrftoken },
+                                body: new URLSearchParams({ comentario: text })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    const replyItem = `
+                                        <div class="reply-item">
+                                            <p><strong><a href="/membro/${data.membro_id}/">${data.membro}</a></strong>: ${data.comentario}</p>
+                                            <p><small>${data.tempo}</small></p>
+                                        </div>
+                                    `;
+                                    replyContainer.insertAdjacentHTML('afterbegin', replyItem);
+                                    replyBox.remove();
+                                }
+                            });
+                        }
+                    };
+
+                    replyBox.appendChild(textarea);
+                    replyBox.appendChild(sendButton);
+                    replyContainer.prepend(replyBox);
                 }
-            });
+            };
         });
-    });
 
-    // Enviar novo comentário
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.onclick = function () {
+                const commentId = this.dataset.id;
+                const commentText = document.querySelector(`.comment-item[data-id="${commentId}"] .comentario-text`);
+                const originalText = commentText.textContent.trim();
+
+                const textarea = document.createElement('textarea');
+                textarea.className = 'form-control';
+                textarea.value = originalText;
+
+                const saveBtn = document.createElement('button');
+                saveBtn.className = 'site-btn';
+                saveBtn.textContent = 'Save';
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = 'site-btn';
+                cancelBtn.textContent = 'Cancel';
+
+                commentText.innerHTML = '';
+                commentText.appendChild(textarea);
+                commentText.appendChild(saveBtn);
+                commentText.appendChild(cancelBtn);
+
+                saveBtn.onclick = function () {
+                    const newText = textarea.value.trim();
+                    fetch(`/comentario/${commentId}/editar/`, {
+                        method: 'POST',
+                        headers: { "X-CSRFToken": csrftoken },
+                        body: new URLSearchParams({ comentario: newText })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            commentText.innerHTML = newText;
+                        }
+                    });
+                };
+
+                cancelBtn.onclick = function () {
+                    commentText.innerHTML = originalText;
+                };
+            };
+        });
+
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.onclick = function () {
+                if (confirm("Are you sure you want to delete this comment?")) {
+                    const commentId = this.dataset.id;
+                    fetch(`/comentario/${commentId}/excluir/`, {
+                        method: 'POST',
+                        headers: { "X-CSRFToken": csrftoken }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.querySelector(`.comment-item[data-id="${commentId}"]`).remove();
+                        }
+                    });
+                }
+            };
+        });
+    }
+
+    attachCommentActions();
+
     const form = document.getElementById('game-comment-form');
     if (form) {
         form.addEventListener('submit', function (e) {
@@ -187,19 +278,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 method: 'POST',
                 headers: {
                     'X-CSRFToken': csrftoken,
-                    'X-Requested-With': 'XMLHttpRequest'  // 👈 ESSENCIAL para funcionar!!
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 body: new URLSearchParams({ comentario: comentarioInput.value })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Limpar o textarea
                     comentarioInput.value = '';
 
-                    // Criar o novo comentário HTML
                     const novoComentario = document.createElement('div');
                     novoComentario.className = 'comment-item';
+                    novoComentario.dataset.id = data.id;
                     novoComentario.innerHTML = `
                         <p>
                             <strong><a href="${data.membro_url}">${data.membro}</a></strong>:
@@ -217,176 +307,42 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div id="replies-${data.id}" class="replies"></div>
                     `;
 
-                    // Adicionar no início da lista de comentários
                     const container = document.getElementById('comentarios-container');
                     container.prepend(novoComentario);
+
+                    attachCommentActions(); // Adiciona eventos aos novos botões
                 }
             });
         });
     }
-
-    // Curtir comentário
-    document.querySelectorAll('.like-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-            fetch(`/comentario/${id}/curtir/`, {
-                method: 'POST',
-                headers: { "X-CSRFToken": csrftoken }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.querySelector('.like-count').textContent = data.likes;
-                }
-            });
-        });
-    });
-
-    // Reply com toggle
-    document.querySelectorAll('.reply-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const commentId = this.dataset.id;
-            const replyContainer = document.getElementById(`replies-${commentId}`);
-            let replyBox = replyContainer.querySelector('.reply-box');
-
-            if (replyBox) {
-                replyBox.remove();
-            } else {
-                replyBox = document.createElement('div');
-                replyBox.className = 'reply-box';
-                const textarea = document.createElement('textarea');
-                textarea.className = 'form-control';
-                textarea.placeholder = 'Reply...';
-                textarea.style.marginTop = '10px';
-
-                const sendButton = document.createElement('button');
-                sendButton.className = 'site-btn';
-                sendButton.textContent = 'Send Reply';
-                sendButton.style.marginTop = '5px';
-
-                sendButton.addEventListener('click', function () {
-                    const text = textarea.value.trim();
-                    if (text) {
-                        fetch(`/comentario/${commentId}/responder/`, {
-                            method: 'POST',
-                            headers: { "X-CSRFToken": csrftoken },
-                            body: new URLSearchParams({ comentario: text })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                const replyItem = `
-                                    <div class="reply-item">
-                                        <p><strong><a href="/membro/${data.membro_id}/">${data.membro}</a></strong>: ${data.comentario}</p>
-                                        <p><small>${data.tempo}</small></p>
-                                    </div>
-                                `;
-                                replyContainer.insertAdjacentHTML('afterbegin', replyItem);
-                                replyBox.remove();
-                            }
-                        });
-                    }
-                });
-
-                replyBox.appendChild(textarea);
-                replyBox.appendChild(sendButton);
-                replyContainer.prepend(replyBox);
-            }
-        });
-    });
-
-    // Editar comentário
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const commentId = this.dataset.id;
-            const commentText = document.querySelector(`.comment-item[data-id="${commentId}"] .comentario-text`);
-            const originalText = commentText.querySelector('textarea') ? commentText.querySelector('textarea').value.trim() : commentText.childNodes[0].nodeValue.trim();
-
-            const textarea = document.createElement('textarea');
-            textarea.className = 'form-control';
-            textarea.value = originalText;
-
-            const saveBtn = document.createElement('button');
-            saveBtn.className = 'site-btn';
-            saveBtn.textContent = 'Save';
-
-            const cancelBtn = document.createElement('button');
-            cancelBtn.className = 'site-btn';
-            cancelBtn.textContent = 'Cancel';
-
-            commentText.innerHTML = '';
-            commentText.appendChild(textarea);
-            commentText.appendChild(saveBtn);
-            commentText.appendChild(cancelBtn);
-
-            saveBtn.addEventListener('click', function () {
-                const newText = textarea.value.trim();
-                fetch(`/comentario/${commentId}/editar/`, {
-                    method: 'POST',
-                    headers: { "X-CSRFToken": csrftoken },
-                    body: new URLSearchParams({ comentario: newText })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        commentText.innerHTML = newText;
-                    }
-                });
-            });
-
-            cancelBtn.addEventListener('click', function () {
-                commentText.innerHTML = originalText;
-            });
-        });
-    });
-
-    // Deletar comentário
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            if (confirm("Are you sure you want to delete this comment?")) {
-                const commentId = this.dataset.id;
-                fetch(`/comentario/${commentId}/excluir/`, {
-                    method: 'POST',
-                    headers: { "X-CSRFToken": csrftoken }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        document.querySelector(`.comment-item[data-id="${commentId}"]`).remove();
-                    }
-                });
-            }
-        });
-    });
 });
 </script>
+
 <style>
-
-   .comment-box button {
-        display: inline-block;
-        margin-right: 10px;
-    }
-
-    .replies {
-        margin-left: 30px;
-        margin-top: 10px;
-        border-left: 2px solid #ccc;
-        padding-left: 10px;
-    }
-
-    .reply-item {
-        margin-top: 10px;
-    }
-    .reply-item p {
-        margin: 0;
-    }
-    .reply-box textarea {
-        width: 100%;
-    }
-    .reply-box button {
-        display: inline-block;
-        margin-right: 10px;
-    }
+.comment-box button {
+    display: inline-block;
+    margin-right: 10px;
+}
+.replies {
+    margin-left: 30px;
+    margin-top: 10px;
+    border-left: 2px solid #ccc;
+    padding-left: 10px;
+}
+.reply-item {
+    margin-top: 10px;
+}
+.reply-item p {
+    margin: 0;
+}
+.reply-box textarea {
+    width: 100%;
+}
+.reply-box button {
+    display: inline-block;
+    margin-right: 10px;
+}
 </style>
+
 {% include 'footer.html' %}
 {% endblock %}
