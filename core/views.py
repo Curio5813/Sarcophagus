@@ -487,7 +487,7 @@ class AvaliarJogoView(TemplateView):
             defaults={'rating': rating_value}
         )
 
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'rating': rating_value})
 
 
 class FavoritarJogoView(TemplateView):
