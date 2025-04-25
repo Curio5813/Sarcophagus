@@ -185,12 +185,16 @@ document.addEventListener('DOMContentLoaded', function () {
             const comentarioInput = document.getElementById('comentario-input');
             fetch(window.location.href, {
                 method: 'POST',
-                headers: { 'X-CSRFToken': csrftoken },
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'X-Requested-With': 'XMLHttpRequest'  // 👈 ESSENCIAL para funcionar!!
+                },
                 body: new URLSearchParams({ comentario: comentarioInput.value })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    comentarioInput.value = '';
                     location.reload();
                 }
             });
