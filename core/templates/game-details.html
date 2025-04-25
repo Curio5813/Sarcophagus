@@ -194,8 +194,32 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    // Limpar o textarea
                     comentarioInput.value = '';
-                    location.reload();
+
+                    // Criar o novo comentário HTML
+                    const novoComentario = document.createElement('div');
+                    novoComentario.className = 'comment-item';
+                    novoComentario.innerHTML = `
+                        <p>
+                            <strong><a href="${data.membro_url}">${data.membro}</a></strong>:
+                            <span class="comentario-text">${data.comentario}</span>
+                        </p>
+                        <p><small>${data.tempo}</small></p>
+                        <div class="comment-actions">
+                            <button class="like-btn" data-id="${data.id}">
+                                <i class="fa fa-heart"></i> <span class="like-count">0</span>
+                            </button>
+                            <button class="reply-btn" data-id="${data.id}">Reply</button>
+                            <button class="edit-btn" data-id="${data.id}">Edit</button>
+                            <button class="delete-btn" data-id="${data.id}">Delete</button>
+                        </div>
+                        <div id="replies-${data.id}" class="replies"></div>
+                    `;
+
+                    // Adicionar no início da lista de comentários
+                    const container = document.getElementById('comentarios-container');
+                    container.prepend(novoComentario);
                 }
             });
         });
