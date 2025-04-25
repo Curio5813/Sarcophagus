@@ -2582,3 +2582,41 @@ ol {
 .comment-item a:hover {
     text-decoration: underline;
 }
+
+/*===========================
+  BOTÕES DOS COMENTÁRIOS
+============================*/
+
+.comment-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.comment-actions button {
+    background-color: #ffb320;
+    color: #131313;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.comment-actions button:hover {
+    background-color: #e0a000;
+}
+
+.like-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.like-btn i {
+    color: red;
+}
+

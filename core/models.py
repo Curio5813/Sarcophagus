@@ -22,7 +22,6 @@ def get_file_path(instance, filename):
     return f"media/others/{filename}"
 
 
-
 class Base(models.Model):
     criado = models.DateField(_('Created'), auto_now_add=True)
     modificado = models.DateField(_("Updating"), auto_now=True)
@@ -186,6 +185,7 @@ class GameComment(models.Model):
     membro = models.ForeignKey(Membro, on_delete=models.CASCADE)
     comentario = models.TextField()
     publicado_em = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='respostas', on_delete=models.CASCADE)  # 👈 Novo!
 
     def __str__(self):
         return f'{self.membro} comentou em {self.game}'

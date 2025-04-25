@@ -7,7 +7,8 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView,
                     MembroEditView, autocomplete_games, logout_view,
                     SolicitarAmizadeView, AceitarAmizadeView, SolicitacoesPendentesView)
-from .views import BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView
+from .views import (BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView,
+                    curtir_comentario, responder_comentario, editar_comentario, excluir_comentario)
 from django.shortcuts import redirect
 from allauth.socialaccount.views import SignupView
 
@@ -45,6 +46,10 @@ urlpatterns = [
     path('solicitar/<int:id>/', SolicitarAmizadeView.as_view(), name='solicitar_amizade'),
     path('amizade/aceitar/<int:amizade_id>/', AceitarAmizadeView.as_view(), name='aceitar_amizade'),
     path('amizade/solicitacoes/', SolicitacoesPendentesView.as_view(), name='solicitacoes_pendentes'),
+    path('comentario/<int:comentario_id>/curtir/', curtir_comentario, name='curtir_comentario'),
+    path('comentario/<int:comentario_id>/responder/', responder_comentario, name='responder_comentario'),
+    path('comentario/<int:comentario_id>/editar/', editar_comentario, name='editar_comentario'),
+    path('comentario/<int:comentario_id>/excluir/', excluir_comentario, name='excluir_comentario'),
 ]
 
 if settings.DEBUG:

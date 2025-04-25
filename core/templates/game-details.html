@@ -6,10 +6,8 @@
 {% include 'latest_news.html' %}
 
 <div class="game-detail-container">
-    <!-- Título -->
     <h1>{{ game.game }}</h1>
 
-    <!-- Imagem e vídeo lado a lado -->
     <div class="game-media-wrapper">
         <div class="game-cover">
             <img src="{{ game.imagem.url }}" alt="{{ game.game }}">
@@ -22,7 +20,6 @@
         {% endif %}
     </div>
 
-    <!-- Favorito + Avaliação -->
     {% if user.is_authenticated %}
     <div class="rating-favorite-box">
         <p><strong>Favorite:</strong>
@@ -34,15 +31,14 @@
         <p><strong>Rate this game:</strong></p>
         <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.user_rating|default:0 }}">
             {% for i in "12345" %}
-                <span class="star {% if game.user_rating >= i|add:'0'|mul:2 %}active{% endif %}" data-value="{{ i }}">
-                    <i class="fa fa-star"></i>
-                </span>
+            <span class="star {% if game.user_rating >= i|add:'0'|mul:2 %}active{% endif %}" data-value="{{ i }}">
+                <i class="fa fa-star"></i>
+            </span>
             {% endfor %}
         </div>
     </div>
     {% endif %}
 
-    <!-- Informações do jogo -->
     <div class="game-meta">
         <p><strong>Year:</strong> {{ game.ano }}</p>
         <p><strong>Genre:</strong>
@@ -54,7 +50,6 @@
         <p><strong>Publisher:</strong> {{ game.distribuidor }}</p>
     </div>
 
-    <!-- Texto e seções -->
     <div class="game-details-text">
         <h3>Review</h3>
         <p>{{ game.descricao }}</p>
@@ -72,7 +67,7 @@
         <p>{{ game.conclusion }}</p>
     </div>
 
-    <!-- Comentários sobre o jogo -->
+    <!-- Caixa de comentários -->
     <div class="comment-box">
         <h3>Comments</h3>
 
@@ -83,199 +78,287 @@
             <button type="submit" class="site-btn" id="send-comment-btn">Send Comment</button>
         </form>
         {% else %}
-            <p>You need <a href="{% url 'login' %}">to login</a> to comment.</p>
+        <p>You need <a href="{% url 'login' %}">to login</a> to comment.</p>
         {% endif %}
 
         <hr style="margin: 20px 0;">
 
-        <!-- Lista de comentários -->
         <div id="comentarios-container">
             {% for comentario in comentarios %}
-            <div class="comment-item">
-                <p>
-                    <strong>
-                        <a href="{% url 'membro-details' comentario.membro.id %}">{{ comentario.membro }}</a>
-                    </strong>: {{ comentario.comentario }}
-                </p>
-                <p><small>
-                    {% if comentario.publicado_em|timesince == "0 minutes" %}
-                        Agora mesmo
-                    {% else %}
-                        {{ comentario.publicado_em|timesince }} atrás
-                    {% endif %}
-                </small></p>
-            </div>
-            {% empty %}
-            <p>No comments yet.</p>
+                {{ comentario.comentario }}
+                <div class="comment-item" data-id="{{ comentario.id }}">
+                    <p>
+                        <strong><a href="{% url 'membro-details' comentario.membro.id %}">{{ comentario.membro }}</a></strong>:
+                        <span class="comentario-text">{{ comentario.comentario }}</span>
+                    </p>
+                    <p><small>
+                        {% if comentario.publicado_em|timesince == "0 minutes" %}
+                            Agora mesmo
+                        {% else %}
+                            {{ comentario.publicado_em|timesince }} atrás
+                        {% endif %}
+                    </small></p>
+
+                    <div class="comment-actions">
+                        <button class="like-btn" data-id="{{ comentario.id }}">
+                            <i class="fa fa-heart"></i> <span class="like-count">{{ comentario.likes.count }}</span>
+                        </button>
+                        <button class="reply-btn" data-id="{{ comentario.id }}">Reply</button>
+
+                        {% if user == comentario.membro %}
+                            <button class="edit-btn" data-id="{{ comentario.id }}">Edit</button>
+                            <button class="delete-btn" data-id="{{ comentario.id }}">Delete</button>
+                        {% endif %}
+                    </div>
+
+                    <div id="replies-{{ comentario.id }}" class="replies">
+                        {% for resposta in comentario.replies %}
+                            {{ resposta.comentario }}
+                            <div class="reply-item">
+                                <p><strong><a href="{% url 'membro-details' resposta.membro.id %}">{{ resposta.membro }}</a></strong>: {{ resposta.comentario }}</p>
+                                <p><small>
+                                    {% if resposta.publicado_em|timesince == "0 minutes" %}
+                                        Agora mesmo
+                                    {% else %}
+                                        {{ resposta.publicado_em|timesince }} atrás
+                                    {% endif %}
+                                </small></p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
 </div>
 
-<!-- JavaScript Favorito e Avaliação -->
+<!-- Scripts -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith(name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    const csrftoken = getCookie('csrftoken');
-
-    // Favorito
+    // Favoritar jogo
     document.querySelectorAll('.favorite-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             const gameId = this.dataset.gameId;
-            const isActive = this.classList.contains('active');
-            const icon = this.querySelector('i');
-
             fetch("{% url 'favoritar_jogo' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrftoken
-                },
-                body: JSON.stringify({
-                    "game_id": gameId,
-                    "favorito": !isActive
-                })
+                method: 'POST',
+                headers: { "X-CSRFToken": csrftoken },
+                body: JSON.stringify({ game_id: gameId, favorito: !this.classList.contains('active') })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     this.classList.toggle('active');
-                    icon.classList.toggle('far');
-                    icon.classList.toggle('fas');
+                    this.querySelector('i').classList.toggle('far');
+                    this.querySelector('i').classList.toggle('fas');
                 }
-            })
-            .catch(error => console.error("Erro:", error));
+            });
         });
     });
 
     // Avaliação
     document.querySelectorAll('.star-rating .star').forEach(star => {
-        star.addEventListener('mouseover', function () {
-            const hoverValue = parseInt(this.dataset.value) * 2;
-            const stars = this.parentNode.querySelectorAll('.star');
-
-            stars.forEach(s => {
-                const starValue = parseInt(s.dataset.value) * 2;
-                s.classList.remove('selected');
-                if (starValue <= hoverValue) {
-                    s.classList.add('selected');
-                }
-            });
-        });
-
-        star.addEventListener('mouseout', function () {
-            const currentRating = parseInt(this.parentNode.dataset.currentRating);
-            const stars = this.parentNode.querySelectorAll('.star');
-
-            stars.forEach(s => {
-                const starValue = parseInt(s.dataset.value) * 2;
-                s.classList.remove('selected');
-                if (starValue <= currentRating) {
-                    s.classList.add('active');
-                }
-            });
-        });
-
         star.addEventListener('click', function () {
+            const rating = parseInt(this.dataset.value) * 2;
             const gameId = this.parentNode.dataset.gameId;
-            const ratingValue = parseInt(this.dataset.value) * 2;
 
             fetch("{% url 'avaliar_jogo' %}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": csrftoken
-                },
-                body: JSON.stringify({
-                    "game_id": gameId,
-                    "rating": ratingValue
-                })
+                method: 'POST',
+                headers: { "X-CSRFToken": csrftoken },
+                body: JSON.stringify({ game_id: gameId, rating: rating })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    const stars = this.parentNode.querySelectorAll('.star');
-                    this.parentNode.dataset.currentRating = ratingValue;
-
-                    stars.forEach(s => {
-                        const starValue = parseInt(s.dataset.value) * 2;
-                        s.classList.remove('active');
-                        if (starValue <= ratingValue) {
-                            s.classList.add('active');
-                        }
-                    });
+                    this.parentNode.dataset.currentRating = rating;
                 }
-            })
-            .catch(error => console.error("Erro:", error));
+            });
         });
     });
 
-    // Enviar Comentário via AJAX
+    // Enviar novo comentário
     const form = document.getElementById('game-comment-form');
     if (form) {
-        const comentarioInput = document.getElementById('comentario-input');
-        const comentariosContainer = document.getElementById('comentarios-container');
-        const sendBtn = document.getElementById('send-comment-btn');
-
         form.addEventListener('submit', function (e) {
             e.preventDefault();
-
-            sendBtn.disabled = true;
-            sendBtn.textContent = 'Sending...';
-
+            const comentarioInput = document.getElementById('comentario-input');
             fetch(window.location.href, {
                 method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: new URLSearchParams({
-                    comentario: comentarioInput.value
-                })
+                headers: { 'X-CSRFToken': csrftoken },
+                body: new URLSearchParams({ comentario: comentarioInput.value })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    const newComment = `
-                        <div class="comment-item">
-                            <p>
-                                <strong>
-                                    <a href="${data.membro_url}">${data.membro}</a>
-                                </strong>: ${data.comentario}
-                            </p>
-                            <p><small>${data.tempo}</small></p>
-                        </div>
-                    `;
-                    comentariosContainer.insertAdjacentHTML('afterbegin', newComment);
-                    comentarioInput.value = "";
-                } else {
-                    alert("Erro ao enviar comentário.");
+                    location.reload();
                 }
-            })
-            .catch(error => {
-                console.error("Erro AJAX:", error);
-            })
-            .finally(() => {
-                sendBtn.disabled = false;
-                sendBtn.textContent = 'Send Comment';
             });
         });
     }
+
+    // Curtir comentário
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            fetch(`/comentario/${id}/curtir/`, {
+                method: 'POST',
+                headers: { "X-CSRFToken": csrftoken }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.querySelector('.like-count').textContent = data.likes;
+                }
+            });
+        });
+    });
+
+    // Reply com toggle
+    document.querySelectorAll('.reply-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const commentId = this.dataset.id;
+            const replyContainer = document.getElementById(`replies-${commentId}`);
+            let replyBox = replyContainer.querySelector('.reply-box');
+
+            if (replyBox) {
+                replyBox.remove();
+            } else {
+                replyBox = document.createElement('div');
+                replyBox.className = 'reply-box';
+                const textarea = document.createElement('textarea');
+                textarea.className = 'form-control';
+                textarea.placeholder = 'Reply...';
+                textarea.style.marginTop = '10px';
+
+                const sendButton = document.createElement('button');
+                sendButton.className = 'site-btn';
+                sendButton.textContent = 'Send Reply';
+                sendButton.style.marginTop = '5px';
+
+                sendButton.addEventListener('click', function () {
+                    const text = textarea.value.trim();
+                    if (text) {
+                        fetch(`/comentario/${commentId}/responder/`, {
+                            method: 'POST',
+                            headers: { "X-CSRFToken": csrftoken },
+                            body: new URLSearchParams({ comentario: text })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const replyItem = `
+                                    <div class="reply-item">
+                                        <p><strong><a href="/membro/${data.membro_id}/">${data.membro}</a></strong>: ${data.comentario}</p>
+                                        <p><small>${data.tempo}</small></p>
+                                    </div>
+                                `;
+                                replyContainer.insertAdjacentHTML('afterbegin', replyItem);
+                                replyBox.remove();
+                            }
+                        });
+                    }
+                });
+
+                replyBox.appendChild(textarea);
+                replyBox.appendChild(sendButton);
+                replyContainer.prepend(replyBox);
+            }
+        });
+    });
+
+    // Editar comentário
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const commentId = this.dataset.id;
+            const commentText = document.querySelector(`.comment-item[data-id="${commentId}"] .comentario-text`);
+            const originalText = commentText.querySelector('textarea') ? commentText.querySelector('textarea').value.trim() : commentText.childNodes[0].nodeValue.trim();
+
+            const textarea = document.createElement('textarea');
+            textarea.className = 'form-control';
+            textarea.value = originalText;
+
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'site-btn';
+            saveBtn.textContent = 'Save';
+
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'site-btn';
+            cancelBtn.textContent = 'Cancel';
+
+            commentText.innerHTML = '';
+            commentText.appendChild(textarea);
+            commentText.appendChild(saveBtn);
+            commentText.appendChild(cancelBtn);
+
+            saveBtn.addEventListener('click', function () {
+                const newText = textarea.value.trim();
+                fetch(`/comentario/${commentId}/editar/`, {
+                    method: 'POST',
+                    headers: { "X-CSRFToken": csrftoken },
+                    body: new URLSearchParams({ comentario: newText })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        commentText.innerHTML = newText;
+                    }
+                });
+            });
+
+            cancelBtn.addEventListener('click', function () {
+                commentText.innerHTML = originalText;
+            });
+        });
+    });
+
+    // Deletar comentário
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (confirm("Are you sure you want to delete this comment?")) {
+                const commentId = this.dataset.id;
+                fetch(`/comentario/${commentId}/excluir/`, {
+                    method: 'POST',
+                    headers: { "X-CSRFToken": csrftoken }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.querySelector(`.comment-item[data-id="${commentId}"]`).remove();
+                    }
+                });
+            }
+        });
+    });
 });
 </script>
+<style>
+
+   .comment-box button {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    .replies {
+        margin-left: 30px;
+        margin-top: 10px;
+        border-left: 2px solid #ccc;
+        padding-left: 10px;
+    }
+
+    .reply-item {
+        margin-top: 10px;
+    }
+    .reply-item p {
+        margin: 0;
+    }
+    .reply-box textarea {
+        width: 100%;
+    }
+    .reply-box button {
+        display: inline-block;
+        margin-right: 10px;
+    }
+</style>
 {% include 'footer.html' %}
 {% endblock %}

@@ -14,7 +14,7 @@ from django.db.models import Q
 from django import forms
 from django.db.models import Avg
 from django.contrib.auth.decorators import user_passes_test
-from .models import BlogPost, Genero, Games
+from .models import BlogPost, Genero, Games, GameComment
 from .forms import BlogForm
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.mixins import UserPassesTestMixin
@@ -27,6 +27,7 @@ from .models import Amizade
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView
+from collections import defaultdict
 
 
 def autocomplete_games(request):
@@ -362,7 +363,21 @@ class GameDetailView(TemplateView):
                 pass
 
         context['game'] = game
-        context['comentarios'] = game.comentarios.select_related('membro').order_by('-publicado_em')
+        comentarios = game.comentarios.select_related('membro').order_by('publicado_em')
+
+        comentarios_dict = defaultdict(list)
+        comentarios_raiz = []
+
+        for comentario in comentarios:
+            if comentario.parent:
+                comentarios_dict[comentario.parent_id].append(comentario)
+            else:
+                comentarios_raiz.append(comentario)
+
+        for comentario in comentarios_raiz:
+            comentario.replies = comentarios_dict.get(comentario.id, [])
+
+        context['comentarios'] = comentarios_raiz
         context['comment_form'] = GameCommentForm()
         return context
 
@@ -611,3 +626,52 @@ class SolicitacoesPendentesView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Amizade.objects.filter(para_membro=self.request.user, aceita=False).select_related('de_membro')
+
+
+@login_required
+def curtir_comentario(request, comentario_id):
+    comentario = get_object_or_404(GameComment, id=comentario_id)
+    if request.user in comentario.likes.all():
+        comentario.likes.remove(request.user)
+    else:
+        comentario.likes.add(request.user)
+    return JsonResponse({'success': True, 'likes': comentario.likes.count()})
+
+
+@login_required
+def responder_comentario(request, comentario_id):
+    comentario_pai = get_object_or_404(GameComment, id=comentario_id)
+    texto = request.POST.get('comentario')
+
+    if texto:
+        resposta = GameComment.objects.create(
+            membro=request.user,
+            game=comentario_pai.game,  # Usa o mesmo jogo do comentário pai
+            comentario=texto,
+            parent=comentario_pai  # Importante: aqui vinculamos a resposta ao comentário pai
+        )
+        return JsonResponse({
+            'success': True,
+            'comentario': resposta.comentario,
+            'membro': resposta.membro.membro,
+            'tempo': "Agora mesmo"
+        })
+    return JsonResponse({'success': False})
+
+
+@login_required
+def editar_comentario(request, comentario_id):
+    comentario = get_object_or_404(GameComment, id=comentario_id, membro=request.user)
+    novo_texto = request.POST.get('comentario')
+    if novo_texto:
+        comentario.comentario = novo_texto
+        comentario.save()
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+
+@login_required
+def excluir_comentario(request, comentario_id):
+    comentario = get_object_or_404(GameComment, id=comentario_id, membro=request.user)
+    comentario.delete()
+    return JsonResponse({'success': True})
