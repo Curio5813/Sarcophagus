@@ -367,18 +367,26 @@ class GameDetailView(TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        game = get_object_or_404(Games, id=kwargs['id'])
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            comentario_texto = request.POST.get('comentario')
+            game_id = kwargs.get('id')
+            membro = request.user
 
-        if request.user.is_authenticated:
-            form = GameCommentForm(request.POST)
-            if form.is_valid():
-                comentario = form.save(commit=False)
-                comentario.game = game
-                comentario.membro = request.user
-                comentario.save()
-                return redirect('game-details', id=game.id)
-
-        return self.get(request, *args, **kwargs)
+            if comentario_texto and membro.is_authenticated:
+                game = get_object_or_404(Games, id=game_id)
+                comentario = GameComment.objects.create(
+                    game=game,
+                    membro=membro,
+                    comentario=comentario_texto
+                )
+                return JsonResponse({
+                    'success': True,
+                    'membro': comentario.membro.membro,
+                    'comentario': comentario.comentario,
+                    'tempo': "Agora mesmo",
+                    'membro_url': reverse('membro-details', args=[comentario.membro.id])
+                })
+        return JsonResponse({'success': False})
 
 
 class TesteView(TemplateView):

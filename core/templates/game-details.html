@@ -77,10 +77,10 @@
         <h3>Comments</h3>
 
         {% if user.is_authenticated %}
-        <form method="post" action="">
+        <form method="post" id="game-comment-form">
             {% csrf_token %}
-            {{ comment_form.comentario|add_class:"form-control" }}
-            <button type="submit" class="site-btn">Send Comment</button>
+            <textarea name="comentario" id="comentario-input" class="form-control" placeholder="Your comment..." required></textarea>
+            <button type="submit" class="site-btn" id="send-comment-btn">Send Comment</button>
         </form>
         {% else %}
             <p>You need <a href="{% url 'login' %}">to login</a> to comment.</p>
@@ -89,35 +89,32 @@
         <hr style="margin: 20px 0;">
 
         <!-- Lista de comentários -->
-        {% for comentario in comentarios %}
-        <div class="comment-item">
-            <p>
-                <strong>
-                    <a href="{% url 'membro-details' comentario.membro.id %}">
-                        {{ comentario.membro }}
-                    </a>
-                </strong>: {{ comentario.comentario }}
-            </p>
-            <p>
-                <small>
+        <div id="comentarios-container">
+            {% for comentario in comentarios %}
+            <div class="comment-item">
+                <p>
+                    <strong>
+                        <a href="{% url 'membro-details' comentario.membro.id %}">{{ comentario.membro }}</a>
+                    </strong>: {{ comentario.comentario }}
+                </p>
+                <p><small>
                     {% if comentario.publicado_em|timesince == "0 minutes" %}
                         Agora mesmo
                     {% else %}
                         {{ comentario.publicado_em|timesince }} atrás
                     {% endif %}
-                </small>
-            </p>
+                </small></p>
+            </div>
+            {% empty %}
+            <p>No comments yet.</p>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p>No comments yet.</p>
-        {% endfor %}
     </div>
 </div>
 
-<!-- JavaScript -->
+<!-- JavaScript Favorito e Avaliação -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // CSRF Token
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -135,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const csrftoken = getCookie('csrftoken');
 
-    // Sistema de Favoritos
+    // Favorito
     document.querySelectorAll('.favorite-btn').forEach(btn => {
         btn.addEventListener('click', function () {
             const gameId = this.dataset.gameId;
@@ -165,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Sistema de Estrelas
+    // Avaliação
     document.querySelectorAll('.star-rating .star').forEach(star => {
         star.addEventListener('mouseover', function () {
             const hoverValue = parseInt(this.dataset.value) * 2;
@@ -226,6 +223,58 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error("Erro:", error));
         });
     });
+
+    // Enviar Comentário via AJAX
+    const form = document.getElementById('game-comment-form');
+    if (form) {
+        const comentarioInput = document.getElementById('comentario-input');
+        const comentariosContainer = document.getElementById('comentarios-container');
+        const sendBtn = document.getElementById('send-comment-btn');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrftoken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: new URLSearchParams({
+                    comentario: comentarioInput.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const newComment = `
+                        <div class="comment-item">
+                            <p>
+                                <strong>
+                                    <a href="${data.membro_url}">${data.membro}</a>
+                                </strong>: ${data.comentario}
+                            </p>
+                            <p><small>${data.tempo}</small></p>
+                        </div>
+                    `;
+                    comentariosContainer.insertAdjacentHTML('afterbegin', newComment);
+                    comentarioInput.value = "";
+                } else {
+                    alert("Erro ao enviar comentário.");
+                }
+            })
+            .catch(error => {
+                console.error("Erro AJAX:", error);
+            })
+            .finally(() => {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Comment';
+            });
+        });
+    }
 });
 </script>
 {% include 'footer.html' %}
