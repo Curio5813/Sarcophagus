@@ -27,7 +27,6 @@ from .models import Amizade
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView
-from collections import defaultdict
 
 
 def autocomplete_games(request):
@@ -363,45 +362,35 @@ class GameDetailView(TemplateView):
                 pass
 
         context['game'] = game
-        comentarios = game.comentarios.select_related('membro').order_by('publicado_em')
-
-        comentarios_dict = defaultdict(list)
-        comentarios_raiz = []
-
-        for comentario in comentarios:
-            if comentario.parent:
-                comentarios_dict[comentario.parent_id].append(comentario)
-            else:
-                comentarios_raiz.append(comentario)
-
-        for comentario in comentarios_raiz:
-            comentario.replies = comentarios_dict.get(comentario.id, [])
-
-        context['comentarios'] = comentarios_raiz
+        context['comentarios'] = game.comentarios.select_related('membro').order_by('-publicado_em')
         context['comment_form'] = GameCommentForm()
         return context
 
     def post(self, request, *args, **kwargs):
         if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            comentario_texto = request.POST.get('comentario')
-            game_id = kwargs.get('id')
-            membro = request.user
+            try:
+                data = json.loads(request.body)
+                comentario_texto = data.get('comentario')
+                game_id = kwargs.get('id')
+                membro = request.user
 
-            if comentario_texto and membro.is_authenticated:
-                game = get_object_or_404(Games, id=game_id)
-                comentario = GameComment.objects.create(
-                    game=game,
-                    membro=membro,
-                    comentario=comentario_texto
-                )
-                return JsonResponse({
-                    'success': True,
-                    'id': comentario.id,
-                    'membro': comentario.membro.membro,
-                    'comentario': comentario.comentario,
-                    'tempo': "Agora mesmo",
-                    'membro_url': reverse('membro-details', args=[comentario.membro.id])
-                })
+                if comentario_texto and membro.is_authenticated:
+                    game = get_object_or_404(Games, id=game_id)
+                    comentario = GameComment.objects.create(
+                        game=game,
+                        membro=membro,
+                        comentario=comentario_texto
+                    )
+                    return JsonResponse({
+                        'success': True,
+                        'id': comentario.id,
+                        'membro': comentario.membro.membro,
+                        'comentario': comentario.comentario,
+                        'tempo': "Agora mesmo",
+                        'membro_url': reverse('membro-details', args=[comentario.membro.id])
+                    })
+            except Exception as e:
+                print(f"Erro no envio de comentário: {e}")
         return JsonResponse({'success': False})
 
 
@@ -450,6 +439,7 @@ class RegisterForm(forms.ModelForm):
 
         return user
 
+
 class RegisterView(FormView):
     template_name = 'registration/register.html'
     form_class = RegisterForm
@@ -487,7 +477,7 @@ class AvaliarJogoView(TemplateView):
             defaults={'rating': rating_value}
         )
 
-        return JsonResponse({'success': True, 'rating': rating_value})
+        return JsonResponse({'success': True})
 
 
 class FavoritarJogoView(TemplateView):
@@ -641,21 +631,20 @@ def curtir_comentario(request, comentario_id):
 
 @login_required
 def responder_comentario(request, comentario_id):
-    comentario_pai = get_object_or_404(GameComment, id=comentario_id)
+    comentario = get_object_or_404(GameComment, id=comentario_id)
     texto = request.POST.get('comentario')
-
     if texto:
         resposta = GameComment.objects.create(
             membro=request.user,
-            game=comentario_pai.game,  # Usa o mesmo jogo do comentário pai
+            game=comentario.game,
             comentario=texto,
-            parent=comentario_pai  # Importante: aqui vinculamos a resposta ao comentário pai
+            parent=comentario
         )
         return JsonResponse({
             'success': True,
             'comentario': resposta.comentario,
-            'membro': resposta.membro.membro,
-            'tempo': "Agora mesmo"
+            'membro': resposta.membro.username,
+            'tempo': "Just now"
         })
     return JsonResponse({'success': False})
 

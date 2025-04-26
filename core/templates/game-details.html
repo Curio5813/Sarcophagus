@@ -72,7 +72,7 @@
         <h3>Comments</h3>
 
         {% if user.is_authenticated %}
-        <form method="post" id="game-comment-form">
+        <form method="post" id="game-comment-form" action="{{ request.path }}">
             {% csrf_token %}
             <textarea name="comentario" id="comentario-input" class="form-control" placeholder="Your comment..." required></textarea>
             <button type="submit" class="site-btn" id="send-comment-btn">Send Comment</button>
@@ -85,6 +85,7 @@
 
         <div id="comentarios-container">
             {% for comentario in comentarios %}
+                {{ comentario.comentario }}
                 <div class="comment-item" data-id="{{ comentario.id }}">
                     <p>
                         <strong><a href="{% url 'membro-details' comentario.membro.id %}">{{ comentario.membro }}</a></strong>:
@@ -111,7 +112,7 @@
                     </div>
 
                     <div id="replies-{{ comentario.id }}" class="replies">
-                        {% for resposta in comentario.replies %}
+                        {% for resposta in comentario.respostas.all %}
                             <div class="reply-item">
                                 <p><strong><a href="{% url 'membro-details' resposta.membro.id %}">{{ resposta.membro }}</a></strong>: {{ resposta.comentario }}</p>
                                 <p><small>
@@ -124,6 +125,7 @@
                             </div>
                         {% endfor %}
                     </div>
+
                 </div>
             {% endfor %}
         </div>
@@ -135,64 +137,75 @@
 document.addEventListener('DOMContentLoaded', function () {
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    // ⭐ Avaliar o jogo
+    // FAVORITAR JOGO
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const gameId = this.dataset.gameId;
+            const isFavorited = this.classList.contains('active');
+
+            fetch("{% url 'favoritar_jogo' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({ game_id: gameId, favorito: !isFavorited })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.classList.toggle('active');
+                    this.querySelector('i').classList.toggle('far');
+                    this.querySelector('i').classList.toggle('fas');
+                }
+            });
+        });
+    });
+
+    // AVALIAR JOGO
     document.querySelectorAll('.star-rating .star').forEach(star => {
         star.addEventListener('click', function () {
             const rating = parseInt(this.dataset.value) * 2;
-            const gameId = this.parentNode.dataset.gameId;
+            const gameId = this.closest('.star-rating').dataset.gameId;
 
             fetch("{% url 'avaliar_jogo' %}", {
                 method: 'POST',
                 headers: {
-                    "X-CSRFToken": csrftoken,
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
                 },
                 body: JSON.stringify({ game_id: gameId, rating: rating })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    this.parentNode.dataset.currentRating = rating;
+                    const allStars = star.closest('.star-rating').querySelectorAll('.star');
+                    allStars.forEach(s => {
+                        if (parseInt(s.dataset.value) <= rating / 2) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
                 }
             });
         });
     });
+});
+</script>
 
-    // 💖 Favoritar jogo
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', function () {
-            const gameId = this.dataset.gameId;
-            const isActive = this.classList.contains('active');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-            fetch("{% url 'favoritar_jogo' %}", {
-                method: 'POST',
-                headers: {
-                    "X-CSRFToken": csrftoken,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ game_id: gameId, favorito: !isActive })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    this.classList.toggle('active');
-                    const icon = this.querySelector('i');
-                    icon.classList.toggle('fas');
-                    icon.classList.toggle('far');
-                }
-            });
-        });
-    });
-
-    // 🔁 Funções para ações nos comentários
-    function attachCommentActions() {
+    function ativarAcoesComentarios() {
         // Curtir comentário
         document.querySelectorAll('.like-btn').forEach(btn => {
             btn.onclick = function () {
                 const id = this.dataset.id;
                 fetch(`/comentario/${id}/curtir/`, {
                     method: 'POST',
-                    headers: { "X-CSRFToken": csrftoken }
+                    headers: { 'X-CSRFToken': csrftoken }
                 })
                 .then(response => response.json())
                 .then(data => {
@@ -215,23 +228,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     replyBox = document.createElement('div');
                     replyBox.className = 'reply-box';
+                    replyBox.innerHTML = `
+                        <textarea class="form-control" placeholder="Reply..." style="margin-top:10px;"></textarea>
+                        <button class="site-btn" style="margin-top:5px;">Send Reply</button>
+                    `;
 
-                    const textarea = document.createElement('textarea');
-                    textarea.className = 'form-control';
-                    textarea.placeholder = 'Reply...';
-                    textarea.style.marginTop = '10px';
-
-                    const sendButton = document.createElement('button');
-                    sendButton.className = 'site-btn';
-                    sendButton.textContent = 'Send Reply';
-                    sendButton.style.marginTop = '5px';
+                    const textarea = replyBox.querySelector('textarea');
+                    const sendButton = replyBox.querySelector('button');
 
                     sendButton.onclick = function () {
                         const text = textarea.value.trim();
                         if (text) {
                             fetch(`/comentario/${commentId}/responder/`, {
                                 method: 'POST',
-                                headers: { "X-CSRFToken": csrftoken },
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                    'X-CSRFToken': csrftoken
+                                },
                                 body: new URLSearchParams({ comentario: text })
                             })
                             .then(response => response.json())
@@ -239,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 if (data.success) {
                                     const replyItem = `
                                         <div class="reply-item">
-                                            <p><strong><a href="/membro/${data.membro_id}/">${data.membro}</a></strong>: ${data.comentario}</p>
+                                            <p><strong>${data.membro}</strong>: ${data.comentario}</p>
                                             <p><small>${data.tempo}</small></p>
                                         </div>
                                     `;
@@ -250,23 +263,33 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     };
 
-                    replyBox.appendChild(textarea);
-                    replyBox.appendChild(sendButton);
                     replyContainer.prepend(replyBox);
                 }
             };
         });
 
-        // Editar comentário
+       // Editar comentário
         document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.onclick = function () {
                 const commentId = this.dataset.id;
                 const commentText = document.querySelector(`.comment-item[data-id="${commentId}"] .comentario-text`);
+
+                // ⚡ Verifica se já tem um textarea (já está editando)
+                if (commentText.querySelector('textarea')) {
+                    return; // se já está editando, não faz nada
+                }
+
                 const originalText = commentText.textContent.trim();
 
                 const textarea = document.createElement('textarea');
                 textarea.className = 'form-control';
                 textarea.value = originalText;
+
+                // Criar container para os botões
+                const actionsDiv = document.createElement('div');
+                actionsDiv.style.display = 'flex';
+                actionsDiv.style.gap = '10px';
+                actionsDiv.style.marginTop = '5px';
 
                 const saveBtn = document.createElement('button');
                 saveBtn.className = 'site-btn';
@@ -278,14 +301,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 commentText.innerHTML = '';
                 commentText.appendChild(textarea);
-                commentText.appendChild(saveBtn);
-                commentText.appendChild(cancelBtn);
+                commentText.appendChild(actionsDiv);
+                actionsDiv.appendChild(saveBtn);
+                actionsDiv.appendChild(cancelBtn);
 
                 saveBtn.onclick = function () {
                     const newText = textarea.value.trim();
                     fetch(`/comentario/${commentId}/editar/`, {
                         method: 'POST',
-                        headers: { "X-CSRFToken": csrftoken },
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': csrftoken,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
                         body: new URLSearchParams({ comentario: newText })
                     })
                     .then(response => response.json())
@@ -309,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     const commentId = this.dataset.id;
                     fetch(`/comentario/${commentId}/excluir/`, {
                         method: 'POST',
-                        headers: { "X-CSRFToken": csrftoken }
+                        headers: { 'X-CSRFToken': csrftoken }
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -322,82 +350,58 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    attachCommentActions();
+    ativarAcoesComentarios();
 
     // Enviar novo comentário
-    const form = document.getElementById('game-comment-form');
-    if (form) {
-        form.addEventListener('submit', function (e) {
+    const commentForm = document.getElementById('game-comment-form');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const comentarioInput = document.getElementById('comentario-input');
+            const text = comentarioInput.value.trim();
+
+            if (!text) return;
+
             fetch(window.location.href, {
                 method: 'POST',
                 headers: {
+                    'Content-Type': 'application/json',
                     'X-CSRFToken': csrftoken,
                     'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: new URLSearchParams({ comentario: comentarioInput.value })
+                body: JSON.stringify({ comentario: text })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    comentarioInput.value = '';
-
-                    const novoComentario = document.createElement('div');
-                    novoComentario.className = 'comment-item';
-                    novoComentario.dataset.id = data.id;
-                    novoComentario.innerHTML = `
-                        <p>
-                            <strong><a href="${data.membro_url}">${data.membro}</a></strong>:
-                            <span class="comentario-text">${data.comentario}</span>
-                        </p>
-                        <p><small>${data.tempo}</small></p>
-                        <div class="comment-actions">
-                            <button class="like-btn" data-id="${data.id}">
-                                <i class="fa fa-heart"></i> <span class="like-count">0</span>
-                            </button>
-                            <button class="reply-btn" data-id="${data.id}">Reply</button>
-                            <button class="edit-btn" data-id="${data.id}">Edit</button>
-                            <button class="delete-btn" data-id="${data.id}">Delete</button>
+                    const comentariosContainer = document.getElementById('comentarios-container');
+                    const newComment = `
+                        <div class="comment-item" data-id="${data.id}">
+                            <p>
+                                <strong><a href="${data.membro_url}">${data.membro}</a></strong>:
+                                <span class="comentario-text">${data.comentario}</span>
+                            </p>
+                            <p><small>${data.tempo}</small></p>
+                            <div class="comment-actions">
+                                <button class="like-btn" data-id="${data.id}">
+                                    <i class="fa fa-heart"></i> <span class="like-count">0</span>
+                                </button>
+                                <button class="reply-btn" data-id="${data.id}">Reply</button>
+                                <button class="edit-btn" data-id="${data.id}">Edit</button>
+                                <button class="delete-btn" data-id="${data.id}">Delete</button>
+                            </div>
+                            <div id="replies-${data.id}" class="replies"></div>
                         </div>
-                        <div id="replies-${data.id}" class="replies"></div>
                     `;
-
-                    const container = document.getElementById('comentarios-container');
-                    container.prepend(novoComentario);
-                    attachCommentActions();
+                    comentariosContainer.insertAdjacentHTML('afterbegin', newComment);
+                    comentarioInput.value = '';
+                    ativarAcoesComentarios();
                 }
             });
         });
     }
 });
 </script>
-
-<style>
-.comment-box button {
-    display: inline-block;
-    margin-right: 10px;
-}
-.replies {
-    margin-left: 30px;
-    margin-top: 10px;
-    border-left: 2px solid #ccc;
-    padding-left: 10px;
-}
-.reply-item {
-    margin-top: 10px;
-}
-.reply-item p {
-    margin: 0;
-}
-.reply-box textarea {
-    width: 100%;
-}
-.reply-box button {
-    display: inline-block;
-    margin-right: 10px;
-}
-</style>
 
 {% include 'footer.html' %}
 {% endblock %}
