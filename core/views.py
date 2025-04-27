@@ -643,7 +643,7 @@ def responder_comentario(request, comentario_id):
         return JsonResponse({
             'success': True,
             'comentario': resposta.comentario,
-            'membro': resposta.membro.username,
+            'membro': resposta.membro.membro,
             'tempo': "Just now"
         })
     return JsonResponse({'success': False})
