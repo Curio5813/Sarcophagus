@@ -362,7 +362,8 @@ class GameDetailView(TemplateView):
                 pass
 
         context['game'] = game
-        context['comentarios'] = game.comentarios.select_related('membro').order_by('-publicado_em')
+        context['comentarios'] = game.comentarios.filter(parent__isnull=True).select_related('membro').order_by(
+            '-publicado_em')
         context['comment_form'] = GameCommentForm()
         return context
 
@@ -642,9 +643,11 @@ def responder_comentario(request, comentario_id):
         )
         return JsonResponse({
             'success': True,
+            'id': resposta.id,
             'comentario': resposta.comentario,
-            'membro': resposta.membro.membro,
-            'tempo': "Just now"
+            'tempo': 'Agora mesmo',
+            'membro': resposta.membro.membro,  # 👈
+            'parent_id': comentario.id  # 👈 Manda o ID do comentário pai
         })
     return JsonResponse({'success': False})
 

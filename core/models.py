@@ -186,6 +186,7 @@ class GameComment(models.Model):
     comentario = models.TextField()
     publicado_em = models.DateTimeField(auto_now_add=True)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='respostas', on_delete=models.CASCADE)  # 👈 Novo!
+    likes = models.ManyToManyField(Membro, related_name='comentarios_curtidos', blank=True)
 
     def __str__(self):
         return f'{self.membro} comentou em {self.game}'
