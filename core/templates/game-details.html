@@ -426,6 +426,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+<script>
+    // Efeito hover nas estrelas
+    document.querySelectorAll('.star-rating').forEach(rating => {
+        const stars = rating.querySelectorAll('.star');
+
+        stars.forEach((star, index) => {
+            star.addEventListener('mouseover', () => {
+                stars.forEach((s, i) => {
+                    s.classList.toggle('hovered', i <= index);
+                });
+            });
+
+            star.addEventListener('mouseout', () => {
+                stars.forEach(s => s.classList.remove('hovered'));
+            });
+        });
+    });
+</script>
 
 <style>
     /* Estilo para o balão do comentário */
@@ -469,6 +487,12 @@ document.addEventListener('DOMContentLoaded', function () {
             transform: translateY(0);
         }
     }
+
+    .star.hovered i {
+    color: #ffaa00; /* Cor mais intensa ao passar o mouse */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    }
+
 </style>
 
 {% include 'footer.html' %}
