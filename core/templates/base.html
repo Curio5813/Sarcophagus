@@ -47,6 +47,27 @@
 				<div class="user-panel">
 					{% if user.is_authenticated %}
 						<div style="position: relative; display: inline-block; margin-left: 10px;">
+							<a href="#" id="notificacaoToggle">
+								<img src="{% static 'img/globo_icone001.png' %}" alt="Notificações"
+									style="width: 50px; filter: {% if notificacoes_nao_lidas %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
+								{% if notificacoes_nao_lidas %}
+									<span class="amizade-badge">{{ notificacoes_nao_lidas.count }}</span>
+								{% endif %}
+							</a>
+							<div id="notificacoesDropdown" class="dropdown-menu">
+								{% for notificacao in notificacoes_nao_lidas %}
+									<a class="dropdown-item" href="{% url 'membro-details' notificacao.remetente.id %}">
+										<img src="{% if notificacao.remetente.imagem %}{{ notificacao.remetente.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+											 alt="avatar" style="width:24px; border-radius:50%;">
+										<strong>{{ notificacao.remetente.membro }}</strong>
+										{{ notificacao.get_tipo_display }} seu comentário
+									</a>
+								{% empty %}
+									<p class="dropdown-item">Nenhuma nova notificação.</p>
+								{% endfor %}
+							</div>
+						</div>
+						<div style="position: relative; display: inline-block; margin-left: 10px;">
 							<a href="{% url 'solicitacoes_pendentes' %}">
 								<img src="{% static 'img/icone4.png' %}" alt="Solicitações de amizade" width="80" height="80"
 								 	style="filter: {% if solicitacoes_pendentes %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
@@ -161,6 +182,13 @@
 			return cookieValue;
 		}
 		const csrftoken = getCookie('csrftoken');
+	</script>
+	<script>
+		document.getElementById("notificacaoToggle").addEventListener("click", function(e) {
+			e.preventDefault();
+			const dropdown = document.getElementById("notificacoesDropdown");
+			dropdown.classList.toggle("show");
+		});
 	</script>
 </body>
 </html>

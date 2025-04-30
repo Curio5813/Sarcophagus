@@ -7,6 +7,8 @@ from datetime import date
 from cloudinary.models import CloudinaryField
 import re
 import uuid
+from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 
 def get_file_path(instance, filename):
@@ -277,3 +279,21 @@ class Amizade(models.Model):
     def __str__(self):
         return f"{self.de_membro} -> {self.para_membro} ({'Aceita' if self.aceita else 'Pendente'})"
 
+
+User = get_user_model()
+
+class Notificacao(models.Model):
+    TIPO_CHOICES = [
+        ('curtida', _('Curtida')),
+        ('comentario', _('Comentário')),
+    ]
+
+    destinatario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notificacoes')
+    remetente = models.ForeignKey(User, on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
+    comentario = models.ForeignKey('GameComment', on_delete=models.CASCADE, null=True, blank=True)
+    lida = models.BooleanField(default=False)
+    criada_em = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.remetente} -> {self.destinatario} ({self.tipo})"

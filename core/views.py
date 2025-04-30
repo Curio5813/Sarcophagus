@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from .forms import ContatoForm, MembroLoginForm, BlogCommentForm, GameCommentForm
-from .models import Membro, GameRating, Tournament, GameComment
+from .models import Membro, GameRating, Tournament, GameComment, Notificacao
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.utils import translation
@@ -668,3 +668,57 @@ def excluir_comentario(request, comentario_id):
     comentario = get_object_or_404(GameComment, id=comentario_id, membro=request.user)
     comentario.delete()
     return JsonResponse({'success': True})
+
+
+@login_required
+def curtir_comentario(request, comentario_id):
+    comentario = get_object_or_404(GameComment, id=comentario_id)
+    if request.user != comentario.membro:
+        Notificacao.objects.get_or_create(
+            destinatario=comentario.membro,
+            remetente=request.user,
+            tipo='curtida',
+            comentario=comentario
+        )
+
+    # Alternar curtida
+    if request.user in comentario.likes.all():
+        comentario.likes.remove(request.user)
+    else:
+        comentario.likes.add(request.user)
+
+    return JsonResponse({'success': True, 'likes': comentario.likes.count()})
+
+
+@login_required
+def responder_comentario(request, comentario_id):
+    comentario = get_object_or_404(GameComment, id=comentario_id)
+    texto = request.POST.get('comentario')
+
+    if texto:
+        resposta = GameComment.objects.create(
+            membro=request.user,
+            game=comentario.game,
+            comentario=texto,
+            parent=comentario
+        )
+
+        if comentario.membro != request.user:
+            Notificacao.objects.get_or_create(
+                destinatario=comentario.membro,
+                remetente=request.user,
+                tipo='comentario',
+                comentario=comentario
+            )
+
+        return JsonResponse({
+            'success': True,
+            'id': resposta.id,
+            'comentario': resposta.comentario,
+            'tempo': 'Agora mesmo',
+            'membro': resposta.membro.membro,
+            'parent_id': comentario.id
+        })
+
+    return JsonResponse({'success': False})
+

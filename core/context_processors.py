@@ -1,4 +1,4 @@
-from .models import BlogPost, BlogComment
+from .models import BlogPost, BlogComment, Notificacao
 from django.core.cache import cache
 import feedparser
 from .models import Amizade
@@ -53,3 +53,10 @@ def solicitacoes_pendentes_context(request):
         solicitacoes_pendentes = []
 
     return {'solicitacoes_pendentes': solicitacoes_pendentes}
+
+
+def notificacoes_context(request):
+    if request.user.is_authenticated:
+        notificacoes_nao_lidas = Notificacao.objects.filter(destinatario=request.user, lida=False).select_related('remetente')[:5]
+        return {'notificacoes_nao_lidas': notificacoes_nao_lidas}
+    return {}
