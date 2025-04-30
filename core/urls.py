@@ -6,7 +6,8 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     GameSearchView, BlogView, TesteView, LoginView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView,
                     MembroEditView, autocomplete_games, logout_view,
-                    SolicitarAmizadeView, AceitarAmizadeView, SolicitacoesPendentesView)
+                    SolicitarAmizadeView, AceitarAmizadeView, SolicitacoesPendentesView,
+                    marcar_notificacoes_lidas)
 from .views import (BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView,
                     curtir_comentario, responder_comentario, editar_comentario, excluir_comentario)
 from django.shortcuts import redirect
@@ -50,6 +51,8 @@ urlpatterns = [
     path('comentario/<int:comentario_id>/responder/', responder_comentario, name='responder_comentario'),
     path('comentario/<int:comentario_id>/editar/', editar_comentario, name='editar_comentario'),
     path('comentario/<int:comentario_id>/excluir/', excluir_comentario, name='excluir_comentario'),
+    path('notificacoes/marcar_lidas/', marcar_notificacoes_lidas, name='marcar_notificacoes_lidas'),
+
 ]
 
 if settings.DEBUG:

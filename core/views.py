@@ -27,6 +27,7 @@ from .models import Amizade
 from django.views import View
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView
+from django.views.decorators.http import require_POST
 
 
 def autocomplete_games(request):
@@ -722,3 +723,9 @@ def responder_comentario(request, comentario_id):
 
     return JsonResponse({'success': False})
 
+
+@require_POST
+@login_required
+def marcar_notificacoes_lidas(request):
+    Notificacao.objects.filter(destinatario=request.user, lida=False).update(lida=True)
+    return JsonResponse({'success': True})

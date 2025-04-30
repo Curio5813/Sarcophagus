@@ -48,10 +48,10 @@
 					{% if user.is_authenticated %}
 						<div style="position: relative; display: inline-block; margin-left: 10px;">
 							<a href="#" id="notificacaoToggle">
-								<img src="{% static 'img/globo_icone001.png' %}" alt="Notificações"
-									style="width: 50px; filter: {% if notificacoes_nao_lidas %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
+								<img id="iconeNotificacao" src="{% static 'img/globo_icone001.png' %}" alt="Notificações"
+									 style="width: 50px; filter: {% if notificacoes_nao_lidas %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
 								{% if notificacoes_nao_lidas %}
-									<span class="amizade-badge">{{ notificacoes_nao_lidas.count }}</span>
+									<span id="badgeNotificacao" class="amizade-badge">{{ notificacoes_nao_lidas.count }}</span>
 								{% endif %}
 							</a>
 							<div id="notificacoesDropdown" class="dropdown-menu">
@@ -189,6 +189,37 @@
 			const dropdown = document.getElementById("notificacoesDropdown");
 			dropdown.classList.toggle("show");
 		});
+	</script>
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const notificacoesLinks = document.querySelectorAll("#notificacoesDropdown .dropdown-item");
+		const iconeNotificacao = document.getElementById("iconeNotificacao");
+		const badgeNotificacao = document.getElementById("badgeNotificacao");
+
+		notificacoesLinks.forEach(link => {
+			link.addEventListener("click", function () {
+				// Visual
+				if (iconeNotificacao) {
+					iconeNotificacao.style.filter = "grayscale(100%) opacity(50%)";
+				}
+				if (badgeNotificacao) {
+					badgeNotificacao.remove();
+				}
+
+				// Backend: marca como lidas via AJAX
+				fetch("{% url 'marcar_notificacoes_lidas' %}", {
+					method: "POST",
+					headers: {
+						"X-CSRFToken": csrftoken,
+						"X-Requested-With": "XMLHttpRequest",
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({ lidas: true })
+				});
+			});
+
+		});
+	});
 	</script>
 </body>
 </html>
