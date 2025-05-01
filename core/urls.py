@@ -7,7 +7,8 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     RegisterView, GameDetailView, MembroDetailView, BlogPostEditView,
                     MembroEditView, autocomplete_games, logout_view,
                     SolicitarAmizadeView, AceitarAmizadeView, SolicitacoesPendentesView,
-                    marcar_notificacoes_lidas)
+                    marcar_notificacoes_lidas, SeguirMembroView, DeixarDeSeguirMembroView,
+                    SeguindoListView, SeguidoresListView)
 from .views import (BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView,
                     curtir_comentario, responder_comentario, editar_comentario, excluir_comentario)
 from django.shortcuts import redirect
@@ -52,7 +53,10 @@ urlpatterns = [
     path('comentario/<int:comentario_id>/editar/', editar_comentario, name='editar_comentario'),
     path('comentario/<int:comentario_id>/excluir/', excluir_comentario, name='excluir_comentario'),
     path('notificacoes/marcar_lidas/', marcar_notificacoes_lidas, name='marcar_notificacoes_lidas'),
-
+    path('membro/<int:id>/seguir/', SeguirMembroView.as_view(), name='seguir_membro'),
+    path('membro/<int:id>/deixar_de_seguir/', DeixarDeSeguirMembroView.as_view(), name='deixar_de_seguir_membro'),
+    path('membro/<int:id>/seguindo/', SeguindoListView.as_view(), name='membro_seguindo'),
+    path('membro/<int:id>/seguidores/', SeguidoresListView.as_view(), name='membro_seguidores'),
 ]
 
 if settings.DEBUG:

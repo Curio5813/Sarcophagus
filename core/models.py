@@ -297,3 +297,16 @@ class Notificacao(models.Model):
 
     def __str__(self):
         return f"{self.remetente} -> {self.destinatario} ({self.tipo})"
+
+
+class Seguir(models.Model):
+    seguidor = models.ForeignKey(Membro, related_name='seguindo', on_delete=models.CASCADE)
+    seguido = models.ForeignKey(Membro, related_name='seguidores', on_delete=models.CASCADE)
+    criado_em = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('seguidor', 'seguido')
+
+    def __str__(self):
+        return f"{self.seguidor} segue {self.seguido}"
+

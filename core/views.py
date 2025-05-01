@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from .forms import ContatoForm, MembroLoginForm, BlogCommentForm, GameCommentForm
-from .models import Membro, GameRating, Tournament, GameComment, Notificacao
+from .models import Membro, GameRating, Tournament, GameComment, Notificacao, Seguir
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.utils import translation
@@ -221,6 +221,14 @@ class MembroDetailView(TemplateView):
         # Buscar jogos favoritos do membro
         jogos_favoritos = GameRating.objects.filter(membro=membro, favorito=True).select_related('game')
         context['jogos_favoritos'] = jogos_favoritos
+
+        seguindo = Membro.objects.filter(seguidores__seguidor=membro)
+        seguidores = Membro.objects.filter(seguindo__seguido=membro)
+        context['seguindo'] = seguindo
+        context['seguidores'] = seguidores
+        context['total_seguindo'] = seguindo.count()
+        context['total_seguidores'] = seguidores.count()
+        context['seguindo'] = seguindo
 
         return context
 
@@ -729,3 +737,48 @@ def responder_comentario(request, comentario_id):
 def marcar_notificacoes_lidas(request):
     Notificacao.objects.filter(destinatario=request.user, lida=False).update(lida=True)
     return JsonResponse({'success': True})
+
+
+class SeguirMembroView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        seguido_id = kwargs.get('id')
+        seguido = get_object_or_404(Membro, id=seguido_id)
+
+        if request.user != seguido:
+            Seguir.objects.get_or_create(seguidor=request.user, seguido=seguido)
+
+        return JsonResponse({'seguindo': True})
+
+
+class DeixarDeSeguirMembroView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        seguido_id = kwargs.get('id')
+        seguido = get_object_or_404(Membro, id=seguido_id)
+
+        Seguir.objects.filter(seguidor=request.user, seguido=seguido).delete()
+
+        return JsonResponse({'seguindo': False})
+
+
+class SeguindoListView(TemplateView):
+    template_name = 'membros/seguindo.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        membro = get_object_or_404(Membro, id=kwargs['id'])
+        seguindo = Membro.objects.filter(seguidores__seguidor=membro)
+        context['membro'] = membro
+        context['seguindo'] = seguindo
+        return context
+
+
+class SeguidoresListView(TemplateView):
+    template_name = 'membros/seguidores.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        membro = get_object_or_404(Membro, id=kwargs['id'])
+        seguidores = Membro.objects.filter(seguindo__seguido=membro)
+        context['membro'] = membro
+        context['seguidores'] = seguidores
+        return context

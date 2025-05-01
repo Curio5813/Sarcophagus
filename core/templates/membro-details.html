@@ -24,6 +24,14 @@
         <div class="member-details">
             <h4 style="font-size: 28px; font-weight: bold; color: #ffb320;">
                 <strong>{{ membro.first_name }} {{ membro.last_name }}</strong>
+                <p style="color: #fff;">
+                    <a href="{% url 'membro_seguindo' membro.id %}" style="color: #fff;">
+                        <strong>{{ total_seguindo }}</strong> seguindo
+                    </a> |
+                    <a href="{% url 'membro_seguidores' membro.id %}" style="color: #fff;">
+                        <strong>{{ total_seguidores }}</strong> seguidores
+                    </a>
+                </p>
             </h4>
             <br>
             <img src="{{ membro.imagem.url }}" alt="{{ membro.membro }}" style="width: 150px; border-radius: 10px;">
@@ -44,6 +52,15 @@
                     <button type="button" id="btn-solicitar-amizade" data-url="{% url 'solicitar_amizade' membro.id %}" title="Solicitar amizade" style="background: none; border: none;">
                         <i class="fas fa-user-plus" style="color: #6c757d; font-size: 24px;"></i>
                     </button>
+                {% endif %}
+            </div>
+
+            <!-- Botão de seguir/deixar de seguir -->
+            <div id="seguir-status">
+                {% if user in membro.seguidores.all %}
+                    <button id="btn-deixar-de-seguir" data-url="{% url 'deixar_de_seguir_membro' membro.id %}" class="btn btn-warning">Deixar de seguir</button>
+                {% else %}
+                    <button id="btn-seguir" data-url="{% url 'seguir_membro' membro.id %}" class="btn btn-outline-light">Seguir</button>
                 {% endif %}
             </div>
             {% endif %}
@@ -107,7 +124,7 @@
 
 {% include 'footer.html' %}
 
-<!-- AJAX para solicitar amizade -->
+<!-- Scripts AJAX para amizade e seguir -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const botao = document.getElementById("btn-solicitar-amizade");
@@ -135,6 +152,56 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    function addSeguirListeners() {
+        const seguirBtn = document.getElementById("btn-seguir");
+        const deixarBtn = document.getElementById("btn-deixar-de-seguir");
+
+        if (seguirBtn) {
+            seguirBtn.addEventListener("click", function () {
+                fetch(seguirBtn.dataset.url, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }).then(() => toggleBtn("seguindo"));
+            });
+        }
+
+        if (deixarBtn) {
+            deixarBtn.addEventListener("click", function () {
+                fetch(deixarBtn.dataset.url, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}",
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                }).then(() => toggleBtn("nao_seguindo"));
+            });
+        }
+    }
+
+    function toggleBtn(state) {
+        const container = document.getElementById("seguir-status");
+        if (state === "seguindo") {
+            container.innerHTML = `<button id="btn-deixar-de-seguir" data-url="${container.dataset.deixarUrl}" class="btn btn-warning">Deixar de seguir</button>`;
+        } else {
+            container.innerHTML = `<button id="btn-seguir" data-url="${container.dataset.seguirUrl}" class="btn btn-outline-light">Seguir</button>`;
+        }
+        addSeguirListeners();
+    }
+
+    const seguirBtn = document.getElementById("btn-seguir");
+    const deixarBtn = document.getElementById("btn-deixar-de-seguir");
+    const container = document.getElementById("seguir-status");
+    if (seguirBtn) container.dataset.seguirUrl = seguirBtn.dataset.url;
+    if (deixarBtn) container.dataset.deixarUrl = deixarBtn.dataset.url;
+
+    addSeguirListeners();
 });
 </script>
 {% endblock %}

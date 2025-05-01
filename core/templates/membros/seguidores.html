@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'latest_news.html' %}
+<section class="page-section community-page">
+  <div class="container">
+    <h3 style="color: #ffb320; font-size: 28px;">Seguidores de @{{ membro.membro }}:</h3>
+    <ul class="favorite-games-list">
+      {% for seguidor in seguidores %}
+      <li class="game-card">
+        <a href="{% url 'membro-details' seguidor.id %}" class="game-link">
+          <div class="game-thumb">
+            <img src="{{ seguidor.imagem.url }}" alt="{{ seguidor.membro }}" width="100" style="border-radius: 10px;">
+          </div>
+          <div class="game-info">
+            <h5>{{ seguidor.first_name }} {{ seguidor.last_name }}</h5>
+            <p>@{{ seguidor.membro }}</p>
+          </div>
+        </a>
+      </li>
+      {% empty %}
+      <p style="color: white;">Este membro ainda não tem seguidores.</p>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% include 'footer.html' %}
+{% endblock %}

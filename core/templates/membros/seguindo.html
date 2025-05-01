@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'latest_news.html' %}
+<section class="page-section community-page">
+  <div class="container">
+    <h3 style="color: #ffb320; font-size: 28px;">@{{ membro.membro }} está seguindo:</h3>
+    <ul class="favorite-games-list">
+      {% for seguido in seguindo %}
+      <li class="game-card">
+        <a href="{% url 'membro-details' seguido.id %}" class="game-link">
+          <div class="game-thumb">
+            <img src="{{ seguido.imagem.url }}" alt="{{ seguido.membro }}" width="100" style="border-radius: 10px;">
+          </div>
+          <div class="game-info">
+            <h5>{{ seguido.first_name }} {{ seguido.last_name }}</h5>
+            <p>@{{ seguido.membro }}</p>
+          </div>
+        </a>
+      </li>
+      {% empty %}
+      <p style="color: white;">Este membro ainda não está seguindo ninguém.</p>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% include 'footer.html' %}
+{% endblock %}
