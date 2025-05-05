@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from .forms import ContatoForm, MembroLoginForm, BlogCommentForm, GameCommentForm
-from .models import Membro, GameRating, Tournament, GameComment, Notificacao, Seguir
+from .models import Membro, GameRating, Tournament, GameComment, Notificacao, Seguir, Mensagem
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.utils import translation
@@ -782,3 +782,29 @@ class SeguidoresListView(TemplateView):
         context['membro'] = membro
         context['seguidores'] = seguidores
         return context
+
+
+class CaixaEntradaView(ListView):
+    model = Mensagem
+    template_name = 'mensagens/caixa_entrada.html'
+    context_object_name = 'mensagens'
+
+    def get_queryset(self):
+        return Mensagem.objects.filter(destinatario=self.request.user).select_related('remetente').order_by('-enviada_em')
+
+    def get(self, request, *args, **kwargs):
+        # Marcar mensagens como lidas
+        Mensagem.objects.filter(destinatario=request.user, lida=False).update(lida=True)
+        return super().get(request, *args, **kwargs)
+
+
+class EnviarMensagemView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        destinatario_id = kwargs.get('id')
+        conteudo = request.POST.get('conteudo')
+
+        destinatario = get_object_or_404(Membro, id=destinatario_id)
+        if destinatario != request.user and conteudo.strip():
+            Mensagem.objects.create(remetente=request.user, destinatario=destinatario, conteudo=conteudo)
+            messages.success(request, "Mensagem enviada com sucesso.")
+        return redirect('membro-details', id=destinatario_id)

@@ -1,4 +1,4 @@
-from .models import BlogPost, BlogComment, Notificacao
+from .models import BlogPost, BlogComment, Notificacao, Mensagem
 from django.core.cache import cache
 import feedparser
 from .models import Amizade
@@ -60,3 +60,10 @@ def notificacoes_context(request):
         notificacoes_nao_lidas = Notificacao.objects.filter(destinatario=request.user, lida=False).select_related('remetente')[:5]
         return {'notificacoes_nao_lidas': notificacoes_nao_lidas}
     return {}
+
+
+def mensagens_nao_lidas_context(request):
+    if request.user.is_authenticated:
+        mensagens_nao_lidas = Mensagem.objects.filter(destinatario=request.user, lida=False)
+        return {'mensagens_nao_lidas': mensagens_nao_lidas}
+    return {'mensagens_nao_lidas': []}

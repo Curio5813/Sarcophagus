@@ -310,3 +310,14 @@ class Seguir(models.Model):
     def __str__(self):
         return f"{self.seguidor} segue {self.seguido}"
 
+
+class Mensagem(models.Model):
+    remetente = models.ForeignKey(Membro, on_delete=models.CASCADE, related_name='mensagens_enviadas')
+    destinatario = models.ForeignKey(Membro, on_delete=models.CASCADE, related_name='mensagens_recebidas')
+    conteudo = models.TextField()
+    enviada_em = models.DateTimeField(auto_now_add=True)
+    lida = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-enviada_em']
+

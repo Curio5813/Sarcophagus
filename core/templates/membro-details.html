@@ -64,7 +64,13 @@
                 {% endif %}
             </div>
             {% endif %}
-
+            {% if user != membro %}
+            <form action="{% url 'enviar_mensagem' membro.id %}" method="POST">
+                {% csrf_token %}
+                <textarea name="conteudo" placeholder="Escreva uma mensagem..." rows="3" required></textarea>
+                <button type="submit" class="site-btn">Enviar</button>
+            </form>
+            {% endif %}
             <div>
                 <p><strong>Email:</strong> {{ membro.email }}</p>
                 <p><strong>Idade:</strong> {{ membro.idade }} anos</p>

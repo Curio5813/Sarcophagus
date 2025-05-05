@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'latest_news.html' %}
+<div class="container mt-5">
+    <h2>Caixa de Entrada</h2>
+    {% if mensagens %}
+        {% for msg in mensagens %}
+            <div class="message-box" style="border: 1px solid #ccc; padding: 15px; margin-bottom: 15px; border-radius: 8px;">
+                <div style="display: flex; align-items: center;">
+                    <img src="{% if msg.remetente.imagem %}{{ msg.remetente.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+                         alt="{{ msg.remetente.membro }}" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                    <strong>
+                        <a href="{% url 'membro-details' msg.remetente.id %}">{{ msg.remetente.membro }}</a>
+                    </strong>
+                    <span style="margin-left: auto; font-size: 0.9em; color: #999;">{{ msg.enviada_em|timesince }} atrás</span>
+                </div>
+                <p style="margin-top: 10px;">{{ msg.conteudo }}</p>
+                <strong>Data:</strong> {{ msg.enviada_em|date:"d/m/Y H:i" }}<br>
+            </div>
+        {% endfor %}
+
+        <!-- Botão fora do loop -->
+        <div style="text-align: left; margin-top: 30px;">
+            <a href="{% url 'community' %}" class="site-btn">Nova mensagem</a>
+        </div>
+
+    {% else %}
+        <p>Você não tem mensagens.</p>
+    {% endif %}
+</div>
+{% include 'footer.html' %}
+{% endblock %}

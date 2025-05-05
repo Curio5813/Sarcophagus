@@ -8,7 +8,7 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     MembroEditView, autocomplete_games, logout_view,
                     SolicitarAmizadeView, AceitarAmizadeView, SolicitacoesPendentesView,
                     marcar_notificacoes_lidas, SeguirMembroView, DeixarDeSeguirMembroView,
-                    SeguindoListView, SeguidoresListView)
+                    SeguindoListView, SeguidoresListView, CaixaEntradaView, EnviarMensagemView)
 from .views import (BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView,
                     curtir_comentario, responder_comentario, editar_comentario, excluir_comentario)
 from django.shortcuts import redirect
@@ -57,6 +57,8 @@ urlpatterns = [
     path('membro/<int:id>/deixar_de_seguir/', DeixarDeSeguirMembroView.as_view(), name='deixar_de_seguir_membro'),
     path('membro/<int:id>/seguindo/', SeguindoListView.as_view(), name='membro_seguindo'),
     path('membro/<int:id>/seguidores/', SeguidoresListView.as_view(), name='membro_seguidores'),
+    path('mensagens/', CaixaEntradaView.as_view(), name='caixa_entrada'),
+    path('mensagem/enviar/<int:id>/', EnviarMensagemView.as_view(), name='enviar_mensagem'),
 ]
 
 if settings.DEBUG:

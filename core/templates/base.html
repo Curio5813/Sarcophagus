@@ -47,6 +47,16 @@
 				<div class="user-panel">
 					{% if user.is_authenticated %}
 						<div style="position: relative; display: inline-block; margin-left: 10px;">
+							<a href="{% url 'caixa_entrada' %}">
+								<img src="{% static 'img/envelope_icone001.png' %}" alt="Mensagens"
+									 width="50"
+									 style="filter: {% if mensagens_nao_lidas %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
+								{% if mensagens_nao_lidas %}
+									<span class="amizade-badge">{{ mensagens_nao_lidas.count }}</span>
+								{% endif %}
+							</a>
+						</div>
+						<div style="position: relative; display: inline-block; margin-left: 10px;">
 							<a href="#" id="notificacaoToggle">
 								<img id="iconeNotificacao" src="{% static 'img/globo_icone001.png' %}" alt="Notificações"
 									 style="width: 50px; filter: {% if notificacoes_nao_lidas %}none{% else %}grayscale(100%) opacity(50%){% endif %};">

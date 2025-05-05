@@ -82,7 +82,8 @@ TEMPLATES = [
                 'core.context_processors.latest_comments',
                 'core.context_processors.fs_rss_feed',
                 'core.context_processors.solicitacoes_pendentes_context',
-                'core.context_processors.notificacoes_context'
+                'core.context_processors.notificacoes_context',
+                'core.context_processors.mensagens_nao_lidas_context'
             ],
         },
     },
