@@ -798,7 +798,10 @@ class CaixaEntradaView(TemplateView):
             mensagens = Mensagem.objects.filter(
                 Q(remetente_id=remetente_id, destinatario=user) |
                 Q(remetente=user, destinatario_id=remetente_id)
-            ).order_by('enviada_em')  # do mais antigo para o mais recente
+            ).order_by('enviada_em')
+
+            # Marcar como lidas
+            Mensagem.objects.filter(remetente_id=remetente_id, destinatario=user, lida=False).update(lida=True)
 
         remetentes = (
             Mensagem.objects
