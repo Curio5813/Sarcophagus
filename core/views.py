@@ -793,9 +793,12 @@ class CaixaEntradaView(TemplateView):
 
         remetente_id = self.request.GET.get('remetente')
 
-        mensagens = Mensagem.objects.filter(destinatario=user)
+        mensagens = Mensagem.objects.none()
         if remetente_id:
-            mensagens = mensagens.filter(remetente_id=remetente_id)
+            mensagens = Mensagem.objects.filter(
+                Q(remetente_id=remetente_id, destinatario=user) |
+                Q(remetente=user, destinatario_id=remetente_id)
+            ).order_by('enviada_em')  # do mais antigo para o mais recente
 
         remetentes = (
             Mensagem.objects
