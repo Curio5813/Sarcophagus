@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import json
-from django.db.models import Q
+from django.db.models import Q, Count
 from django import forms
 from django.db.models import Avg
 from django.contrib.auth.decorators import user_passes_test
@@ -784,18 +784,30 @@ class SeguidoresListView(TemplateView):
         return context
 
 
-class CaixaEntradaView(ListView):
-    model = Mensagem
+class CaixaEntradaView(TemplateView):
     template_name = 'mensagens/caixa_entrada.html'
-    context_object_name = 'mensagens'
 
-    def get_queryset(self):
-        return Mensagem.objects.filter(destinatario=self.request.user).select_related('remetente').order_by('-enviada_em')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
 
-    def get(self, request, *args, **kwargs):
-        # Marcar mensagens como lidas
-        Mensagem.objects.filter(destinatario=request.user, lida=False).update(lida=True)
-        return super().get(request, *args, **kwargs)
+        remetente_id = self.request.GET.get('remetente')
+
+        mensagens = Mensagem.objects.filter(destinatario=user)
+        if remetente_id:
+            mensagens = mensagens.filter(remetente_id=remetente_id)
+
+        remetentes = (
+            Mensagem.objects
+            .filter(destinatario=user)
+            .order_by('remetente__id')  # importante: precisa ordenar pelo campo que será usado no distinct
+            .distinct('remetente__id')
+            .values('remetente__id', 'remetente__imagem')
+        )
+
+        context['mensagens'] = mensagens.order_by('-enviada_em')
+        context['remetentes'] = remetentes
+        return context
 
 
 class EnviarMensagemView(LoginRequiredMixin, View):

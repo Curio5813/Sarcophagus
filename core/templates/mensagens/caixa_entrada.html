@@ -2,38 +2,48 @@
 {% load static %}
 {% block content %}
 {% include 'latest_news.html' %}
+
 <div class="container mt-5">
     <h2 class="section-title">Caixa de Entrada</h2>
 
-    {% if mensagens %}
-        {% for msg in mensagens %}
-            <div class="sarc-card mb-4 p-4 rounded-xl shadow {% if not msg.lida %}border border-yellow-500 bg-[#2a2a1e]{% else %}bg-[#1e1e1e]{% endif %}">
-                <div class="flex items-center mb-3">
-                    <img src="{% if msg.remetente.imagem %}{{ msg.remetente.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
-                         alt="{{ msg.remetente.membro }}"
-                         class="w-10 h-10 rounded-full mr-3 border border-gray-500">
-
-                    <div class="flex-1">
-                        <a href="{% url 'membro-details' msg.remetente.id %}" class="text-white font-semibold hover:underline">
-                            {{ msg.remetente.membro }}
-                        </a>
-                        <div class="text-sm text-gray-400">{{ msg.enviada_em|timesince }} atrás</div>
-                    </div>
-                </div>
-
-                <p class="text-gray-200 mb-2">{{ msg.conteudo }}</p>
-                <div class="text-sm text-gray-400">Data: {{ msg.enviada_em|date:"d/m/Y H:i" }}</div>
-            </div>
+    <!-- Avatares dos remetentes -->
+    <div class="flex flex-wrap items-center gap-3 mb-6">
+        {% for r in remetentes %}
+            <a href="?remetente={{ r.remetente__id }}" title="Ver mensagens deste membro">
+                <img src="{% if r.remetente__imagem %}{{ r.remetente__imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+                     class="w-12 h-12 rounded-full border-2 border-gray-500 hover:border-yellow-500 transition"
+                     alt="Remetente">
+            </a>
         {% endfor %}
+    </div>
 
-        <!-- Botão fora do loop -->
-        <div class="mt-6">
-            <a href="{% url 'community' %}" class="site-btn">Nova mensagem</a>
-        </div>
-
+    <!-- Mensagens só aparecem se um remetente foi selecionado -->
+    {% if request.GET.remetente %}
+        {% if mensagens %}
+            {% for msg in mensagens %}
+                <div class="sarc-card mb-4 p-4 rounded-xl shadow {% if not msg.lida %}border border-yellow-500 bg-[#2a2a1e]{% else %}bg-[#1e1e1e]{% endif %}">
+                    <div class="flex items-center mb-3">
+                        <img src="{% if msg.remetente.imagem %}{{ msg.remetente.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+                             alt="{{ msg.remetente.membro }}"
+                             class="w-10 h-10 rounded-full mr-3 border border-gray-500">
+                        <div class="flex-1">
+                            <a href="{% url 'membro-details' msg.remetente.id %}" class="text-white font-semibold hover:underline">
+                                {{ msg.remetente.membro }}
+                            </a>
+                            <div class="text-sm text-gray-400">{{ msg.enviada_em|timesince }} atrás</div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 mb-2">{{ msg.conteudo }}</p>
+                    <div class="text-sm text-gray-400">Data: {{ msg.enviada_em|date:"d/m/Y H:i" }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-gray-400">Nenhuma mensagem encontrada para este remetente.</p>
+        {% endif %}
     {% else %}
-        <p class="text-gray-400">Você não tem mensagens.</p>
+        <p class="text-gray-400">Clique em um avatar para visualizar as mensagens desse membro.</p>
     {% endif %}
 </div>
+
 {% include 'footer.html' %}
 {% endblock %}
