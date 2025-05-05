@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from .forms import ContatoForm, MembroLoginForm, BlogCommentForm, GameCommentForm
-from .models import Membro, GameRating, Tournament, GameComment, Notificacao, Seguir, Mensagem
+from .models import Membro, GameRating, Tournament, Notificacao, Seguir, Mensagem
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.utils import translation
@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 import json
-from django.db.models import Q, Count
+from django.db.models import Q
 from django import forms
 from django.db.models import Avg
 from django.contrib.auth.decorators import user_passes_test
