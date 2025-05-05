@@ -7,15 +7,15 @@
     <h2 class="section-title mb-6">Caixa de Entrada</h2>
 
     <div class="flex gap-6">
-        <!-- Coluna de Avatares -->
+        <!-- Avatares dos remetentes -->
         <div class="w-1/5">
-            <div class="flex flex-col items-center gap-5">
+            <div class="flex flex-col gap-5 items-center">
                 {% for r in remetentes %}
-                    <a href="?remetente={{ r.remetente__id }}" class="group text-center">
+                    <a href="?remetente={{ r.remetente__id }}" class="text-center group">
                         <img src="{% if r.remetente__imagem %}{{ r.remetente__imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
-                             class="w-12 h-12 rounded-full border border-gray-500 group-hover:border-yellow-500 transition mx-auto"
-                             alt="Remetente">
-                        <div class="text-xs text-white mt-1 truncate w-16">
+                             class="w-8 h-8 rounded-full border-2 border-gray-500 group-hover:border-yellow-500 transition mx-auto"
+                             alt="Remetente" style="width: 60px; height: 60px; border-radius: 50%;">
+                        <div class="text-white text-xs mt-1 truncate w-16">
                             {{ r.remetente__membro }}
                         </div>
                     </a>
@@ -23,28 +23,20 @@
             </div>
         </div>
 
-        <!-- Coluna de Conversa -->
+        <!-- Conversa exibida apenas se houver mensagens -->
         <div class="w-4/5">
             {% if mensagens %}
                 <div class="flex flex-col gap-4">
-                    {% for msg in mensagens %}
-                        <div class="flex {% if msg.remetente == request.user %}justify-end{% else %}justify-start{% endif %}">
-                            {% if msg.remetente != request.user %}
-                                <img src="{% if msg.remetente.imagem %}{{ msg.remetente.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
-                                     class="w-8 h-8 rounded-full mr-2 border border-gray-500"
-                                     alt="{{ msg.remetente.membro }}">
-                            {% endif %}
-
-                            <div class="bg-[#2a2a1e] text-white p-3 rounded-xl max-w-md shadow">
+                    {% for msg in mensagens|dictsort:"enviada_em" %}
+                        <div class="flex items-start gap-3 {% if msg.remetente == request.user %}justify-end flex-row-reverse{% endif %}">
+                            <img src="{% if msg.remetente.imagem %}{{ msg.remetente.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
+                                 class="w-7 h-7 rounded-full border border-gray-500"
+                                 alt="{{ msg.remetente.membro }}"
+                                 style="width: 28px; height: 28px; border-radius: 50%;">
+                            <div class="bg-[#2a2a1e] text-white p-3 rounded-xl max-w-xs shadow">
                                 <p>{{ msg.conteudo }}</p>
                                 <div class="text-xs text-gray-400 mt-1">{{ msg.enviada_em|timesince }} atrás</div>
                             </div>
-
-                            {% if msg.remetente == request.user %}
-                                <img src="{% if request.user.imagem %}{{ request.user.imagem.url }}{% else %}{% static 'img/default-avatar.png' %}{% endif %}"
-                                     class="w-8 h-8 rounded-full ml-2 border border-gray-500"
-                                     alt="{{ request.user.membro }}">
-                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>
