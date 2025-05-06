@@ -42,7 +42,7 @@
 						<button id="search-toggle" style="background: none; border: none;">
 							<i class="fas fa-search" style="font-size: 24px; color: gray;"></i>
 						</button>
-						<div id="search-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: #131313; padding: 10px; border-radius: 8px; z-index: 999;">
+						<div id="search-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: rgba(255, 102, 0, 0.1); backdrop-filter: blur(4px); padding: 10px; border-radius: 8px; z-index: 999; border: 1px solid rgba(255, 102, 0, 0.3);">
 							<form action="{% url 'game_search' %}" method="GET" class="search-form">
 								<input type="text" id="search-game" name="q" placeholder="Search games..." autocomplete="off" style="width: 200px; padding: 5px;">
 								<button type="submit"><i class="fas fa-search"></i></button>
