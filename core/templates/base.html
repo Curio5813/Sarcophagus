@@ -37,14 +37,19 @@
 				<a class="site-logo" href="{% url 'index' %}">
 					<img src="{% static 'img/logo7.png' %}" alt="Logo">
 				</a>
-				<div class="search-container">
-					<form action="{% url 'game_search' %}" method="GET" class="search-form">
-						<input type="text" id="search-game" name="q" placeholder="Search games..." autocomplete="off">
-						<button type="submit"><i class="fas fa-search"></i></button>
-					</form>
-					<ul id="autocomplete-results" class="autocomplete-list"></ul>
-				</div>
 				<div class="user-panel">
+					<div class="search-dropdown-wrapper" style="position: relative;">
+						<button id="search-toggle" style="background: none; border: none;">
+							<i class="fas fa-search" style="font-size: 24px; color: gray;"></i>
+						</button>
+						<div id="search-dropdown" style="display: none; position: absolute; top: 100%; right: 0; background: #131313; padding: 10px; border-radius: 8px; z-index: 999;">
+							<form action="{% url 'game_search' %}" method="GET" class="search-form">
+								<input type="text" id="search-game" name="q" placeholder="Search games..." autocomplete="off" style="width: 200px; padding: 5px;">
+								<button type="submit"><i class="fas fa-search"></i></button>
+							</form>
+							<ul id="autocomplete-results" class="autocomplete-list"></ul>
+						</div>
+					</div>
 					{% if user.is_authenticated %}
 						<div style="position: relative; display: inline-block; margin-left: 10px;">
 							<a href="{% url 'caixa_entrada' %}">
@@ -124,6 +129,27 @@
 	<script src="{% static 'js/jquery.marquee.min.js' %}"></script>
 	<script src="{% static 'js/main.js' %}"></script>
 
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		const toggleBtn = document.getElementById("search-toggle");
+		const dropdown = document.getElementById("search-dropdown");
+
+		toggleBtn.addEventListener("click", function (e) {
+			e.stopPropagation();
+			dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
+		});
+
+		// Fecha o dropdown ao clicar fora
+		document.addEventListener("click", function () {
+			dropdown.style.display = "none";
+		});
+
+		// Evita que clique dentro do dropdown o feche
+		dropdown.addEventListener("click", function (e) {
+			e.stopPropagation();
+		});
+	});
+	</script>
 	<script>
 		const currentUrl = window.location.href;
 		const navLinks = document.querySelectorAll('.main-menu ul li a');
