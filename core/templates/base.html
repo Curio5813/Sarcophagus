@@ -74,7 +74,7 @@
 						<div style="position: relative; display: inline-block; margin-left: 10px;">
 							<a href="#" id="notificacaoToggle">
 								<img id="iconeNotificacao" src="{% static 'img/globo_icone001.png' %}" alt="Notificações"
-									 style="width: 50px; filter: {% if notificacoes_nao_lidas %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
+									 style="filter: {% if notificacoes_nao_lidas %}none{% else %}grayscale(100%) opacity(50%){% endif %};">
 								{% if notificacoes_nao_lidas %}
 									<span id="badgeNotificacao" class="amizade-badge">{{ notificacoes_nao_lidas.count }}</span>
 								{% endif %}
