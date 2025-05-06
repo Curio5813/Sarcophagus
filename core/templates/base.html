@@ -35,8 +35,18 @@
 		<div class="container">
 			<div class="header-content">
 				<a class="site-logo" href="{% url 'index' %}">
-					<img src="{% static 'img/logo7.png' %}" alt="Logo">
+					<img src="{% static 'img/logo7.png' %}" alt="Logo" style="width: 280px; height: auto;">
 				</a>
+				<nav class="main-menu">
+					<ul>
+						<li><a class="nostalgia-text" href="{% url 'index' %}">{% trans 'Start' %}</a></li>
+						<li><a class="nostalgia-text" href="{% url 'reviews' %}">{% trans 'Reviews' %}</a></li>
+						<li><a class="nostalgia-text" href="{% url 'games' %}">{% trans 'Games' %}</a></li>
+						<li><a class="nostalgia-text" href="{% url 'community' %}">{% trans 'Community' %}</a></li>
+						<li><a class="nostalgia-text" href="{% url 'blog' %}">{% trans 'Blog' %}</a></li>
+						<li><a class="nostalgia-text" href="{% url 'contact' %}">{% trans 'Contact' %}</a></li>
+					</ul>
+				</nav>
 				<div class="user-panel">
 					<div class="search-dropdown-wrapper" style="position: relative;">
 						<button id="search-toggle" style="background: none; border: none;">
@@ -107,17 +117,6 @@
 					{% endif %}
 				</div>
 			</div>
-
-			<nav class="main-menu">
-				<ul>
-					<li><a class="nostalgia-text" href="{% url 'index' %}">{% trans 'Start' %}</a></li>
-					<li><a class="nostalgia-text" href="{% url 'reviews' %}">{% trans 'Reviews' %}</a></li>
-					<li><a class="nostalgia-text" href="{% url 'games' %}">{% trans 'Games' %}</a></li>
-					<li><a class="nostalgia-text" href="{% url 'community' %}">{% trans 'Community' %}</a></li>
-					<li><a class="nostalgia-text" href="{% url 'blog' %}">{% trans 'Blog' %}</a></li>
-					<li><a class="nostalgia-text" href="{% url 'contact' %}">{% trans 'Contact' %}</a></li>
-				</ul>
-			</nav>
 		</div>
 	</header>
 

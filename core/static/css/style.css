@@ -271,14 +271,10 @@
     ---------------------*/
 
     .header-content {
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* Distribui os elementos */
-        width: 100%; /* Garante que ocupa toda a largura disponível */
-        max-width: 1200px; /* Mantém um limite */
-        margin: 0 auto;
-        padding: 10px 20px; /* Adiciona padding para evitar elementos colados */
-        box-sizing: border-box; /* Garante que padding não afete largura total */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     }
 
     /* Estilo da Logo */
@@ -385,12 +381,10 @@
 
     /* Painel do Usuário - Alinhado à Direita */
     .user-panel {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        gap: 20px;
-        z-index: 100; /* 🔥 Garante que o avatar fique na frente da pesquisa */
-        position: relative; /* 🔥 Evita que seja escondido */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
     }
 
     /* Garante que o avatar sempre apareça */
@@ -419,15 +413,16 @@
     }
 
     .main-menu {
-        width: 100vw; /* Garante que ocupa toda a largura da tela */
-        height: auto; /* Ajustável conforme o conteúdo */
-        /*background-color: #5A6978;*/
-        padding: 10px 0;
-        display: flex;
-        justify-content: center; /* Centraliza os itens horizontalmente */
-        align-items: center; /* Alinha os itens verticalmente */
-        text-align: center;
-        position: relative; /* Mantém dentro do fluxo normal */
+    flex: 1; /* Ocupa todo o espaço restante disponível */
+    height: auto;
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    flex-wrap: wrap; /* Permite quebrar em telas pequenas */
+    min-width: 0; /* Impede o overflow horizontal */
     }
 
     .main-menu ul {
@@ -2619,4 +2614,5 @@
     .like-btn i {
         color: red;
     }
+
 
