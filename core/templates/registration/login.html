@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load socialaccount %}
-
 {% block content %}
+{% include 'latest_news.html' %}
 <div class="page-spacing">
-    {% include 'latest_news.html' %}
-
     <div class="background-image-login">
         <img src="{% static 'img/login-bg.jpg' %}" alt="Login Background" class="login-bg">
 
@@ -23,7 +21,6 @@
             </a>
         </div>
     </div>
-
-    {% include 'footer.html' %}
 </div>
+{% include 'footer.html' %}
 {% endblock %}
