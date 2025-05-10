@@ -267,6 +267,12 @@ animation: loader 0.8s linear infinite;
     HEADER SECTION
 ---------------------*/
 
+.header-section {
+margin: 0;
+padding: 0;
+background-color: #252525;
+}
+
 .header-content {
 display: flex;
 align-items: center;
