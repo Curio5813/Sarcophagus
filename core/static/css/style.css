@@ -269,7 +269,7 @@ animation: loader 0.8s linear infinite;
 
 .header-section {
 margin: 0px   ;
-padding: 3px;
+padding: 4px;
 background-color: #252525;
 }
 
@@ -287,7 +287,7 @@ justify-content: flex-start;
 
 .site-logo img {
 width: auto;      /* Mantém a proporção */
-height: 50px;     /* Ajuste conforme necessário */
+height: 40px;     /* Ajuste conforme necessário */
 object-fit: contain; /* Garante que a imagem não seja cortada */
 }
 
