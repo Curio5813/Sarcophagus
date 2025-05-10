@@ -145,10 +145,6 @@ color: #fbb710;
 color: #e0e3e4;
 }
 
-/*-----------------------
-    COMMOM ELEMENTS
------------------------*/
-
 /*---------------------
       BUTTONS
 ----------------------*/
@@ -278,10 +274,6 @@ justify-content: space-between;
 flex-wrap: wrap;
 }
 
-/*-----------------------
-    ESTILO DO LOGO
------------------------*/
-
 .site-logo {
 display: flex;
 justify-content: flex-start;
@@ -294,14 +286,14 @@ object-fit: contain; /* Garante que a imagem não seja cortada */
 }
 
 .search-container {
-position: relative; /* 🔥 Mantém a posição relativa para a lista de sugestões */
+position: relative; /* Mantém a posição relativa para a lista de sugestões */
 display: flex;
-justify-content: center; /* 🔥 Centraliza a barra de pesquisa */
-align-items: center; /* 🔥 Garante alinhamento correto */
+justify-content: center; /* Centraliza a barra de pesquisa */
+align-items: center; /* Garante alinhamento correto */
 width: 100%;
-max-width: 350px; /* 🔥 Ajuste conforme necessário */
-margin: 0 auto; /* 🔥 Centraliza dentro do layout */
-z-index: 10; /* 🔥 Garante que fique acima de outros elementos */
+max-width: 350px; /* Ajuste conforme necessário */
+margin: 0 auto; /* Centraliza dentro do layout */
+z-index: 10; /* Garante que fique acima de outros elementos */
 }
 
 .search-form {
@@ -363,10 +355,6 @@ margin: 0;
 display: none; /* Evita que a lista reserve espaço antes da exibição */
 }
 
-/*--------------------------------------------------
-    QUANDO A LISTA TIVER SUGESTÕES ELA APARECE
---------------------------------------------------*/
-
 .autocomplete-list.show {
 display: block;
 }
@@ -384,10 +372,6 @@ transition: background 0.2s ease;
 background: #ffb320;
 color: white;
 }
-
-/*--------------------------
-    PAINEL DO USUÁRIO
---------------------------*/
 
 .user-panel {
 display: flex;
@@ -469,6 +453,58 @@ margin-right: 0;
 
 .nav-switch {
 display: none;
+}
+
+.dropdown {
+position: relative;
+display: inline-block;
+}
+
+.dropdown-toggle {
+background: none;
+border: none;
+cursor: pointer;
+padding: 0;
+}
+
+.dropdown-toggle img {
+width: 40px;
+height: 40px;
+border-radius: 50%;
+object-fit: cover;
+border: 2px solid #ffb320;
+margin-top: 24px;
+}
+
+.dropdown-menu {
+position: absolute;
+top: 100%; /* logo abaixo do botão */
+left: 50%; /* centraliza horizontalmente */
+transform: translateX(-50%); /* corrige o alinhamento */
+background-color: #ffffff;
+padding: 10px;
+border-radius: 8px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+z-index: 999;
+min-width: 150px; /* ou ajusta conforme necessário */
+}
+
+.dropdown-menu .dropdown-item {
+color: #131313;
+padding: 12px 16px;
+text-decoration: none;
+display: block;
+font-weight: bold;
+transition: background 0.3s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+background-color: #ffb320;
+color: #fff;
+}
+
+.dropdown:hover .dropdown-menu {
+display: block;
 }
 
 /*---------------------
@@ -1498,9 +1534,9 @@ color: #ffb320;
 margin-bottom: 5px;
 }
 
-/*===============================
+/*-------------------------------
    ESTILOS PARA JOGOS FAVORITOS
-===============================*/
+--------------------------------*/
 
 .favorite-games-list {
 display: flex; /* Permite que os itens fiquem um ao lado do outro */
@@ -1618,9 +1654,9 @@ margin-left: 10px;
 margin-right: 20px;
 }
 
-/*------------------
+/*======================
     REPONSIVIDADE
----------------------*/
+=======================*/
 
 @media (min-width: 1200px) {
     .container {
@@ -1982,7 +2018,7 @@ margin-right: 8px;
 }
 
 /*------------------------------------------------
-Estilos para a Página de Resultados da Busca
+    Estilos para a Página de Resultados da Busca
 ------------------------------------------------*/
 
 .search-results-container {
@@ -2368,62 +2404,6 @@ transition: transform 0.3s ease;
 
 .recent-game-item:hover {
 transform: translateY(-5px);
-}
-
-/*------------------------
-    PAGE EDIT PERFIL
--------------------------*/
-
-.dropdown {
-position: relative;
-display: inline-block;
-}
-
-.dropdown-toggle {
-background: none;
-border: none;
-cursor: pointer;
-padding: 0;
-}
-
-.dropdown-toggle img {
-width: 40px;
-height: 40px;
-border-radius: 50%;
-object-fit: cover;
-border: 2px solid #ffb320;
-margin-top: 24px;
-}
-
-.dropdown-menu {
-position: absolute;
-top: 100%; /* logo abaixo do botão */
-left: 50%; /* centraliza horizontalmente */
-transform: translateX(-50%); /* corrige o alinhamento */
-background-color: #ffffff;
-padding: 10px;
-border-radius: 8px;
-box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-z-index: 999;
-min-width: 150px; /* ou ajusta conforme necessário */
-}
-
-.dropdown-menu .dropdown-item {
-color: #131313;
-padding: 12px 16px;
-text-decoration: none;
-display: block;
-font-weight: bold;
-transition: background 0.3s;
-}
-
-.dropdown-menu .dropdown-item:hover {
-background-color: #ffb320;
-color: #fff;
-}
-
-.dropdown:hover .dropdown-menu {
-display: block;
 }
 
 /*---------------------------------------
