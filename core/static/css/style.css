@@ -269,7 +269,7 @@ animation: loader 0.8s linear infinite;
 
 .header-section {
 margin: 0px   ;
-padding: 0px;
+padding: 1px;
 background-color: #252525;
 }
 
