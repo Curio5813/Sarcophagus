@@ -348,3 +348,4 @@ class SystemRequirement(models.Model):
 
     def __str__(self):
         return f"Requisitos de {self.game.game}"
+

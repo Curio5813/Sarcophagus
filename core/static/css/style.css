@@ -2621,12 +2621,17 @@ margin-bottom: 0px;
 ------------------------------*/
 
 .system-requirements {
-    background-color: #3b4758; /* fundo cinza azulado */
+    background-color: #e2e8f0; /* cinza bem claro */
     padding: 30px;
     border-radius: 12px;
     margin-top: 50px;
-    color: #e2e8f0;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+    color: #1e293b; /* azul petróleo escuro */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.system-requirements h3 {
+    color: #000000; /* Título em preto */
+    margin-bottom: 20px;
 }
 
 .requirements-wrapper {
@@ -2638,19 +2643,19 @@ margin-bottom: 0px;
 
 .requirement-card {
     width: 50%;
-    background-color: #4c5a6a;
+    background-color: #f8fafc; /* quase branco */
     padding: 20px 25px;
     border-radius: 10px;
-    color: #f1f5f9;
-    border: 1px solid #5e6d7f;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    color: #1e293b; /* azul escuro para o texto */
+    border: 1px solid #cbd5e1;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
 .requirement-card h5 {
-    color: #ffc107;
+    color: #0f172a; /* azul grafite */
     margin-bottom: 12px;
     font-size: 18px;
-    border-bottom: 1px solid #5e6d7f;
+    border-bottom: 1px solid #cbd5e1;
     padding-bottom: 5px;
 }
 
@@ -2659,6 +2664,12 @@ margin-bottom: 0px;
     padding: 0;
     margin: 0;
 }
+
+.requirement-card li {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
 
 .requirement-card li {
     margin-bottom: 10px;
