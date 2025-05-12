@@ -67,6 +67,36 @@
         <p>{{ game.conclusion }}</p>
     </div>
 
+    {% if game.requisitos %}
+    <div class="system-requirements">
+        <h3 class="text-white">System Requirements</h3>
+        <div class="requirements-wrapper">
+            <div class="requirement-card">
+                <h5>Minimum</h5>
+                <ul>
+                    <li><strong>OS:</strong> {{ game.requisitos.so_min|default:"-" }}</li>
+                    <li><strong>CPU:</strong> {{ game.requisitos.cpu_min|default:"-" }}</li>
+                    <li><strong>RAM:</strong> {{ game.requisitos.ram_min|default:"-" }}</li>
+                    <li><strong>GPU:</strong> {{ game.requisitos.gpu_min|default:"-" }}</li>
+                    <li><strong>Storage:</strong> {{ game.requisitos.armazenamento_min|default:"-" }}</li>
+                    <li><strong>Audio:</strong> {{ game.requisitos.audio_min|default:"-" }}</li>
+                </ul>
+            </div>
+            <div class="requirement-card">
+                <h5>Recommended</h5>
+                <ul>
+                    <li><strong>OS:</strong> {{ game.requisitos.so_rec|default:"-" }}</li>
+                    <li><strong>CPU:</strong> {{ game.requisitos.cpu_rec|default:"-" }}</li>
+                    <li><strong>RAM:</strong> {{ game.requisitos.ram_rec|default:"-" }}</li>
+                    <li><strong>GPU:</strong> {{ game.requisitos.gpu_rec|default:"-" }}</li>
+                    <li><strong>Storage:</strong> {{ game.requisitos.armazenamento_rec|default:"-" }}</li>
+                    <li><strong>Audio:</strong> {{ game.requisitos.audio_rec|default:"-" }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Caixa de comentários -->
     <div class="comment-box">
         <h3>Comments</h3>

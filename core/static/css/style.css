@@ -2614,3 +2614,71 @@ color: red;
 margin-top: 0px;
 margin-bottom: 0px;
 }
+
+
+/*------------------------------
+    REQUISITOS DO SISTEMA
+------------------------------*/
+
+.system-requirements {
+    background-color: #3b4758; /* fundo cinza azulado */
+    padding: 30px;
+    border-radius: 12px;
+    margin-top: 50px;
+    color: #e2e8f0;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.35);
+}
+
+.requirements-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 30px;
+}
+
+.requirement-card {
+    width: 50%;
+    background-color: #4c5a6a;
+    padding: 20px 25px;
+    border-radius: 10px;
+    color: #f1f5f9;
+    border: 1px solid #5e6d7f;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.requirement-card h5 {
+    color: #ffc107;
+    margin-bottom: 12px;
+    font-size: 18px;
+    border-bottom: 1px solid #5e6d7f;
+    padding-bottom: 5px;
+}
+
+.requirement-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.requirement-card li {
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+
+.requirement-card h5 {
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #ffc107; /* amarelo ouro sutil */
+}
+
+.requirement-card ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.requirement-card li {
+    margin-bottom: 10px;
+    font-size: 15px;
+}

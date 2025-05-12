@@ -9,6 +9,7 @@ import re
 import uuid
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 def get_file_path(instance, filename):
@@ -96,9 +97,6 @@ class Membro(AbstractBaseUser, PermissionsMixin):
         return self.membro if self.membro else self.email
 
 
-from django.db import models
-from django.utils.translation import gettext_lazy as _
-
 class Genero(models.Model):
     class GenreChoices(models.TextChoices):
         ADVENTURE = 'ADVENTURE', _('Adventure')
@@ -163,10 +161,10 @@ class Games(Base):
         is_new = self.pk is None
         super().save(*args, **kwargs)
 
-        # Cria avaliação inicial apenas se for um jogo novo
         if is_new:
-            from .models import Membro, GameRating  # Import interno para evitar erro circular
+            from .models import Membro, GameRating, SystemRequirement
 
+            # Cria avaliação padrão do system user
             try:
                 system_user = Membro.objects.get(email='system@sarcophagus.com')
                 GameRating.objects.create(
@@ -177,6 +175,9 @@ class Games(Base):
                 )
             except Membro.DoesNotExist:
                 print("Usuário 'system@sarcophagus.com' não encontrado. A nota inicial não foi criada.")
+
+            # Cria os requisitos de sistema
+            SystemRequirement.objects.create(game=self)
 
     def __str__(self):
         return self.game
@@ -321,3 +322,29 @@ class Mensagem(models.Model):
     class Meta:
         ordering = ['-enviada_em']
 
+
+class SystemRequirement(models.Model):
+    game = models.OneToOneField(Games, on_delete=models.CASCADE, related_name='requisitos')
+
+    # Campos mínimos
+    so_min = models.CharField(_('SO Mínimo'), max_length=200, blank=True, null=True)
+    cpu_min = models.CharField(_('CPU Mínima'), max_length=200, blank=True, null=True)
+    ram_min = models.CharField(_('RAM Mínima'), max_length=100, blank=True, null=True)
+    gpu_min = models.CharField(_('GPU Mínima'), max_length=200, blank=True, null=True)
+    armazenamento_min = models.CharField(_('Armazenamento Mínimo'), max_length=100, blank=True, null=True)
+    audio_min = models.CharField(_('Áudio Mínimo'), max_length=200, blank=True, null=True)
+
+    # Campos recomendados
+    so_rec = models.CharField(_('SO Recomendado'), max_length=200, blank=True, null=True)
+    cpu_rec = models.CharField(_('CPU Recomendada'), max_length=200, blank=True, null=True)
+    ram_rec = models.CharField(_('RAM Recomendada'), max_length=100, blank=True, null=True)
+    gpu_rec = models.CharField(_('GPU Recomendada'), max_length=200, blank=True, null=True)
+    armazenamento_rec = models.CharField(_('Armazenamento Recomendado'), max_length=100, blank=True, null=True)
+    audio_rec = models.CharField(_('Áudio Recomendado'), max_length=200, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'Requisito de Sistema'
+        verbose_name_plural = 'Requisitos de Sistema'
+
+    def __str__(self):
+        return f"Requisitos de {self.game.game}"
