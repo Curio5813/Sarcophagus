@@ -82,6 +82,7 @@
                     <li><strong>Audio:</strong> {{ game.requisitos.audio_min|default:"-" }}</li>
                 </ul>
             </div>
+            {% if game.requisitos.so_rec or game.requisitos.cpu_rec or game.requisitos.ram_rec or game.requisitos.gpu_rec or game.requisitos.armazenamento_rec or game.requisitos.audio_rec %}
             <div class="requirement-card">
                 <h5>Recommended</h5>
                 <ul>
@@ -93,6 +94,7 @@
                     <li><strong>Audio:</strong> {{ game.requisitos.audio_rec|default:"-" }}</li>
                 </ul>
             </div>
+            {% endif %}
         </div>
     </div>
     {% endif %}
