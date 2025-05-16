@@ -33,14 +33,15 @@ class SystemRequirementInline(admin.StackedInline):
 
 @admin.register(Games)
 class GamesAdmin(admin.ModelAdmin):
-    list_display = ('game', 'ativo', 'modificado')
+    list_display = ('game', 'ativo', 'modificado', 'tempo_main_story', 'tempo_main_extras', 'tempo_completionist', 'tempo_all_styles')
     filter_horizontal = ('generos',)
     inlines = [SystemRequirementInline]
     fields = (
         'game', 'descricao', 'gameplay', 'graphics', 'sound_and_music', 'conclusion',
         'generos', 'rating', 'ano', 'desenvolvedor', 'distribuidor',
         'imagem', 'capa', 'video',
-        'ativo'
+        'ativo',
+        'tempo_main_story', 'tempo_main_extras', 'tempo_completionist', 'tempo_all_styles',
     )
 
 @admin.register(Membro)

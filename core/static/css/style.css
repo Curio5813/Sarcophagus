@@ -2693,3 +2693,56 @@ margin-bottom: 0px;
     margin-bottom: 10px;
     font-size: 15px;
 }
+
+/*-------------------------------------
+        TIME TO BEAT - ZERAR O JOGO
+--------------------------------------*/
+
+.time-to-beat-section {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #1c1c1c;
+  border-radius: 12px;
+  border: 1px solid #333;
+}
+
+.time-to-beat-section h3 {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.time-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.time-card {
+  background-color: #e2e8f0;;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 20px;
+  width: 160px;
+  text-align: center;
+  color: #ddd;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease-in-out;
+}
+
+.time-card:hover {
+  transform: scale(1.05);
+  border-color: #555;
+}
+
+.time-card h4 {
+  font-size: 1em;
+  margin-bottom: 8px;
+  color: #000;
+}
+
+.time-card p {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #5da6cc;
+}
+

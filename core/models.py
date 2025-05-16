@@ -132,6 +132,11 @@ class Games(Base):
     graphics = models.TextField(_('Graphics'), max_length=1500, blank=True, null=True)
     sound_and_music = models.TextField(_('Sound and Music'), max_length=1500, blank=True, null=True)
     conclusion = models.TextField(_('Conclusion'), max_length=1500, blank=True, null=True)
+    tempo_main_story = models.DecimalField("Main Story (h)", max_digits=5, decimal_places=2, null=True, blank=True)
+    tempo_main_extras = models.DecimalField("Main + Extras (h)", max_digits=5, decimal_places=2, null=True, blank=True)
+    tempo_completionist = models.DecimalField("Completionist (h)", max_digits=5, decimal_places=2, null=True,
+                                              blank=True)
+    tempo_all_styles = models.DecimalField("All Styles (h)", max_digits=5, decimal_places=2, null=True, blank=True)
 
     generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))
     rating = models.DecimalField(

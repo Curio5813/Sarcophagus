@@ -66,6 +66,37 @@
         <h3>Conclusion</h3>
         <p>{{ game.conclusion }}</p>
     </div>
+    {% if game.tempo_main_story or game.tempo_main_extras or game.tempo_completionist or game.tempo_all_styles %}
+        <div class="time-to-beat">
+            <h3>⏱️ Time to Beat</h3>
+            <div class="time-cards">
+                {% if game.tempo_main_story %}
+                <div class="time-card">
+                    <h4>Main Story</h4>
+                    <p>{{ game.tempo_main_story }}h</p>
+                </div>
+                {% endif %}
+                {% if game.tempo_main_extras %}
+                    <div class="time-card">
+                        <h4>Main + Extras</h4>
+                        <p>{{ game.tempo_main_extras }}h</p>
+                    </div>
+                {% endif %}
+                {% if game.tempo_completionist %}
+                    <div class="time-card">
+                        <h4>Completionist</h4>
+                        <p>{{ game.tempo_completionist }}h</p>
+                    </div>
+                {% endif %}
+                {% if game.tempo_all_styles %}
+                    <div class="time-card">
+                        <h4>All Styles</h4>
+                        <p>{{ game.tempo_all_styles }}h</p>
+                    </div>
+              {% endif %}
+            </div>
+      </div>
+    {% endif %}
 
     {% if game.requisitos %}
     <div class="system-requirements">
