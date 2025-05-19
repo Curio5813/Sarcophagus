@@ -50,6 +50,12 @@
         <p><strong>Publisher:</strong> {{ game.distribuidor }}</p>
     </div>
 
+    <div class="gog-link-box">
+        <a href="{{ game.gog_affiliate_link }}" target="_blank" class="gog-btn">
+            <i class="fas fa-shopping-cart"></i> Buy on GOG.com
+        </a>
+    </div>
+
     <div class="game-details-text">
         <h3>Review</h3>
         <p>{{ game.descricao }}</p>

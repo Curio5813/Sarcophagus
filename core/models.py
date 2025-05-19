@@ -10,6 +10,7 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+import unicodedata
 
 
 def get_file_path(instance, filename):
@@ -152,6 +153,18 @@ class Games(Base):
     imagem = CloudinaryField('games')
     capa = CloudinaryField('games_covers', blank=True, null=True)
     video = models.URLField(_('Video URL'), blank=True, null=True)
+    gog_affiliate_url = models.URLField(_('Link GOG (afiliado)'), blank=True, null=True)
+
+    def gog_affiliate_link(self):
+        if self.gog_affiliate_url:
+            return self.gog_affiliate_url
+
+        base_url = "https://www.gog.com/game/"
+        affiliate_id = "curio5813"
+
+        nome = unicodedata.normalize('NFKD', self.game).encode('ASCII', 'ignore').decode('ASCII')
+        nome = nome.lower().replace(' ', '_').replace("'", "").replace(":", "").replace(",", "")
+        return f"{base_url}{nome}?affiliate={affiliate_id}"
 
     @property
     def embed_video_url(self):

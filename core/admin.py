@@ -36,13 +36,20 @@ class GamesAdmin(admin.ModelAdmin):
     list_display = ('game', 'ativo', 'modificado', 'tempo_main_story', 'tempo_main_extras', 'tempo_completionist', 'tempo_all_styles')
     filter_horizontal = ('generos',)
     inlines = [SystemRequirementInline]
+    readonly_fields = ('gog_affiliate_preview',)
     fields = (
         'game', 'descricao', 'gameplay', 'graphics', 'sound_and_music', 'conclusion',
         'generos', 'rating', 'ano', 'desenvolvedor', 'distribuidor',
         'imagem', 'capa', 'video',
         'ativo',
         'tempo_main_story', 'tempo_main_extras', 'tempo_completionist', 'tempo_all_styles',
+        'gog_affiliate_url', 'gog_affiliate_preview'
     )
+
+    def gog_affiliate_preview(self, obj):
+        return obj.gog_affiliate_link()
+
+    gog_affiliate_preview.short_description = "Prévia do link de afiliação"
 
 @admin.register(Membro)
 class MembroAdmin(admin.ModelAdmin):

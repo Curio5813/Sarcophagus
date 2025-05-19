@@ -2,7 +2,7 @@ from django.views.generic import TemplateView, FormView
 from django.urls import reverse_lazy
 from .forms import ContatoForm, MembroLoginForm, BlogCommentForm, GameCommentForm
 from .models import Membro, GameRating, Tournament, Notificacao, Seguir, Mensagem
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.contrib.auth import login, authenticate
 from django.utils import translation
 from django.http import JsonResponse

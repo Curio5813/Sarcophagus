@@ -2746,3 +2746,28 @@ margin-bottom: 0px;
   color: #5da6cc;
 }
 
+/*------------------------------------------
+   ESTILOS LINKS DE AFILLIAÇÃO DO GOG.COM
+-------------------------------------------*/
+
+.gog-link-box {
+    margin-top: 10px;
+}
+
+.gog-btn {
+    display: inline-block;
+    background-color: #202020;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.gog-btn:hover {
+    background-color: #ffaa00;
+    color: #000;
+}
+
+
