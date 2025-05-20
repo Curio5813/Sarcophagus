@@ -56,6 +56,18 @@
         </a>
     </div>
 
+    <h2 style="margin-top: 40px;">🎮 Jogue Doom agora!</h2>
+    <div id="jsdos-container" style="width: 800px; height: 600px; border: 2px solid #fff; margin-top: 20px;"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-dos@6.22.59/dist/js-dos.js"></script>
+    <script>
+        Dos(document.getElementById("jsdos-container"), {
+            wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@6.22.59/dist/wdosbox.js"
+        }).run("{% static 'jsdos/doom.jsdos' %}")
+        .then(dos => console.log("Doom carregado com sucesso"))
+        .catch(err => console.error("Erro ao carregar Doom:", err));
+    </script>
+
     <div class="game-details-text">
         <h3>Review</h3>
         <p>{{ game.descricao }}</p>

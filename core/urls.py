@@ -8,7 +8,8 @@ from .views import (HomeView, GameView, CommunityView, ContactView,
                     MembroEditView, autocomplete_games, logout_view,
                     SolicitarAmizadeView, AceitarAmizadeView, SolicitacoesPendentesView,
                     marcar_notificacoes_lidas, SeguirMembroView, DeixarDeSeguirMembroView,
-                    SeguindoListView, SeguidoresListView, CaixaEntradaView, EnviarMensagemView)
+                    SeguindoListView, SeguidoresListView, CaixaEntradaView, EnviarMensagemView,
+                    DoomLauncherView)
 from .views import (BlogPostCreateView, BlogPostDetailView, TournamentDetailView, JoinTournamentView,
                     curtir_comentario, responder_comentario, editar_comentario, excluir_comentario)
 from django.shortcuts import redirect
@@ -59,7 +60,10 @@ urlpatterns = [
     path('membro/<int:id>/seguidores/', SeguidoresListView.as_view(), name='membro_seguidores'),
     path('mensagens/', CaixaEntradaView.as_view(), name='caixa_entrada'),
     path('mensagem/enviar/<int:id>/', EnviarMensagemView.as_view(), name='enviar_mensagem'),
+    path("jogar/doom/", DoomLauncherView.as_view(), name="doom_launcher"),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

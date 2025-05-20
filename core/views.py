@@ -826,3 +826,7 @@ class EnviarMensagemView(LoginRequiredMixin, View):
             Mensagem.objects.create(remetente=request.user, destinatario=destinatario, conteudo=conteudo)
             messages.success(request, "Mensagem enviada com sucesso.")
         return redirect('membro-details', id=destinatario_id)
+
+
+class DoomLauncherView(TemplateView):
+    template_name = "doom_launcher.html"

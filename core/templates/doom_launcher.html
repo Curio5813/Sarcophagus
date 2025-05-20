@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogue Doom</title>
+    <script src="https://cdn.jsdelivr.net/npm/js-dos@6.22.59/dist/js-dos.js"></script>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #jsdos-container {
+            width: 800px;
+            height: 600px;
+            border: 2px solid #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="jsdos-container"></div>
+
+    <script>
+        Dos(document.getElementById("jsdos-container"), {
+            wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@6.22.59/dist/wdosbox.js"
+        }).run("{% static 'jsdos/doom.jsdos' %}")
+        .then(dos => console.log("Doom rodando!"))
+        .catch(err => console.error("Erro ao iniciar Doom:", err));
+    </script>
+</body>
+</html>
