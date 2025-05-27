@@ -111,7 +111,7 @@ class Genero(models.Model):
         War_Sim = 'War Sim', _('War Simulation / Military Strategy')
         Survival_Horror = 'Survival Horror', _('Survival Horror')
         MMORPG = 'MMORPG', _('Massively Multiplayer Online RPG')
-        Sports = 'Sports', _('Sports')
+        Sport = 'Sport', _('Sport')
         Point_and_Click = 'Point-and-Click', _('Point-and-Click')
         Puzzle = 'Puzzle', _('Puzzle')
 
