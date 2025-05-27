@@ -44,7 +44,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
 
-        generos_prioridade = ['FPS', 'PUZZLE', 'RACING', 'SIMULATION']
+        generos_prioridade = ['FPS', 'Puzzle', 'Racing', 'Simulation']
         jogos_adicionados = []
 
         for genero_nome in generos_prioridade:

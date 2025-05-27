@@ -100,20 +100,20 @@ class Membro(AbstractBaseUser, PermissionsMixin):
 
 class Genero(models.Model):
     class GenreChoices(models.TextChoices):
-        ADVENTURE = 'ADVENTURE', _('Adventure')
+        Adventure = 'Adventure', _('Adventure')
         RTS = 'RTS', _('Real-Time Strategy')
         TBS = 'TBS', _('Turn-Based Strategy / Tactics')
         RPG = 'RPG', _('Role-Playing Game')
         FPS = 'FPS', _('First-Person Shooter')
-        SIMULATION = 'SIMULATION', _('Simulation')
-        PLATFORMER = 'PLATFORMER', _('Platformer')
-        RACING = 'RACING', _('Racing')
-        WAR_SIM = 'WAR_SIM', _('War Simulation / Military Strategy')
-        SURVIVAL_HORROR = 'SURVIVAL_HORROR', _('Survival Horror')
+        Simulation = 'Simulation', _('Simulation')
+        Platformer = 'Platformer', _('Platformer')
+        Racing = 'Racing', _('Racing')
+        War_Sim = 'War Sim', _('War Simulation / Military Strategy')
+        Survival_Horror = 'Survival Horror', _('Survival Horror')
         MMORPG = 'MMORPG', _('Massively Multiplayer Online RPG')
-        SPORT = 'SPORT', _('Sport')
-        POINT_AND_CLICK = 'POINT_AND_CLICK', _('Point-and-Click')
-        PUZZLE = 'PUZZLE', _('Puzzle')
+        Sports = 'Sports', _('Sports')
+        Point_and_Click = 'Point-and-Click', _('Point-and-Click')
+        Puzzle = 'Puzzle', _('Puzzle')
 
     nome = models.CharField(_('Nome'), max_length=100, choices=GenreChoices.choices, unique=True)
 

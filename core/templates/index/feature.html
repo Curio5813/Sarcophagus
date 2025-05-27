@@ -9,9 +9,9 @@
                             <span class="cata"
                                   style="
                                       {% if jogo.genero_prioritario == 'FPS' %}background: #ff0000;{% endif %}
-                                      {% if jogo.genero_prioritario == 'PUZZLE' %}background: #40abf5;{% endif %}
-                                      {% if jogo.genero_prioritario == 'RACING' %}background: #694eae;{% endif %}
-                                      {% if jogo.genero_prioritario == 'SIMULATION' %}background: #556b2f;{% endif %}
+                                      {% if jogo.genero_prioritario == 'Puzzle' %}background: #40abf5;{% endif %}
+                                      {% if jogo.genero_prioritario == 'Racing' %}background: #694eae;{% endif %}
+                                      {% if jogo.genero_prioritario == 'Simulation' %}background: #556b2f;{% endif %}
                                   ">
                                 <a href="{% url 'game_search' %}?genero={{ jogo.genero_prioritario }}" style="color: white; text-decoration: none;">
                                     {{ jogo.genero_prioritario|title }}
