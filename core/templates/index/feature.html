@@ -2,26 +2,32 @@
 <section class="feature-section spad">
     <div class="container">
         <div class="row">
-            {% for jogo in jogos_por_genero %}
-                <div class="col-lg-3 col-md-6 p-0">
-                    <div class="feature-item set-bg" data-setbg="{{ jogo.capa.url }}">
-                        <span class="cata"
-                              style="
-                                  {% if jogo.genero_prioritario == 'Shooter' %}background: #ff0000;{% endif %}
-                                  {% if jogo.genero_prioritario == 'Puzzle' %}background: #40abf5;{% endif %}
-                                  {% if jogo.genero_prioritario == 'Racing' %}background: #694eae;{% endif %}
-                                  {% if jogo.genero_prioritario == 'Simulation' %}background: #556b2f;{% endif %}
-                              ">
-                              {{ jogo.genero_prioritario }}
-                        </span>
-                        <div class="fi-content text-white">
-                            <h5><a href="{% url 'game-details' jogo.id %}">{{ jogo.game }}</a></h5>
-                            <p>{{ jogo.descricao|truncatechars:50 }}</p>
-                            <a href="{% url 'game-details' jogo.id %}" class="fi-comment">Details</a>
+            {% if jogos_por_genero %}
+                {% for jogo in jogos_por_genero %}
+                    <div class="col-lg-3 col-md-6 p-0">
+                        <div class="feature-item set-bg" data-setbg="{{ jogo.capa.url }}">
+                            <span class="cata"
+                                  style="
+                                      {% if jogo.genero_prioritario == 'FPS' %}background: #ff0000;{% endif %}
+                                      {% if jogo.genero_prioritario == 'PUZZLE' %}background: #40abf5;{% endif %}
+                                      {% if jogo.genero_prioritario == 'RACING' %}background: #694eae;{% endif %}
+                                      {% if jogo.genero_prioritario == 'SIMULATION' %}background: #556b2f;{% endif %}
+                                  ">
+                                <a href="{% url 'game_search' %}?genero={{ jogo.genero_prioritario }}" style="color: white; text-decoration: none;">
+                                    {{ jogo.genero_prioritario|title }}
+                                </a>
+                            </span>
+                            <div class="fi-content text-white">
+                                <h5><a href="{% url 'game-details' jogo.id %}">{{ jogo.game }}</a></h5>
+                                <p>{{ jogo.descricao|truncatechars:50 }}</p>
+                                <a href="{% url 'game-details' jogo.id %}" class="fi-comment">Details</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <p style="color: white;">Nenhum jogo prioritário disponível no momento.</p>
+            {% endif %}
         </div>
     </div>
 </section>

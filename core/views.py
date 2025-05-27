@@ -44,8 +44,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
 
-        # Define a ordem de prioridade dos gêneros
-        generos_prioridade = ['Shooter', 'Puzzle', 'Racing', 'Simulation']
+        generos_prioridade = ['FPS', 'PUZZLE', 'RACING', 'SIMULATION']
         jogos_adicionados = []
 
         for genero_nome in generos_prioridade:
@@ -54,30 +53,11 @@ class HomeView(TemplateView):
             ).exclude(id__in=[j.id for j in jogos_adicionados]).order_by('-criado').first()
 
             if jogo:
-                # Garante que o gênero prioritário seja destacado
                 jogo.genero_prioritario = genero_nome
-                jogos_adicionados.append(jogo)
-
-        # Completa com jogos restantes se não tiver 4
-        if len(jogos_adicionados) < 4:
-            jogos_restantes = Games.objects.exclude(
-                id__in=[j.id for j in jogos_adicionados]
-            ).order_by('-criado')[:4 - len(jogos_adicionados)]
-
-            for jogo in jogos_restantes:
-                # Define o gênero prioritário com base na ordem ou o primeiro gênero associado
-                for genero_nome in generos_prioridade:
-                    if genero_nome in jogo.generos.values_list('nome', flat=True):
-                        jogo.genero_prioritario = genero_nome
-                        break
-                else:
-                    # Fallback para o primeiro gênero disponível
-                    jogo.genero_prioritario = jogo.generos.first().nome if jogo.generos.exists() else "Outro"
                 jogos_adicionados.append(jogo)
 
         context['jogos_por_genero'] = jogos_adicionados
 
-        # Adiciona o campeonato em destaque do jogo Diablo
         context['tournaments'] = Tournament.objects.all().order_by('-start_date')  # Ordena pelos mais recentes
 
         return context
@@ -326,6 +306,7 @@ class GameSearchView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         query = self.request.GET.get('q', '').strip()
+        genero_param = self.request.GET.get('genero', '').strip()
 
         if query:
             games = Games.objects.filter(
@@ -340,12 +321,16 @@ class GameSearchView(TemplateView):
                 Q(ano__icontains=query) |
                 Q(generos__nome__icontains=query)
             ).distinct().order_by('-ano')  # Ordenar por ano
-
+        elif genero_param:
+            games = Games.objects.filter(
+                generos__nome=genero_param
+            ).distinct().order_by('-ano')
         else:
             games = Games.objects.none()
 
         context['games'] = games
         context['query'] = query
+        context['genero_selecionado'] = genero_param
         return context
 
 
