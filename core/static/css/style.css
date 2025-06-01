@@ -278,6 +278,7 @@ ol {
     margin: 0px   ;
     padding: 1px;
     background-color: #252525;
+    opacity: 0.8;
 }
 
 .header-content {
