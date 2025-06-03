@@ -276,9 +276,10 @@ ol {
     z-index: 1000;
     width: 100%;
     margin: 0px   ;
-    padding: 1px;
+    padding: 0px;
     background-color: #252525;
-    opacity: 0.8;
+    opacity: 0.7;
+    border-bottom: 3px solid orange;
 }
 
 .header-content {
@@ -297,6 +298,7 @@ ol {
     width: auto;      /* Mantém a proporção */
     height: 40px;     /* Ajuste conforme necessário */
     object-fit: contain; /* Garante que a imagem não seja cortada */
+    padding: 5px;
 }
 
 .search-container {
@@ -392,6 +394,7 @@ ol {
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
+    padding: 0px;
 }
 
 .user-panel img {
@@ -628,7 +631,7 @@ ol {
     display: block;
     clear: both;
     background: #131313;
-    padding: 10px 0;
+    padding: 10px;
     position: relative;
     font-family: sans-serif; /* Fonte aplicada globalmente à seção */
 }
