@@ -1331,6 +1331,10 @@ ol {
       REVIEW PAGE
 ---------------------*/
 
+.review-page{
+    padding-top: 150px;
+}
+
 .review-page .review-item {
     margin-bottom: 63px;
 }
@@ -2042,7 +2046,7 @@ ol {
 
 .search-results-container {
     max-width: 900px;
-    margin: 40px auto;
+    margin: 150px auto;
     padding: 20px;
     background: #fff5e6; /* Fundo leve */
     border-radius: 10px;
@@ -2127,7 +2131,7 @@ ol {
     flex-direction: column;
     align-items: center;
     max-width: 1000px;
-    margin: 40px auto;
+    margin: 150px auto;
     padding: 20px;
     background: #fff5e6;
     border-radius: 12px;
