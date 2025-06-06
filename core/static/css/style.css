@@ -22,7 +22,7 @@ body {
     height: 100%;
     font-family: sans-serif;
     background-color: #808080;
-    padding-top: 46px;
+    padding-top: 0px;
 }
 
 h1,
@@ -278,7 +278,7 @@ ol {
     margin: 0px   ;
     padding: 0px;
     background-color: #252525;
-    opacity: 0.7;
+    opacity: 0.75;
     border-bottom: 3px solid orange;
 }
 
@@ -627,13 +627,15 @@ ol {
 ------------------------*/
 
 .latest-news-section {
-    overflow: hidden;
-    display: block;
-    clear: both;
+    position: fixed;           /* Fixa na tela */
+    top: 49px;                 /* Distância do topo, ajusta conforme seu header */
+    left: 0;
+    right: 0;
+    z-index: 999;              /* Garante que fique acima de outros elementos */
     background: #131313;
     padding: 10px;
-    position: relative;
-    font-family: sans-serif; /* Fonte aplicada globalmente à seção */
+    font-family: sans-serif;
+    overflow: hidden;
 }
 
 .ln-title {
