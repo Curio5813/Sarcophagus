@@ -41,16 +41,16 @@ $(window).on('load', function() {
 	/*------------------
 		Hero Slider
 	--------------------*/
-	$('.hero-slider').owlCarousel({
-		loop: true,
-		nav: false,
-		dots: true,
-		mouseDrag: false,
-		animateOut: 'fadeOut',
-    	animateIn: 'fadeIn',
-		items: 1,
-		autoplay: true
-	});
+	$(".hero-slider").owlCarousel({
+    items: 1,
+    loop: true,               // ✅ LOOP INFINITO
+    autoplay: true,           // ✅ RODA AUTOMATICAMENTE
+    autoplayTimeout: 5000,    // ⏱ tempo entre os slides (5s)
+    autoplayHoverPause: true, // ⏸ pausa ao passar o mouse
+    animateOut: 'fadeOut',
+    nav: false,
+    dots: true,
+    });
 	var dot = $('.hero-slider .owl-dot');
 	dot.each(function() {
 		var index = $(this).index() + 1;

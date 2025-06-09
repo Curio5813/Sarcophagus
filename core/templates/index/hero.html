@@ -1,24 +1,19 @@
 {% load static %}
 <section class="hero-section">
-		<div class="hero-slider owl-carousel">
-			<div class="hs-item set-bg" data-setbg="{% static 'img/slider-1.jpg' %}">
-				<div class="hs-text">
-					<div class="container">
-						<h2>The Best Old PC <span>Games</span> Out There</h2>
-						<p>The best old PC games capture the essence of classic gaming, bringing nostalgia and timeless enjoyment.<br>From epic adventures to genre-defining shooters, these games have shaped the landscape of gaming history.</p>
-						<a href="#" class="site-btn">Read More</a>
-					</div>
-				</div>
-			</div>
-			<div class="hs-item set-bg" data-setbg="{% static 'img/slider-2.jpg' %}">
-				<div class="hs-text">
-					<div class="container">
-						<h2>The Best Old PC <span>Games</span> Out There</h2>
-						<p>The best old PC games capture the essence of classic gaming, bringing nostalgia and timeless enjoyment.<br>From epic adventures to genre-defining shooters, these games have shaped the landscape of gaming history.</p>
-						<a href="#" class="site-btn">Read More</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+    <div class="hero-slider owl-carousel">
+        {% for image_url in slider_images %}
+        <div class="hs-item" style="background-image: url('{{ image_url }}'); background-size: cover; background-position: center;">
+            <div class="hs-text">
+                <div class="container">
+                    <h2>The Best Old PC <span>Games</span> Out There</h2>
+                    <p>From epic adventures to genre-defining shooters, these games shaped history.</p>
+                    <a href="#" class="site-btn">Read More</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
 

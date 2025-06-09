@@ -28,6 +28,8 @@ from django.views import View
 from django.http import HttpResponseRedirect
 from django.views.generic import ListView
 from django.views.decorators.http import require_POST
+import cloudinary.api
+from cloudinary.exceptions import Error as CloudinaryError
 
 
 def autocomplete_games(request):
@@ -57,8 +59,20 @@ class HomeView(TemplateView):
                 jogos_adicionados.append(jogo)
 
         context['jogos_por_genero'] = jogos_adicionados
-
         context['tournaments'] = Tournament.objects.all().order_by('-start_date')  # Ordena pelos mais recentes
+
+        try:
+            slider_response = cloudinary.api.resources(
+                type="upload",
+                prefix="slider-",  # <- pega arquivos com nome começando por "slider-"
+                resource_type="image",
+                max_results=20
+            )
+            slider_images = [img['secure_url'] for img in slider_response['resources']]
+        except CloudinaryError:
+            slider_images = []
+
+        context['slider_images'] = slider_images
 
         return context
 
