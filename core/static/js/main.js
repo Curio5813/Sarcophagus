@@ -41,15 +41,21 @@ $(window).on('load', function() {
 	/*------------------
 		Hero Slider
 	--------------------*/
+	try {
+	    Object.defineProperty(document, 'hidden', {value: false, writable: false});
+    } catch (e) {
+	    console.warn("Não foi possível aplicar autoplay contínuo fora da aba:", e);
+    }
 	$(".hero-slider").owlCarousel({
-    items: 1,
-    loop: true,               // ✅ LOOP INFINITO
-    autoplay: true,           // ✅ RODA AUTOMATICAMENTE
-    autoplayTimeout: 5000,    // ⏱ tempo entre os slides (5s)
-    autoplayHoverPause: true, // ⏸ pausa ao passar o mouse
-    animateOut: 'fadeOut',
-    nav: false,
-    dots: true,
+	items: 1,
+	loop: true,                 // Loop infinito
+	autoplay: true,             // Autoplay ligado
+	autoplayTimeout: 5000,      // Tempo entre slides (5 segundos)
+	autoplayHoverPause: false, // Não pausa quando passa o mouse
+	smartSpeed: 800,            // Velocidade da transição
+	animateOut: 'fadeOut',      // Animação de saída
+	nav: false,
+	dots: true
     });
 	var dot = $('.hero-slider .owl-dot');
 	dot.each(function() {
