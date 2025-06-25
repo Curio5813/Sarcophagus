@@ -1461,7 +1461,7 @@ ol {
 
 .community-warp {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 30px;
     background: rgba(0, 0, 0, 0.28);
     padding: 40px;
     border-radius: 10px;
@@ -1470,7 +1470,7 @@ ol {
 .community-top-title {
     font-size: 28px;
     font-weight: bold;
-    color: #ffb320;
+    color: #ffffff;
     text-align: left;
     margin-bottom: 20px;
 }
@@ -1565,16 +1565,16 @@ ol {
     display: flex; /* Permite que os itens fiquem um ao lado do outro */
     flex-wrap: wrap; /* Faz com que os itens quebrem para a linha de baixo se não couberem */
     gap: 15px; /* Espaço entre os flash-cards */
-    justify-content: center; /* Centraliza os itens na tela */
+    justify-content: left; /* Centraliza os itens na tela */
     padding: 0;
-    margin: 0;
+    margin: 20px;
     list-style: none;
 }
 
 .game-card {
     display: flex;
     flex-direction: column; /* Mantém a imagem em cima e o texto abaixo */
-    align-items: center;
+    align-items: left;
     width: 220px; /* Define um tamanho fixo para cada flash-card */
     background: #fff;
     border-radius: 8px;
