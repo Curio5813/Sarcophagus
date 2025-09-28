@@ -194,8 +194,9 @@ class Games(Base):
             except Membro.DoesNotExist:
                 print("Usuário 'system@sarcophagus.com' não encontrado. A nota inicial não foi criada.")
 
-            # Cria os requisitos de sistema
-            SystemRequirement.objects.create(game=self)
+            # Cria os requisitos de sistema **somente se não existir**
+            if not hasattr(self, 'requisitos'):
+                SystemRequirement.objects.create(game=self)
 
     def __str__(self):
         return self.game
