@@ -20,7 +20,7 @@ def fs_rss_feed(request):
     """
     Obtém as últimas notícias de jogos do Rock Paper Shotgun e armazena em cache.
     """
-    feed_url = "https://rss.feedspot.com/folder/5hrKt2Ua4w==/rss/rsscombiner"
+    feed_url = "https://www.rockpapershotgun.com/feed/"
     cache_timeout = 1800  # Cache de 30 minutos
 
     # Verifica se já há notícias no cache
@@ -29,18 +29,23 @@ def fs_rss_feed(request):
     if not fs_news:
         feed = feedparser.parse(feed_url)
         fs_news = []
+        seen_links = set()
 
         for entry in feed.entries[:50]:
-            fs_news.append({
-                "title": entry.title,
-                "link": entry.link,
-                "published": entry.published,
-                "summary": entry.summary,
-            })
+            link = entry.link.split("#")[0]  # remove anchors duplicados
+            if link not in seen_links:
+                fs_news.append({
+                    "title": entry.title,
+                    "link": link,
+                    "published": entry.get("published", ""),
+                    "summary": entry.get("summary", ""),
+                })
+                seen_links.add(link)
 
         # Armazena no cache para evitar múltiplas requisições
         cache.set("fs_rss_feed", fs_news, cache_timeout)
 
+    print("Noticias:", [n["title"] for n in fs_news])
     return {"fs_news": fs_news}
 
 
