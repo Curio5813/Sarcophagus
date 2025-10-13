@@ -540,7 +540,8 @@ ol {
 
 .hero-slider .hs-text {
     display: table-cell;
-    vertical-align: middle;
+    vertical-align: bottom;
+    padding-bottom: 80px;
 }
 
 .hero-slider .hs-text h2 {
@@ -571,6 +572,7 @@ ol {
     top: -100px;
     opacity: 0;
 }
+
 
 .hero-slider .owl-item.active .hs-item h2,
 .hero-slider .owl-item.active .hs-item p,
@@ -621,6 +623,8 @@ ol {
 .hero-slider .owl-dots .owl-dot.active {
     background: #ffb320;
 }
+
+
 
 /*-----------------------
     LATEST NEWS SECTION
