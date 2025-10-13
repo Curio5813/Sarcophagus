@@ -535,13 +535,14 @@ ol {
 .hero-slider .hs-item {
     height: 865px;
     display: table;
-    width: 100%;
+    margin: auto auto 50px;
+    width: 94%;
 }
 
 .hero-slider .hs-text {
     display: table-cell;
     vertical-align: bottom;
-    padding-bottom: 80px;
+    padding-bottom: 330px;
 }
 
 .hero-slider .hs-text h2 {
@@ -560,8 +561,6 @@ ol {
 
 .hero-slider .hs-text p {
     color: #fff;
-    margin-bottom: 30px;
-    position: relative;
     position: relative;
     top: -90px;
     opacity: 0;
@@ -603,7 +602,7 @@ ol {
     position: relative;
     max-width: 1146px;
     margin: -33px auto 0;
-    top: -67px;
+    top: -350px;
     z-index: 5;
 }
 
