@@ -22,13 +22,13 @@
 
     {% if user.is_authenticated %}
     <div class="rating-favorite-box">
-        <p><strong>Favorite:</strong>
+        <p style="color: #fff;"><strong>Favorite:</strong>
             <span class="favorite-btn {% if game.user_favorito %}active{% endif %}" data-game-id="{{ game.id }}">
                 <i class="{% if game.user_favorito %}fas{% else %}far{% endif %} fa-heart"></i>
             </span>
         </p>
 
-        <p><strong>Rate this game:</strong></p>
+        <p style="color: #fff;"><strong>Rate this game:</strong></p>
         <div class="star-rating" data-game-id="{{ game.id }}" data-current-rating="{{ game.user_rating|default:0 }}">
             {% for i in "12345" %}
             <span class="star {% if game.user_rating >= i|add:'0'|mul:2 %}active{% endif %}" data-value="{{ i }}">
@@ -40,14 +40,14 @@
     {% endif %}
 
     <div class="game-meta">
-        <p><strong>Year:</strong> {{ game.ano }}</p>
-        <p><strong>Genre:</strong>
+        <p style="color: #fff;"><strong>Year:</strong> {{ game.ano }}</p>
+        <p style="color: #fff;"><strong>Genre:</strong>
             {% for genero in game.generos.all %}
                 {{ genero.nome }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </p>
-        <p><strong>Developer:</strong> {{ game.desenvolvedor }}</p>
-        <p><strong>Publisher:</strong> {{ game.distribuidor }}</p>
+        <p style="color: #fff;"><strong>Developer:</strong> {{ game.desenvolvedor }}</p>
+        <p style="color: #fff;"><strong>Publisher:</strong> {{ game.distribuidor }}</p>
     </div>
 
     <div class="gog-link-box">
@@ -72,6 +72,7 @@
         <h3>Conclusion</h3>
         <p>{{ game.conclusion }}</p>
     </div>
+    <br><br>
     {% if game.tempo_main_story or game.tempo_main_extras or game.tempo_completionist or game.tempo_all_styles %}
         <div class="time-to-beat">
             <h3>⏱️ Time to Beat</h3>

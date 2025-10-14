@@ -22,7 +22,7 @@ body {
     height: 100%;
     font-family: sans-serif;
     background-color: #808080;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 h1,
@@ -2144,7 +2144,7 @@ ol {
 /* Título do jogo */
 .game-detail-container h1 {
     font-size: 28px;
-    color: #131313;
+    color: #fff;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -2164,8 +2164,7 @@ ol {
     min-width: 300px;
     max-width: 400px;
     background: #fff;
-    border: 2px solid #ffb320;
-    border-radius: 10px;
+    border-radius: 0;
     overflow: hidden;
 }
 
@@ -2174,7 +2173,7 @@ ol {
     height: 100%;
     object-fit: contain; /* Mantém a proporção */
     display: block;
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 /* Container de vídeo */
@@ -2187,7 +2186,7 @@ ol {
 .video-container iframe {
     width: 100%;
     height: 315px;
-    border-radius: 10px;
+    border-radius: 0;
     border: none;
 }
 
@@ -2283,8 +2282,7 @@ ol {
     display: flex;
     align-items: stretch;
     background: #fff;
-    border: 2px solid #ffb320;
-    border-radius: 10px;
+    border-radius: 0;
     overflow: hidden;
     min-width: 300px;
     max-width: 500px;
@@ -2294,7 +2292,7 @@ ol {
     width: 100%;
     height: 100%;
     object-fit: cover; /* Pode usar 'contain' se preferir menos corte */
-    border-radius: 10px;
+    border-radius: 0;
 }
 
 /* Vídeo do jogo */
@@ -2302,7 +2300,7 @@ ol {
     flex: 1;
     display: flex;
     align-items: stretch;
-    border-radius: 10px;
+    border-radius: 0;
     overflow: hidden;
     min-width: 300px;
     max-width: 500px;
@@ -2524,12 +2522,12 @@ ol {
 -----------------------------------------------*/
 
 .comment-box {
-    margin-top: 40px;
+    margin-top: 10px;
     margin-bottom: 40px;
     padding: 25px;
-    background-color: #f7f7f7;
-    border-radius: 30px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .comment-box h3 {
@@ -2539,13 +2537,26 @@ ol {
     margin-bottom: 20px;
 }
 
-.comment-box textarea,
+.comment-box textarea {
+    width: 100%;
+    height: 100px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    resize: none;
+    font-family: inherit;
+    font-size: 14px;
+    color: #131313;
+    background-color: #fff;
+    margin-bottom: 15px;
+}
+
 .comment-box .form-control {
     width: 100%;
     height: 100px;
     padding: 15px;
     border: 1px solid #ccc;
-    border-radius: 15px;
+    border-radius: 10px;
     resize: none;
     font-family: inherit;
     font-size: 14px;
@@ -2568,9 +2579,9 @@ ol {
 .comment-item {
     margin-bottom: 25px;
     padding: 15px 20px;
-    background-color: #fff;
-    border-radius: 20px;
-    border: 1px solid #e0e0e0;
+    background-color: transparent;
+    border-radius: 0;
+    border: 0;
 }
 
 .comment-item p {
@@ -2631,8 +2642,8 @@ ol {
 }
 
 .page-spacing {
-    margin-top: 0px;
-    margin-bottom: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 
@@ -2641,16 +2652,16 @@ ol {
 ------------------------------*/
 
 .system-requirements {
-    background-color: #e2e8f0; /* cinza bem claro */
+    background-color: transparent; /* cinza bem claro */
     padding: 30px;
     border-radius: 12px;
     margin-top: 50px;
     color: #1e293b; /* azul petróleo escuro */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
 }
 
 .system-requirements h3 {
-    color: #000000; /* Título em preto */
+    color: #ffb320; /* Título em preto */
     margin-bottom: 20px;
 }
 
@@ -2663,12 +2674,11 @@ ol {
 
 .requirement-card {
     width: 50%;
-    background-color: #f8fafc; /* quase branco */
+    background-color: transparent; /* quase branco */
     padding: 20px 25px;
     border-radius: 10px;
     color: #1e293b; /* azul escuro para o texto */
-    border: 1px solid #cbd5e1;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+    box-shadow: none;
 }
 
 .requirement-card h5 {
@@ -2719,11 +2729,10 @@ ol {
 --------------------------------------*/
 
 .time-to-beat-section {
-    margin-top: 30px;
-    padding: 15px;
-    background-color: #1c1c1c;
-    border-radius: 12px;
-    border: 1px solid #333;
+    padding: 50px;
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
 }
 
 .time-to-beat-section h3 {
@@ -2738,19 +2747,19 @@ ol {
 }
 
 .time-card {
-    background-color: #e2e8f0;;
-    border: 1px solid #444;
-    border-radius: 10px;
+    background-color: rgba(226, 232, 240, 0.5);
+    margin-top: 10px;
+    border-radius: 0;
     padding: 20px;
-    width: 160px;
+    width: 220px;
     text-align: center;
-    color: #ddd;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-    transition: transform 0.2s ease-in-out;
+    color: rgb(221, 221, 221);
+    box-shadow: none;
+    transition: none;
 }
 
 .time-card:hover {
-    transform: scale(1.05);
+    transform: none;
     border-color: #555;
 }
 
