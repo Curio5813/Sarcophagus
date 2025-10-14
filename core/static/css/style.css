@@ -1384,15 +1384,15 @@ ol {
 }
 
 .review-page .review-item {
-    background: #fff;
-    border-radius: 12px;
+    background: transparent;
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
+    box-shadow: none;
+    transition: none;
 }
 
 .review-page .review-item:hover {
-    transform: translateY(-5px);
+    transform: none;
 }
 
 .review-page .review-cover {
@@ -1426,8 +1426,8 @@ ol {
 }
 
 .review-page .review-text {
-    padding: 20px;
-    background-color: #fff5e6;
+    padding: 0;
+    background-color: transparent;
     text-align: left;
 }
 
