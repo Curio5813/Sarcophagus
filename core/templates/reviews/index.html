@@ -28,15 +28,15 @@
                             </div>
 
                             <!-- Exibição das informações adicionais -->
-                            <p>Média de Avaliação: {{ g.media_rating|floatformat:1 }}</p>
-                            <p>Número de Avaliações: {{ g.review_count }}</p>
+                            <p><strong>Média de Avaliação:</strong> {{ g.media_rating|floatformat:1 }}</p>
+                            <p><strong>Número de Avaliações:</strong> {{ g.review_count }}</p>
 
                             {% if g.user_rating %}
-                            <p>Sua Nota: {{ g.user_rating|floatformat:1 }}</p>
+                            <p><strong>Sua Nota:</strong> {{ g.user_rating|floatformat:1 }}</p>
                             {% endif %}
 
-                            <p>Ano: {{ g.ano }}</p>
-                            <p>Desenvolvedor: {{ g.desenvolvedor }}</p>
+                            <p><strong>Ano:</strong> {{ g.ano }}</p>
+                            <p><strong>Desenvolvedor:</strong> {{ g.desenvolvedor }}</p>
                             <p>{{ g.descricao }}</p>
                         </div>
                     </div>
