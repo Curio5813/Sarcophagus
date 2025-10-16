@@ -75,7 +75,7 @@
                         <h5 style="font-family: sans-serif; color: #131313;">Comments</h5>
                         <div class="comment-list">
                             {% for comentario in post.all_comments %}
-                            <div class="comment-item" style="width: 100%; margin-bottom: 15px; padding: 10px 15px; border: 1px solid #ccc; border-radius: 30px; background-color: #f9f9f9;">
+                            <div class="comment-item" style="width: 100%; margin-bottom: 15px; padding: 10px 15px; border-radius: 50px; background-color: #e3dede;">
                                 <p style="font-size: 14px; margin-bottom: 5px;">
                                     <strong>
                                         <a href="{% url 'membro-details' comentario.membro.id %}" style="color: #007bff; text-decoration: none;">
@@ -114,7 +114,7 @@
                         {% for post in latest_posts %}
                         <div class="lb-item">
                             <div class="lb-thumb">
-                                <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 86px; height: 86px; object-fit: cover;">
+                                <img src="{{ post.imagem.url }}" alt="{{ post.titulo }}" style="width: 86px; border-radius: 10px; height: 86px; object-fit: cover;">
                             </div>
                             <div class="lb-content">
                                 <div class="lb-date">
@@ -142,24 +142,7 @@
         $('#id_jogo').select2({
             placeholder: 'Search a game...',
             allowClear: true,
-            width: '100%'
+            width: '80%'
         });
     });
 </script>
-
-<style>
-    .file-label {
-        display: inline-block;
-        padding: 10px 15px;
-        background-color: #e7e7e7;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-    .edit-link {
-        color: #007bff;
-        font-weight: bold;
-        margin-left: 15px;
-    }
-</style>

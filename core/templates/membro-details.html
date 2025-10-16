@@ -110,13 +110,7 @@
                 <li class="game-card">
                     <a href="{% url 'game-details' favorito.game.id %}" class="game-link">
                         <div class="game-thumb">
-                            <img src="{{ favorito.game.imagem.url }}" alt="{{ favorito.game.game }}">
-                        </div>
-                        <div class="game-info">
-                            <h5>{{ favorito.game.game }}</h5>
-                            <p><strong>Genre(s):</strong> {{ favorito.game.generos.all|join:", " }}</p>
-                            <p><strong>Developer:</strong> {{ favorito.game.desenvolvedor }}</p>
-                            <p><strong>Year:</strong> {{ favorito.game.ano }}</p>
+                            <img src="{{ favorito.game.capa.url }}" alt="{{ favorito.game.game_covers }}">
                         </div>
                     </a>
                 </li>
