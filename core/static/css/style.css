@@ -2051,9 +2051,9 @@ ol {
     max-width: 900px;
     margin: 150px auto;
     padding: 20px;
-    background: #fff5e6; /* Fundo leve */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: transparent; /* Fundo leve */
+    border-radius: 0;
+    box-shadow: none;
     text-align: left;
 }
 
@@ -2072,17 +2072,16 @@ ol {
 .search-results-list li {
     display: flex;
     align-items: center;
-    background: #fff;
-    border-radius: 8px;
+    background: transparent;
+    border-radius: 0;
     padding: 12px;
     margin-bottom: 12px;
-    transition: transform 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
 }
 
 .search-results-list li:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: none;
+    box-shadow: none;
 }
 
 .search-results-list li a {
@@ -2098,10 +2097,9 @@ ol {
     width: 100px; /* Defina um tamanho fixo para a largura */
     height: auto; /* Mantém a proporção original */
     max-height: 100px; /* Evita que a imagem fique muito alta */
-    border-radius: 10px;
+    border-radius: 0;
     object-fit: contain; /* Mantém a proporção sem cortar a imagem */
     margin-right: 15px;
-    border: 2px solid #ffb320;
 }
 
 .search-results-info {
@@ -2119,8 +2117,8 @@ ol {
     font-size: 18px;
     color: #666;
     padding: 20px;
-    background: #ffe0b3;
-    border-radius: 10px;
+    background: transparent;
+    border-radius: 0;
     font-weight: bold;
 }
 
