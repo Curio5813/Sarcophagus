@@ -4,15 +4,15 @@
 {% block content %}
 {% include 'latest_news.html' %}
 
-<div class="text-center">
+<div class="profile-text-center">
     <img src="{% static 'img/slider-3.jpg' %}" alt="Edit Icon" class="edit-profile-icon">
 </div>
 
-<div class="text-center" style="margin-top: 30px">
+<div class="profile-text-center" style="margin-top: 30px">
     <h2>{% trans "Edit Your Profile" %}</h2>
 </div>
 
-<div class="game-detail-container">
+<div class="profile-container">
     <form method="post" enctype="multipart/form-data" class="login-form">
         {% csrf_token %}
         {{ form.non_field_errors }}
@@ -56,7 +56,7 @@
             {% trans "Cancel" %}
         </a>
 
-        <button type="submit" class="custom-button">{% trans "Save Changes" %}</button>
+        <button type="submit" class="profile-btn"> {% trans "Save Changes" %}</button>
     </form>
 </div>
 {% include 'footer.html' %}

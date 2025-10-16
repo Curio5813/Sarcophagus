@@ -1063,8 +1063,131 @@ ol {
     color: #aeaeae;
 }
 
+/*---------------------
+      REVIEW PAGE
+---------------------*/
+
+.review-page{
+    padding-top: 150px;
+}
+
+.review-page .review-item {
+    margin-bottom: 63px;
+}
+
+.review-page .review-item .review-text h4 {
+    margin-bottom: 10px;
+}
+
+.review-dark .review-item .review-text p {
+    color: #b5b5b5;
+}
+
+.review-section.review-dark {
+    background-position: center top;
+}
+
+.recent-game-item .rgi-content .rgi-extra {
+    position: absolute; /* Mantenha a posição absoluta se quiser que os ícones fiquem em um local específico */
+    right: 0;
+    bottom: 0;
+    display: flex; /* Alinha os ícones lado a lado */
+    align-items: center; /* Centraliza verticalmente os ícones */
+    gap: 5px; /* Espaçamento entre os ícones */
+}
+
+.recent-game-item .rgi-content .rgi-extra .rgi-heart {
+    height: 35px;
+    width: 35px;
+    display: block; /* Mantém o bloco, mas remove o float */
+    padding: 6px 8px 0;
+}
+
+.recent-game-item .rgi-extra .rgi-star {
+    background: #ffb320; /* Cor da estrela */
+}
+
+.recent-game-item .rgi-extra .rgi-heart {
+    background-color: #c71f2d; /* Cor rubro para o coração */
+}
+
+.review-page .review-item-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.review-page .review-item {
+    background: transparent;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+    transition: none;
+}
+
+.review-page .review-item:hover {
+    transform: none;
+}
+
+.review-page .review-cover {
+    position: relative;
+    width: 100%;
+}
+
+.review-page .review-cover img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.review-page .score.yellow {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 54px;
+    height: 54px;
+    background: #ffb320;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #131313;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.review-page .review-text {
+    padding: 0;
+    background-color: transparent;
+    text-align: left;
+}
+
+.review-page .review-text h4 {
+    color: #ffb320;
+    font-size: 20px;
+    margin-bottom: 12px;
+}
+
+.review-page .review-text p {
+    color: #444;
+    font-size: 14px;
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.review-page .rating {
+    margin-bottom: 15px;
+}
+
+.review-page .rating i {
+    font-size: 14px;
+    margin-right: 2px;
+}
+
 /*--------------------
-    OTHERS PAGES
+    GAMES PAGES
 --------------------*/
 
 .page-info-section {
@@ -1188,283 +1311,6 @@ ol {
     color: #131313;  /* Cor do texto */
     transition: none;
     transform: none;
-}
-
-
-
-/*-----------------------
-    BLOG PAGE
------------------------*/
-
-.single-blog-page .blog-thumb {
-    height: 424px;
-    padding-top: 24px;
-    padding-left: 29px;
-    margin-bottom: 40px;
-    position: relative;
-}
-
-.single-blog-page .blog-thumb .rgi-extra {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 70px;
-}
-
-.single-blog-page .blog-thumb .rgi-extra .rgi-star,
-.single-blog-page .blog-thumb .rgi-extra .rgi-heart {
-    height: 35px;
-    width: 35px;
-    float: left;
-    display: block;
-    padding: 6px 8px 0;
-}
-
-.single-blog-page .blog-thumb .rgi-extra .rgi-star {
-    background: #ffb320;
-}
-
-.single-blog-page .blog-thumb .rgi-extra .rgi-heart {
-    background: #ff205f;
-}
-
-.single-blog-page .blog-content h3 {
-    margin-bottom: 10px;
-}
-
-.single-blog-page .blog-content .meta-comment {
-    display: block;
-    font-size: 12px;
-    color: #131313;
-    margin-bottom: 25px;
-}
-
-.single-blog-page .blog-content p {
-    margin-bottom: 25px;
-}
-
-.blog-post {
-    width: 700px;  /* Define a largura do post */
-    margin-bottom: 40px;  /* Espaçamento entre os posts */
-    padding: 20px;
-    border: none;
-    box-shadow: none;
-    background-color: #fff;  /* Cor de fundo PeachPuff */
-    background-clip: border-box;  /* Faz com que a cor de fundo não ultrapasse as bordas */
-    border-radius: 8px;  /* Opcional: deixa as bordas arredondadas */
-    color: #131313;  /* Cor do texto */
-}
-
-.blog-post img {
-    width: 100%;  /* A imagem se ajusta ao tamanho do post */
-    height: auto;  /* Mantém a proporção original da imagem */
-    max-height: 400px;  /* Garantir que a altura máxima da imagem seja de 400px */
-    object-fit: cover;  /* Cobre o espaço sem distorcer */
-    margin-bottom: 15px;
-}
-
-.blog-post h3 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #131313;
-}
-
-.blog-post p {
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-.comment-warp {
-    padding-top: 50px;
-}
-
-.comment-title {
-    margin-bottom: 45px;
-}
-
-.comment-list {
-    list-style: ul;
-    margin-bottom: 40px;
-}
-
-.comment-list .comment .comment-avator {
-    width: 63px;
-    height: 63px;
-    border-radius: 50%;
-    float: left;
-}
-
-.comment-list .comment .comment-content {
-    padding-left: 100px;
-}
-
-.comment-list .comment .comment-content h5 {
-    font-size: 12px;
-    color: #131313;
-    font-weight: 400;
-    margin-bottom: 10px;
-}
-
-.comment-list .comment .comment-content h5 span {
-    color: #ffb320;
-    padding-left: 18px;
-}
-
-.comment-list .comment .comment-content p {
-    font-size: 12px;
-    margin-bottom: 5px;
-}
-
-.comment-list .comment .comment-content .reply {
-    font-size: 12px;
-    color: #ff1d55;
-}
-
-.comment-form-warp {
-    padding-top: 30px;
-}
-
-.comment-form input[type=text],
-.comment-form input[type=email],
-.comment-form textarea {
-    width: 100%;
-    height: 41px;
-    border: 1px solid #d6dee7;
-    padding-left: 22px;
-    padding-right: 45px;
-    font-size: 12px;
-    margin-bottom: 24px;
-}
-
-.comment-form textarea {
-    height: 243px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    margin-bottom: 38px;
-}
-
-/*---------------------
-      REVIEW PAGE
----------------------*/
-
-.review-page{
-    padding-top: 150px;
-}
-
-.review-page .review-item {
-    margin-bottom: 63px;
-}
-
-.review-page .review-item .review-text h4 {
-    margin-bottom: 10px;
-}
-
-.review-dark .review-item .review-text p {
-    color: #b5b5b5;
-}
-
-.review-section.review-dark {
-    background-position: center top;
-}
-
-.recent-game-item .rgi-content .rgi-extra {
-    position: absolute; /* Mantenha a posição absoluta se quiser que os ícones fiquem em um local específico */
-    right: 0;
-    bottom: 0;
-    display: flex; /* Alinha os ícones lado a lado */
-    align-items: center; /* Centraliza verticalmente os ícones */
-    gap: 5px; /* Espaçamento entre os ícones */
-}
-
-.recent-game-item .rgi-content .rgi-extra .rgi-heart {
-    height: 35px;
-    width: 35px;
-    display: block; /* Mantém o bloco, mas remove o float */
-    padding: 6px 8px 0;
-}
-
-.recent-game-item .rgi-extra .rgi-star {
-    background: #ffb320; /* Cor da estrela */
-}
-
-.recent-game-item .rgi-extra .rgi-heart {
-    background-color: #c71f2d; /* Cor rubro para o coração */
-}
-
-.review-page .review-item-wrapper {
-    display: flex;
-    justify-content: center;
-}
-
-.review-page .review-item {
-    background: transparent;
-    border-radius: 0;
-    overflow: hidden;
-    box-shadow: none;
-    transition: none;
-}
-
-.review-page .review-item:hover {
-    transform: none;
-}
-
-.review-page .review-cover {
-    position: relative;
-    width: 100%;
-}
-
-.review-page .review-cover img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: contain;
-}
-
-.review-page .score.yellow {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 54px;
-    height: 54px;
-    background: #ffb320;
-    border-radius: 50%;
-    font-size: 16px;
-    font-weight: bold;
-    color: #131313;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    z-index: 2;
-}
-
-.review-page .review-text {
-    padding: 0;
-    background-color: transparent;
-    text-align: left;
-}
-
-.review-page .review-text h4 {
-    color: #ffb320;
-    font-size: 20px;
-    margin-bottom: 12px;
-}
-
-.review-page .review-text p {
-    color: #444;
-    font-size: 14px;
-    margin-bottom: 8px;
-    line-height: 1.6;
-}
-
-.review-page .rating {
-    margin-bottom: 15px;
-}
-
-.review-page .rating i {
-    font-size: 14px;
-    margin-right: 2px;
 }
 
 /*---------------------
@@ -1649,6 +1495,158 @@ ol {
     word-wrap: break-word;
 }
 
+/*-----------------------
+    BLOG PAGE
+-----------------------*/
+
+.single-blog-page .blog-thumb {
+    height: 424px;
+    padding-top: 24px;
+    padding-left: 29px;
+    margin-bottom: 40px;
+    position: relative;
+}
+
+.single-blog-page .blog-thumb .rgi-extra {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 70px;
+}
+
+.single-blog-page .blog-thumb .rgi-extra .rgi-star,
+.single-blog-page .blog-thumb .rgi-extra .rgi-heart {
+    height: 35px;
+    width: 35px;
+    float: left;
+    display: block;
+    padding: 6px 8px 0;
+}
+
+.single-blog-page .blog-thumb .rgi-extra .rgi-star {
+    background: #ffb320;
+}
+
+.single-blog-page .blog-thumb .rgi-extra .rgi-heart {
+    background: #ff205f;
+}
+
+.single-blog-page .blog-content h3 {
+    margin-bottom: 10px;
+}
+
+.single-blog-page .blog-content .meta-comment {
+    display: block;
+    font-size: 12px;
+    color: #131313;
+    margin-bottom: 25px;
+}
+
+.single-blog-page .blog-content p {
+    margin-bottom: 25px;
+}
+
+.blog-post {
+    width: 700px;  /* Define a largura do post */
+    margin-bottom: 40px;  /* Espaçamento entre os posts */
+    padding: 20px;
+    border: none;
+    box-shadow: none;
+    background-color: #fff;  /* Cor de fundo PeachPuff */
+    background-clip: border-box;  /* Faz com que a cor de fundo não ultrapasse as bordas */
+    border-radius: 8px;  /* Opcional: deixa as bordas arredondadas */
+    color: #131313;  /* Cor do texto */
+}
+
+.blog-post img {
+    width: 100%;  /* A imagem se ajusta ao tamanho do post */
+    height: auto;  /* Mantém a proporção original da imagem */
+    max-height: 400px;  /* Garantir que a altura máxima da imagem seja de 400px */
+    object-fit: cover;  /* Cobre o espaço sem distorcer */
+    margin-bottom: 15px;
+}
+
+.blog-post h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #131313;
+}
+
+.blog-post p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.comment-warp {
+    padding-top: 50px;
+}
+
+.comment-title {
+    margin-bottom: 45px;
+}
+
+.comment-list {
+    list-style: ul;
+    margin-bottom: 40px;
+}
+
+.comment-list .comment .comment-avator {
+    width: 63px;
+    height: 63px;
+    border-radius: 50%;
+    float: left;
+}
+
+.comment-list .comment .comment-content {
+    padding-left: 100px;
+}
+
+.comment-list .comment .comment-content h5 {
+    font-size: 12px;
+    color: #131313;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.comment-list .comment .comment-content h5 span {
+    color: #ffb320;
+    padding-left: 18px;
+}
+
+.comment-list .comment .comment-content p {
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.comment-list .comment .comment-content .reply {
+    font-size: 12px;
+    color: #ff1d55;
+}
+
+.comment-form-warp {
+    padding-top: 30px;
+}
+
+.comment-form input[type=text],
+.comment-form input[type=email],
+.comment-form textarea {
+    width: 100%;
+    height: 41px;
+    border: 1px solid #d6dee7;
+    padding-left: 22px;
+    padding-right: 45px;
+    font-size: 12px;
+    margin-bottom: 24px;
+}
+
+.comment-form textarea {
+    height: 243px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-bottom: 38px;
+}
+
 /*---------------------
     CONTACT PAGE
 ----------------------*/
@@ -1782,9 +1780,9 @@ ol {
     margin-right: 8px;
 }
 
-/*------------------------------------------------
-    Estilos para a Página de Resultados da Busca
-------------------------------------------------*/
+/*----------------------------------
+     PAGINA RESULTADO BUSCA MENU
+-----------------------------------*/
 
 .search-results-container {
     max-width: 900px;
@@ -1877,12 +1875,12 @@ ol {
 }
 
 /* Título do jogo */
-.game-detail-container h1 {
-    font-size: 28px;
-    color: #fff;
-    text-align: center;
-    margin-bottom: 20px;
-}
+    .game-detail-container h1 {
+        font-size: 28px;
+        color: #fff;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
 /* Capa + vídeo lado a lado */
 .game-media-wrapper {
@@ -2165,6 +2163,73 @@ ol {
     transform: translateY(-5px);
 }
 
+/*-----------------------------------
+          EDIT PROFILE
+------------------------------------ */
+
+.profile-text-center h2 {
+    font-size: 28px;
+    color: #fff;
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+.profile-container{
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.profile-container .form-group {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profile-container label {
+    display: block;
+    font-weight: bold;
+    color: #ffb320;
+    margin-bottom: 8px;
+}
+
+.profile-container input[type="text"],
+.profile-container input[type="email"],
+.profile-container input[type="date"],
+.profile-container select,
+.profile-container textarea {
+    width: 30%;
+    padding: 10px 12px;
+    border: 1px solid #ffb320;
+    border-radius: 8px;
+    background-color: #1a1a1a;
+    color: #fff;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.profile-container input:focus,
+.profile-container textarea:focus,
+.profile-container select:focus {
+    border-color: #ffd700;
+    box-shadow: none;
+    outline: none;
+}
+
+.profile-container .profile-btn {
+    background-color: #ffb320;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px 15px 5px 15px;
+    border-radius: 20px;
+    border: none;
+    display: inline-block;
+}
+
+.profile-btn:hover {
+    color: #000;
+}
+
 /*---------------------------------------
        MENSAGENS DE SUCESSO E ERRO
 ----------------------------------------*/
@@ -2381,7 +2446,6 @@ ol {
     margin-bottom: 0;
 }
 
-
 /*------------------------------
     REQUISITOS DO SISTEMA
 ------------------------------*/
@@ -2459,9 +2523,9 @@ ol {
     font-size: 15px;
 }
 
-/*-------------------------------------
-        TIME TO BEAT - ZERAR O JOGO
---------------------------------------*/
+/*------------------------
+        TIME TO BEAT
+-------------------------*/
 
 .time-to-beat-section {
     padding: 50px;
