@@ -1562,10 +1562,6 @@ ol {
     margin-bottom: 5px;
 }
 
-/*-------------------------------
-   ESTILOS PARA JOGOS FAVORITOS
---------------------------------*/
-
 .favorite-games-list {
     display: flex; /* Permite que os itens fiquem um ao lado do outro */
     flex-wrap: wrap; /* Faz com que os itens quebrem para a linha de baixo se não couberem */
@@ -1621,7 +1617,7 @@ ol {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    text-align: left;
+    text-align: center;
     padding-left: 10px;
 }
 
@@ -1679,277 +1675,6 @@ ol {
     font-size: 16px;
     margin-left: 10px;
     margin-right: 20px;
-}
-
-/*======================
-    REPONSIVIDADE
-=======================*/
-
-@media (min-width: 1200px) {
-    .container {
-    max-width: 1176px;
-    }
-}
-
-/*-------------------------
-     MEDIUM SCREEN: 992px
--------------------------*/
-
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
-    .main-menu {
-        margin-right: 90px;
-    }
-    .hero-slider .owl-dots {
-        max-width: 930px;
-    }
-    .review-section {
-        background-position: right 10% top;
-    }
-    .review-item .review-cover {
-        height: 280px;
-    }
-    .latest-blog .lb-item .lb-thumb {
-        width: 55px;
-        height: 55px;
-    }
-    .latest-blog .lb-item .lb-content {
-        padding-left: 67px;
-    }
-    .top-comment .tc-item .tc-content {
-        padding-left: 95px;
-    }
-    .footer-top-bg {
-        max-width: 370px;
-    }
-    .page-info-section .pi-content h2 {
-        font-size: 50px;
-    }
-}
-
-/*--------------------------
-        TABLET: 768px
---------------------------*/
-
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-    .site-logo {
-        max-width: 130px;
-    }
-    .main-menu {
-        margin-right: 25px;
-    }
-    .main-menu ul li a {
-        margin-left: 15px;
-    }
-    .user-panel {
-        padding: 8px 15px;
-    }
-    .hero-slider .hs-text h2 {
-        font-size: 50px;
-    }
-    .hero-slider .owl-dots {
-        max-width: 690px;
-    }
-    .recent-game-item {
-        margin-bottom: 42px;
-    }
-    .tournament-item .ti-thumb {
-        width: 100%;
-        height: 230px;
-        float: none;
-    }
-    .tournament-item .ti-text {
-        padding-left: 0;
-        padding-top: 20px;
-    }
-    .review-section {
-        background-position: left top;
-    }
-    .review-item {
-        margin-bottom: 63px;
-    }
-    .footer-logo {
-        margin-bottom: 50px;
-    }
-    .latest-blog .lb-item .lb-thumb {
-        width: 80px;
-        height: 80px;
-    }
-    .latest-blog .lb-item .lb-content {
-        padding-left: 95px;
-    }
-    .footer-top-bg {
-        display: none;
-    }
-}
-
-/*---------------------------
-    LARGE MOBILE: 480px
----------------------------*/
-
-@media only screen and (max-width: 767px) {
-    .header-section {
-        overflow: visible;
-        padding: 23px 0;
-    }
-    .header-section .container {
-        position: relative;
-    }
-    .site-logo {
-        float: none;
-        padding-top: 0;
-    }
-    .main-menu {
-        display: none;
-        position: absolute;
-        top: calc(100% + 24px);
-        left: 0;
-        width: 100%;
-        background: #ffffff;
-        z-index: 999;
-    }
-    .main-menu ul li {
-        display: block;
-        border-bottom: 1px solid #ececec;
-    }
-    .main-menu ul li a {
-        margin-left: 0;
-        color: #131313;
-        padding: 13px 26px;
-    }
-    .nav-switch {
-        color: #fff;
-        display: block;
-        float: right;
-        cursor: pointer;
-        font-size: 25px;
-    }
-    .user-panel {
-        display: none;
-    }
-    .hero-slider .hs-item {
-        height: 700px;
-    }
-        .hero-slider .hs-text h2 {
-        font-size: 36px;
-    }
-    .hero-slider .owl-dots {
-        max-width: 510px;
-    }
-    .ln-title {
-        padding-right: 30px;
-    }
-    .feature-item {
-        margin-bottom: 30px;
-    }
-    .recent-game-item {
-        margin-bottom: 42px;
-    }
-    .review-section {
-        background-position: left top;
-    }
-    .review-item {
-        margin-bottom: 63px;
-    }
-    .footer-logo {
-        margin-bottom: 50px;
-    }
-    .footer-top-bg {
-        display: none;
-    }
-    .footer-section {
-        padding: 30px 0 20px;
-        text-align: center;
-    }
-    .footer-menu li:first-child a {
-        margin-left: 0;
-    }
-    .footer-menu,
-    .copyright {
-        float: none;
-    }
-    .copyright {
-        padding-top: 15px;
-    }
-    .community-post-list li {
-        padding: 30px 25px 30px;
-    }
-    .page-info-section .pi-content h2 {
-        font-size: 50px;
-    }
-}
-
-/*------------------------
-    MEDIUM MOBILE: 480px
--------------------------*/
-
-@media only screen and (max-width: 576px) {
-    .hero-slider .owl-dots {
-        padding: 0 15px;
-    }
-    .feature-section {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-    .community-post-list .community-post .author-avator {
-        float: none;
-    }
-    .community-post-list .community-post .post-content {
-        padding-left: 0;
-        padding-top: 30px;
-    }
-}
-
-/*----------------------------
-      SMALL MOBILE: 320px
-----------------------------*/
-
-@media only screen and (max-width: 479px) {
-    .hero-slider .hs-item {
-        height: auto;
-        padding: 150px 0;
-    }
-    .ln-title {
-        display: none;
-    }
-    .news-ticker {
-        width: 100%;
-    }
-    .tournament-item .ti-thumb {
-        width: 100%;
-        height: 230px;
-        float: none;
-    }
-    .tournament-item .ti-text {
-        padding-left: 0;
-        padding-top: 20px;
-    }
-    .latest-blog .lb-item .lb-thumb {
-        width: 55px;
-        height: 55px;
-    }
-    .latest-blog .lb-item .lb-content {
-        padding-left: 67px;
-    }
-    .top-comment .tc-item .tc-content {
-        padding-left: 85px;
-    }
-    .site-btn {
-        padding: 11px 30px;
-        min-width: 145px;
-    }
-    .comment-list .comment .comment-avator {
-        float: none;
-    }
-    .comment-list .comment .comment-content {
-        padding-left: 0;
-        padding-top: 20px;
-    }
-    .footer-widget {
-        padding: 40px 15px 7px;
-    }
-    .page-info-section .pi-content h2 {
-        font-size: 40px;
-    }
 }
 
 /*-------------------------
@@ -2795,3 +2520,275 @@ ol {
     background-color: #ffaa00;
     color: #000;
 }
+
+/*======================
+    REPONSIVIDADE
+=======================*/
+
+@media (min-width: 1200px) {
+    .container {
+    max-width: 1176px;
+    }
+}
+
+/*-------------------------
+     MEDIUM SCREEN: 992px
+-------------------------*/
+
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+    .main-menu {
+        margin-right: 90px;
+    }
+    .hero-slider .owl-dots {
+        max-width: 930px;
+    }
+    .review-section {
+        background-position: right 10% top;
+    }
+    .review-item .review-cover {
+        height: 280px;
+    }
+    .latest-blog .lb-item .lb-thumb {
+        width: 55px;
+        height: 55px;
+    }
+    .latest-blog .lb-item .lb-content {
+        padding-left: 67px;
+    }
+    .top-comment .tc-item .tc-content {
+        padding-left: 95px;
+    }
+    .footer-top-bg {
+        max-width: 370px;
+    }
+    .page-info-section .pi-content h2 {
+        font-size: 50px;
+    }
+}
+
+/*--------------------------
+        TABLET: 768px
+--------------------------*/
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .site-logo {
+        max-width: 130px;
+    }
+    .main-menu {
+        margin-right: 25px;
+    }
+    .main-menu ul li a {
+        margin-left: 15px;
+    }
+    .user-panel {
+        padding: 8px 15px;
+    }
+    .hero-slider .hs-text h2 {
+        font-size: 50px;
+    }
+    .hero-slider .owl-dots {
+        max-width: 690px;
+    }
+    .recent-game-item {
+        margin-bottom: 42px;
+    }
+    .tournament-item .ti-thumb {
+        width: 100%;
+        height: 230px;
+        float: none;
+    }
+    .tournament-item .ti-text {
+        padding-left: 0;
+        padding-top: 20px;
+    }
+    .review-section {
+        background-position: left top;
+    }
+    .review-item {
+        margin-bottom: 63px;
+    }
+    .footer-logo {
+        margin-bottom: 50px;
+    }
+    .latest-blog .lb-item .lb-thumb {
+        width: 80px;
+        height: 80px;
+    }
+    .latest-blog .lb-item .lb-content {
+        padding-left: 95px;
+    }
+    .footer-top-bg {
+        display: none;
+    }
+}
+
+/*---------------------------
+    LARGE MOBILE: 480px
+---------------------------*/
+
+@media only screen and (max-width: 767px) {
+    .header-section {
+        overflow: visible;
+        padding: 23px 0;
+    }
+    .header-section .container {
+        position: relative;
+    }
+    .site-logo {
+        float: none;
+        padding-top: 0;
+    }
+    .main-menu {
+        display: none;
+        position: absolute;
+        top: calc(100% + 24px);
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        z-index: 999;
+    }
+    .main-menu ul li {
+        display: block;
+        border-bottom: 1px solid #ececec;
+    }
+    .main-menu ul li a {
+        margin-left: 0;
+        color: #131313;
+        padding: 13px 26px;
+    }
+    .nav-switch {
+        color: #fff;
+        display: block;
+        float: right;
+        cursor: pointer;
+        font-size: 25px;
+    }
+    .user-panel {
+        display: none;
+    }
+    .hero-slider .hs-item {
+        height: 700px;
+    }
+        .hero-slider .hs-text h2 {
+        font-size: 36px;
+    }
+    .hero-slider .owl-dots {
+        max-width: 510px;
+    }
+    .ln-title {
+        padding-right: 30px;
+    }
+    .feature-item {
+        margin-bottom: 30px;
+    }
+    .recent-game-item {
+        margin-bottom: 42px;
+    }
+    .review-section {
+        background-position: left top;
+    }
+    .review-item {
+        margin-bottom: 63px;
+    }
+    .footer-logo {
+        margin-bottom: 50px;
+    }
+    .footer-top-bg {
+        display: none;
+    }
+    .footer-section {
+        padding: 30px 0 20px;
+        text-align: center;
+    }
+    .footer-menu li:first-child a {
+        margin-left: 0;
+    }
+    .footer-menu,
+    .copyright {
+        float: none;
+    }
+    .copyright {
+        padding-top: 15px;
+    }
+    .community-post-list li {
+        padding: 30px 25px 30px;
+    }
+    .page-info-section .pi-content h2 {
+        font-size: 50px;
+    }
+}
+
+/*------------------------
+    MEDIUM MOBILE: 480px
+-------------------------*/
+
+@media only screen and (max-width: 576px) {
+    .hero-slider .owl-dots {
+        padding: 0 15px;
+    }
+    .feature-section {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .community-post-list .community-post .author-avator {
+        float: none;
+    }
+    .community-post-list .community-post .post-content {
+        padding-left: 0;
+        padding-top: 30px;
+    }
+}
+
+/*----------------------------
+      SMALL MOBILE: 320px
+----------------------------*/
+
+@media only screen and (max-width: 479px) {
+    .hero-slider .hs-item {
+        height: auto;
+        padding: 150px 0;
+    }
+    .ln-title {
+        display: none;
+    }
+    .news-ticker {
+        width: 100%;
+    }
+    .tournament-item .ti-thumb {
+        width: 100%;
+        height: 230px;
+        float: none;
+    }
+    .tournament-item .ti-text {
+        padding-left: 0;
+        padding-top: 20px;
+    }
+    .latest-blog .lb-item .lb-thumb {
+        width: 55px;
+        height: 55px;
+    }
+    .latest-blog .lb-item .lb-content {
+        padding-left: 67px;
+    }
+    .top-comment .tc-item .tc-content {
+        padding-left: 85px;
+    }
+    .site-btn {
+        padding: 11px 30px;
+        min-width: 145px;
+    }
+    .comment-list .comment .comment-avator {
+        float: none;
+    }
+    .comment-list .comment .comment-content {
+        padding-left: 0;
+        padding-top: 20px;
+    }
+    .footer-widget {
+        padding: 40px 15px 7px;
+    }
+    .page-info-section .pi-content h2 {
+        font-size: 40px;
+    }
+}
+
