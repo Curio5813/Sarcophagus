@@ -2093,9 +2093,8 @@ ol {
 }
 
 .search-results-list img {
-    width: 200px; /* Defina um tamanho fixo para a largura */
+    width: 300px; /* Defina um tamanho fixo para a largura */
     height: auto; /* Mantém a proporção original */
-    max-height: 100px; /* Evita que a imagem fique muito alta */
     border-radius: 0;
     object-fit: contain; /* Mantém a proporção sem cortar a imagem */
     margin-right: 15px;
