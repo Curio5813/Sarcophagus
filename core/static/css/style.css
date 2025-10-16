@@ -1577,21 +1577,20 @@ ol {
 .game-card {
     display: flex;
     flex-direction: column; /* Mantém a imagem em cima e o texto abaixo */
-    align-items: left;
     width: 220px; /* Define um tamanho fixo para cada flash-card */
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     padding: 10px;
     text-align: center;
     word-wrap: break-word;
     overflow: hidden;
-    transition: transform 0.2s ease-in-out;
+    transition: none;
     position: relative;
 }
 
 .game-card:hover {
-    transform: scale(1.05);
+    transform: none;
 }
 
 .game-link {
