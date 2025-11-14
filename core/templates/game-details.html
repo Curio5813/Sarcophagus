@@ -15,7 +15,11 @@
 
         {% if game.embed_video_url %}
         <div class="video-container">
-            <iframe src="{{ game.embed_video_url }}" allowfullscreen></iframe>
+           <iframe
+                src="{{ game.video }}"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
         </div>
         {% endif %}
     </div>

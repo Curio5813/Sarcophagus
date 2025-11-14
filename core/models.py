@@ -155,6 +155,22 @@ class Games(Base):
     video = models.URLField(_('Video URL'), blank=True, null=True)
     gog_affiliate_url = models.URLField(_('Link GOG (afiliado)'), blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if self.video:
+            import re
+
+            match = re.search(r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{5,20})", self.video)
+            if match:
+                video_id = match.group(1)
+                t = re.search(r"[?&]t=(\d+)", self.video)
+                if t:
+                    segundos = t.group(1)
+                    self.video = f"https://www.youtube-nocookie.com/embed/{video_id}?start={segundos}"
+                else:
+                    self.video = f"https://www.youtube-nocookie.com/embed/{video_id}"
+
+        super().save(*args, **kwargs)
+
     def gog_affiliate_link(self):
         if self.gog_affiliate_url:
             return self.gog_affiliate_url
@@ -166,14 +182,57 @@ class Games(Base):
         nome = nome.lower().replace(' ', '_').replace("'", "").replace(":", "").replace(",", "")
         return f"{base_url}{nome}?affiliate={affiliate_id}"
 
+    def convert_youtube_url(url):
+        """
+        Converte URLs normais do YouTube para formato embed.
+        Funciona com: ?v=, &t=, youtu.be/, playlists com timestamp.
+        """
+        import re
+
+        if not url:
+            return None
+
+        # Captura ID do vídeo
+        video_id = None
+        match = re.search(r"v=([^&]+)", url)
+        if match:
+            video_id = match.group(1)
+        else:
+            # formato youtu.be
+            match = re.search(r"youtu\.be/([^?&]+)", url)
+            if match:
+                video_id = match.group(1)
+
+        if not video_id:
+            return None
+
+        # Captura timestamp ?t= ou &t=
+        timestamp = 0
+        match = re.search(r"[?&]t=(\d+)", url)
+        if match:
+            timestamp = int(match.group(1))
+
+        # Gera embed
+        embed_url = f"https://www.youtube.com/embed/{video_id}"
+
+        if timestamp > 0:
+            embed_url += f"?start={timestamp}"
+
+        return embed_url
+
     @property
     def embed_video_url(self):
-        """Converte qualquer link do YouTube para a versão embed automaticamente"""
-        if self.video:
-            match = re.search(r"(?:v=|youtu\.be/|embed/|watch\?.*v=)([A-Za-z0-9_-]+)", self.video)
-            if match:
-                return f"https://www.youtube.com/embed/{match.group(1)}"
-        return None
+        if not self.video:
+            return None
+        match = re.search(
+            r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{5,20})",
+            self.video
+        )
+        if not match:
+            return None
+        video_id = match.group(1)
+
+        return f"https://www.youtube.com/embed/{video_id}"
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
