@@ -136,8 +136,7 @@ class Games(Base):
     conclusion = models.TextField(_('Conclusion'), max_length=1500, blank=True, null=True)
     tempo_main_story = models.DecimalField("Main Story (h)", max_digits=5, decimal_places=2, null=True, blank=True)
     tempo_main_extras = models.DecimalField("Main + Extras (h)", max_digits=5, decimal_places=2, null=True, blank=True)
-    tempo_completionist = models.DecimalField("Completionist (h)", max_digits=5, decimal_places=2, null=True,
-                                              blank=True)
+    tempo_completionist = models.DecimalField("Completionist (h)", max_digits=5, decimal_places=2, null=True, blank=True)
     tempo_all_styles = models.DecimalField("All Styles (h)", max_digits=5, decimal_places=2, null=True, blank=True)
 
     generos = models.ManyToManyField(Genero, verbose_name=_('Gêneros'))
@@ -157,9 +156,11 @@ class Games(Base):
     gog_affiliate_url = models.URLField(_('Link GOG (afiliado)'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
+        is_new = self.pk is None
+
+        # --- Conversão do vídeo YouTube para embed ---
         if self.video:
             import re
-
             match = re.search(r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{5,20})", self.video)
             if match:
                 video_id = match.group(1)
@@ -172,77 +173,11 @@ class Games(Base):
 
         super().save(*args, **kwargs)
 
-    def gog_affiliate_link(self):
-        if self.gog_affiliate_url:
-            return self.gog_affiliate_url
-
-        base_url = "https://www.gog.com/game/"
-        affiliate_id = "curio5813"
-
-        nome = unicodedata.normalize('NFKD', self.game).encode('ASCII', 'ignore').decode('ASCII')
-        nome = nome.lower().replace(' ', '_').replace("'", "").replace(":", "").replace(",", "")
-        return f"{base_url}{nome}?affiliate={affiliate_id}"
-
-    def convert_youtube_url(url):
-        """
-        Converte URLs normais do YouTube para formato embed.
-        Funciona com: ?v=, &t=, youtu.be/, playlists com timestamp.
-        """
-        import re
-
-        if not url:
-            return None
-
-        # Captura ID do vídeo
-        video_id = None
-        match = re.search(r"v=([^&]+)", url)
-        if match:
-            video_id = match.group(1)
-        else:
-            # formato youtu.be
-            match = re.search(r"youtu\.be/([^?&]+)", url)
-            if match:
-                video_id = match.group(1)
-
-        if not video_id:
-            return None
-
-        # Captura timestamp ?t= ou &t=
-        timestamp = 0
-        match = re.search(r"[?&]t=(\d+)", url)
-        if match:
-            timestamp = int(match.group(1))
-
-        # Gera embed
-        embed_url = f"https://www.youtube.com/embed/{video_id}"
-
-        if timestamp > 0:
-            embed_url += f"?start={timestamp}"
-
-        return embed_url
-
-    @property
-    def embed_video_url(self):
-        if not self.video:
-            return None
-        match = re.search(
-            r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{5,20})",
-            self.video
-        )
-        if not match:
-            return None
-        video_id = match.group(1)
-
-        return f"https://www.youtube.com/embed/{video_id}"
-
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
-
+        # --- Criar avaliação padrão e requisitos de sistema se for novo ---
         if is_new:
             from .models import Membro, GameRating, SystemRequirement
 
-            # Cria avaliação padrão do system user
+            # Avaliação padrão do system user
             try:
                 system_user = Membro.objects.get(email='system@sarcophagus.com')
                 GameRating.objects.create(
@@ -254,9 +189,32 @@ class Games(Base):
             except Membro.DoesNotExist:
                 print("Usuário 'system@sarcophagus.com' não encontrado. A nota inicial não foi criada.")
 
-            # Cria os requisitos de sistema **somente se não existir**
+            # Criar requisitos de sistema se não existir
             if not hasattr(self, 'requisitos'):
                 SystemRequirement.objects.create(game=self)
+
+    def gog_affiliate_link(self):
+        if self.gog_affiliate_url:
+            return self.gog_affiliate_url
+
+        base_url = "https://www.gog.com/game/"
+        affiliate_id = "curio5813"
+        import unicodedata
+
+        nome = unicodedata.normalize('NFKD', self.game).encode('ASCII', 'ignore').decode('ASCII')
+        nome = nome.lower().replace(' ', '_').replace("'", "").replace(":", "").replace(",", "")
+        return f"{base_url}{nome}?affiliate={affiliate_id}"
+
+    @property
+    def embed_video_url(self):
+        if not self.video:
+            return None
+        import re
+        match = re.search(r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{5,20})", self.video)
+        if not match:
+            return None
+        video_id = match.group(1)
+        return f"https://www.youtube.com/embed/{video_id}"
 
     def __str__(self):
         return self.game
