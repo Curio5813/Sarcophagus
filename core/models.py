@@ -104,6 +104,7 @@ class Genero(models.Model):
         RTS = 'RTS', _('Real-Time Strategy')
         TBS = 'TBS', _('Turn-Based Strategy / Tactics')
         RPG = 'RPG', _('Role-Playing Game')
+        TPS = 'TPS', _('Third-Person Shooter')
         FPS = 'FPS', _('First-Person Shooter')
         Simulation = 'Simulation', _('Simulation')
         Platformer = 'Platformer', _('Platformer')
