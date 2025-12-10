@@ -101,6 +101,9 @@ class Membro(AbstractBaseUser, PermissionsMixin):
 class Genero(models.Model):
     class GenreChoices(models.TextChoices):
         Adventure = 'Adventure', _('Adventure')
+        Action = 'Action', _('Action')
+        Noir = 'Noir', _('Noir')
+        Crime = 'Crime', _('Crime')
         RTS = 'RTS', _('Real-Time Strategy')
         TBS = 'TBS', _('Turn-Based Strategy / Tactics')
         RPG = 'RPG', _('Role-Playing Game')
