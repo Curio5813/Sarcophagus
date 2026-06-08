@@ -31,7 +31,7 @@ def fs_rss_feed(request):
         fs_news = []
         seen_links = set()
 
-        for entry in feed.entries[:50]:
+        for entry in feed.entries[:10]:
             link = entry.link.split("#")[0]  # remove anchors duplicados
             if link not in seen_links:
                 fs_news.append({

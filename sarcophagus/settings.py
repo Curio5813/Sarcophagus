@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from dotenv import load_dotenv
 import os
-import dj_database_url
 from pathlib import Path
 
 
@@ -91,11 +90,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sarcophagus.wsgi.application'
 
-# **Configuração do Banco de Dados no RDS**
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv("DATABASE_URL")
-    )
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
+    }
 }
 
 
