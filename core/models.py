@@ -159,7 +159,7 @@ class Games(Base):
     capa = CloudinaryField('games_covers', blank=True, null=True)
     video = models.FileField(
         _('Vídeo Local'),
-        upload_to='games_videos/',
+        upload_to='core/static/games_videos/',
         blank=True,
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mkv', 'webm'])]
@@ -206,7 +206,8 @@ class Games(Base):
     @property
     def embed_video_url(self):
         if self.video:
-            return self.video.url
+            nome_arquivo = os.path.basename(self.video.name)
+            return static(f'games_videos/{nome_arquivo}')
         return None
 
     def __str__(self):
