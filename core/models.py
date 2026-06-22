@@ -118,6 +118,7 @@ class Genero(models.Model):
         Sport = 'Sport', _('Sport')
         Point_and_Click = 'Point-and-Click', _('Point-and-Click')
         Puzzle = 'Puzzle', _('Puzzle')
+        Sci_Fi = 'Sci-Fi', _('Sci-Fi')
 
     nome = models.CharField(_('Nome'), max_length=100, choices=GenreChoices.choices, unique=True)
 
