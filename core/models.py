@@ -1,3 +1,4 @@
+import os
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -12,6 +13,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import unicodedata
 from django.core.validators import FileExtensionValidator
+from django.templatetags.static import static
 
 
 def get_file_path(instance, filename):
