@@ -13,16 +13,15 @@
             <img src="{{ game.imagem.url }}" alt="{{ game.game }}">
         </div>
 
-        {% if game.embed_video_url %}
+       {% if game.embed_video_url %}
         <div class="video-container">
-           <iframe
-                width="560" height="315"
-                src="{{ game.embed_video_url }}"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen>
-            </iframe>
+            <video width="100%" height="auto" controls poster="{{ game.capa.url|default:'' }}">
+                <source src="{{ game.embed_video_url }}" type="video/mp4">
+                O seu navegador não suporta a reprodução de vídeos locais.
+            </video>
         </div>
         {% endif %}
+
     </div>
 
     {% if user.is_authenticated %}

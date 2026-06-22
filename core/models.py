@@ -11,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 import unicodedata
+from django.core.validators import FileExtensionValidator
 
 
 def get_file_path(instance, filename):
@@ -156,24 +157,17 @@ class Games(Base):
 
     imagem = CloudinaryField('games')
     capa = CloudinaryField('games_covers', blank=True, null=True)
-    video = models.URLField(_('Video URL'), blank=True, null=True)
+    video = models.FileField(
+        _('Vídeo Local'),
+        upload_to='games_videos/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mkv', 'webm'])]
+    )
     gog_affiliate_url = models.URLField(_('Link GOG (afiliado)'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None
-
-        # --- Conversão do vídeo YouTube para embed ---
-        if self.video:
-            import re
-            match = re.search(r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{5,20})", self.video)
-            if match:
-                video_id = match.group(1)
-                t = re.search(r"[?&]t=(\d+)", self.video)
-                if t:
-                    segundos = t.group(1)
-                    self.video = f"https://www.youtube-nocookie.com/embed/{video_id}?start={segundos}"
-                else:
-                    self.video = f"https://www.youtube-nocookie.com/embed/{video_id}"
 
         super().save(*args, **kwargs)
 
@@ -211,14 +205,9 @@ class Games(Base):
 
     @property
     def embed_video_url(self):
-        if not self.video:
-            return None
-        import re
-        match = re.search(r"(?:v=|youtu\.be/|embed/)([A-Za-z0-9_-]{5,20})", self.video)
-        if not match:
-            return None
-        video_id = match.group(1)
-        return f"https://www.youtube.com/embed/{video_id}"
+        if self.video:
+            return self.video.url
+        return None
 
     def __str__(self):
         return self.game

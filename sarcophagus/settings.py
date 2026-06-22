@@ -120,7 +120,7 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 # URLs de mídia
-MEDIA_URL = f"https://res.cloudinary.com/{os.getenv('CLOUDINARY_CLOUD_NAME')}/"
+MEDIA_URL = '/media/'
 # URL dos arquivos estáticos
 STATIC_URL = "/static/"
 
