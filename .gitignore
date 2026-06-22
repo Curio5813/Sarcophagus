@@ -45,3 +45,7 @@ db.pgsql
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Ignorar vídeos locais de gameplays
+core/static/games_videos/
+
