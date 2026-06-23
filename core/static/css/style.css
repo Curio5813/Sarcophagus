@@ -1389,12 +1389,14 @@ ol {
 }
 
 .author-avator {
+    display: inline-block; /* Garante que a div respeite a largura e altura */
     height: 120px;
     width: 120px;
     border-radius: 10px;
     overflow: hidden;
     background-size: cover;
-    background-position: center;
+    background-position: center center;
+    background-repeat: no-repeat;
     margin-right: 10px;
 }
 
