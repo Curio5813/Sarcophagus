@@ -46,6 +46,26 @@ db.pgsql
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# Ignorar vídeos locais de gameplays
-core/static/games_videos/
+# Ignorar imagens da pasta staticfiles
+staticfiles/**/*.jpg
+staticfiles/**/*.jpeg
+staticfiles/**/*.png
+staticfiles/**/*.gif
+staticfiles/**/*.webp
+
+# Ignorar vídeos da pasta static
+static/**/*.mp4
+static/**/*.mkv
+static/**/*.mov
+static/**/*.avi
+static/**/*.webm
+
+# Ignorar vídeos e mídias pesadas
+*.mkv
+*.webm
+*.mp4
+static/games_videos/
+media/core/static/games_videos/
+
+
 
