@@ -123,6 +123,7 @@ class Genero(models.Model):
         Puzzle = 'Puzzle', _('Puzzle')
         Sci_Fi = 'Sci-Fi', _('Sci-Fi')
         Fantasy = 'Fantasy', _('Fantasy')
+        Mistery = 'Mistery', _('Mistery')
 
     nome = models.CharField(_('Nome'), max_length=100, choices=GenreChoices.choices, unique=True)
 
