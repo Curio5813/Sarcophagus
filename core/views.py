@@ -83,7 +83,7 @@ class GameView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(GameView, self).get_context_data(**kwargs)
         context['generos'] = Genero.objects.all()
-        context['anos'] = range(1987, 2006)
+        context['anos'] = range(1987, 2001)
 
         # Obter parâmetros de busca da solicitação
         game = self.request.GET.get('game')
