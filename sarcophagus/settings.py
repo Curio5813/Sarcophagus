@@ -109,27 +109,17 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SITE_ID = 1
 
-# Configuração do Cloudinary
-CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
-    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET"),
-}
-
-# Definir Cloudinary como armazenamento padrão de mídia
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
-
-# URLs de mídia
+# URLs de mídia (Arquivos enviados pelos utilizadores/admin)
 MEDIA_URL = '/media/'
-# URL dos arquivos estáticos
-STATIC_URL = "/static/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Diretório onde os arquivos coletados pelo collectstatic serão armazenados
+# URL dos arquivos estáticos (CSS, JS, Imagens do tema)
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-MEDIA_ROOT = BASE_DIR / "media"
 
 # Configuração do armazenamento de arquivos estáticos no WhiteNoise
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 PORT = 10000
 

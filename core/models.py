@@ -163,11 +163,12 @@ class Games(Base):
     capa = CloudinaryField('games_covers', blank=True, null=True)
     video = models.FileField(
         _('Vídeo Local'),
-        upload_to='core/static/games_videos/',
+        upload_to='games_videos/',  # <--- MUDADO AQUI. O Django vai mapear como media/games_videos/
         blank=True,
         null=True,
         validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mkv', 'webm'])]
     )
+
     gog_affiliate_url = models.URLField(_('Link GOG (afiliado)'), blank=True, null=True)
 
     def save(self, *args, **kwargs):
@@ -210,10 +211,11 @@ class Games(Base):
     @property
     def embed_video_url(self):
         if self.video:
-            nome_arquivo = os.path.basename(self.video.name)
-            return static(f'games_videos/{nome_arquivo}')
+            # Retorna automaticamente a URL baseada no MEDIA_URL (/media/games_videos/...)
+            return self.video.url
         return None
 
+    
     def __str__(self):
         return self.game
 
