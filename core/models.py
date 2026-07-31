@@ -215,7 +215,10 @@ class Games(Base):
             return self.video.url
         return None
 
-    
+    class Meta:
+        verbose_name = "Game"
+        verbose_name_plural = "Games"
+
     def __str__(self):
         return self.game
 
