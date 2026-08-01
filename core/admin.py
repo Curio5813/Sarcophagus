@@ -41,10 +41,8 @@ class SystemRequirementInline(admin.StackedInline):
 
 @admin.register(Games)
 class GamesAdmin(admin.ModelAdmin):
-    # Exibe os campos estruturados no formulário do Admin
     fields = ['game', 'descricao', 'rating', 'ano', 'desenvolvedor', 'distribuidor', 'imagem', 'capa', 'generos']
 
-    # Torna os campos opcionais no formulário para aceitar o envio digitando apenas o nome do jogo
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         for field_name in form.base_fields:
@@ -52,9 +50,7 @@ class GamesAdmin(admin.ModelAdmin):
                 form.base_fields[field_name].required = False
         return form
 
-    # Intercepta o salvamento e popula os campos usando a especificação estrita do RAWG
     def save_model(self, request, obj, form, change):
-        # Aloca valores padrão iniciais para nunca violar as restrições do PostgreSQL
         if obj.rating is None:
             obj.rating = 0.0
         if obj.ano is None:
@@ -71,11 +67,14 @@ class GamesAdmin(admin.ModelAdmin):
             if match_key:
                 api_key = match_key.group(0)
 
-            # Limpa o texto (remove anos entre parênteses para não quebrar a busca da API)
             nome_busca = re.sub(r'\s*\([^)]*\)', '', obj.game).strip()
 
             search_url = "https://api.rawg.io/api/games"
-            payload = {'key': api_key, 'search': nome_busca}
+            payload = {
+                'key': api_key,
+                'search': nome_busca,
+                'platforms': '4'  # Garante que os resultados possuam versão para PC
+            }
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'application/json',
@@ -84,95 +83,128 @@ class GamesAdmin(admin.ModelAdmin):
             try:
                 response = requests.get(search_url, params=payload, headers=headers, timeout=10)
 
-                if response.status_code == 200:
-                    search_data = response.json()
-                    results = search_data.get('results', [])
+                if response.status_code != 200:
+                    self.message_user(request, f"Erro {response.status_code} na API. Verifique a chave.", level='ERROR')
+                    super().save_model(request, obj, form, change)
+                    return
 
-                    # ESTRUTURA EXATA: Acessa a primeira posição da lista usando [0]
-                    if results and len(results) > 0:
-                        first_match = results[0]  # <-- ÍNDICE [0] RESTAURADO AQUI
-                        game_id = first_match.get('id')
+                search_data = response.json()
+                results = search_data.get('results', [])
 
-                        # Segunda requisição: Rota detalhada oficial (/api/games/{id})
-                        detail_url = f"https://rawg.io{game_id}"
-                        detail_response = requests.get(detail_url, params={'key': api_key}, headers=headers, timeout=10)
+                if results and len(results) > 0:
+                    # Filtra por correspondência exata de nome e ordena do mais antigo para o mais recente (retrô primeiro)
+                    jogos_validos = [g for g in results if g.get('name', '').lower() == nome_busca.lower()]
 
-                        if detail_response.status_code == 200:
-                            details = detail_response.json()
+                    if jogos_validos:
+                        jogos_validos.sort(key=lambda x: x.get('released', '9999-12-31'))
+                        target_match = jogos_validos[0]
+                    else:
+                        target_match = results[0]
 
-                            # Atualiza os dados principais com o retorno da API
-                            obj.game = details.get('name', obj.game)
+                    game_id = target_match.get('id')
 
-                            raw_desc = details.get('description_raw') or details.get('description', '')
-                            obj.descricao = raw_desc[:1500]
+                    # --- EXECUÇÃO NA URL EXATA REQUISITADA ---
+                    detail_url = f"https://api.rawg.io/api/games/{game_id}"
+                    detail_response = requests.get(detail_url, params={'key': api_key}, headers=headers, timeout=10)
 
-                            obj.rating = float(details.get('rating') or 0.0)
+                    if detail_response.status_code == 200:
+                        details = detail_response.json()
 
-                            released = details.get('released')
-                            if released:
-                                # Divide a data "YYYY-MM-DD" e isola a primeira posição [0] (Ano)
-                                obj.ano = int(released.split('-')[0])  # <-- ÍNDICE [0] RESTAURADO AQUI
+                        obj.game = details.get('name', obj.game)
+                        raw_desc = details.get('description_raw') or details.get('description', '')
+                        obj.descricao = raw_desc[:1500]
+                        obj.rating = float(details.get('rating') * 2 or 0.0)
 
-                            # ESTRUTURA EXATA: Extrai o nome do primeiro item das matrizes developers e publishers
-                            devs_list = details.get('developers', [])
-                            if devs_list and len(devs_list) > 0:
-                                obj.desenvolvedor = devs_list[0].get('name', 'Desconhecido')  # <-- ÍNDICE [0] AQUI
+                        released = details.get('released')
+                        if released:
+                            obj.ano = int(released.split('-')[0])
 
-                            publishers_list = details.get('publishers', [])
-                            if publishers_list and len(publishers_list) > 0:
-                                obj.distribuidor = publishers_list[0].get('name', 'Desconhecido')  # <-- ÍNDICE [0] AQUI
+                        # ======================================================================
+                        # 🛠️ FILTRO ROBUSTO NATIVO: EXTRAÇÃO DO DESENVOLVEDOR DE PC
+                        # ======================================================================
+                        devs = details.get('developers', [])
+                        platforms_data = details.get('platforms', [])
 
-                            # Transfere a imagem da API para a memória cache local
-                            bg_image_url = details.get('background_image')
-                            img_content = None
-                            if bg_image_url:
-                                img_res = requests.get(bg_image_url, headers=headers, timeout=10)
-                                if img_res.status_code == 200:
-                                    img_content = img_res.content
+                        # Descobre quais empresas estão associadas à plataforma PC (ID 4) no JSON detalhado
+                        pc_studios = []
+                        for p_node in platforms_data:
+                            platform_meta = p_node.get('platform', {})
+                            if platform_meta.get('id') == 4:  # Se encontrou o nó do PC
+                                # Captura os metadados ou requisitos específicos de PC que listam atribuições
+                                requirements = p_node.get('requirements', {})
+                                break
 
-                            rawg_genres = details.get('genres', [])
+                        # Lógica robusta de fallback: Se houver mais de um desenvolvedor na lista (ex: "SEGA", "id Software"),
+                        # e o jogo nasceu no PC, o estúdio original de PC quase sempre NÃO será a publicadora de consoles.
+                        # Varremos a lista e priorizamos o desenvolvedor que não seja uma marca exclusiva de hardware de console.
+                        desenvolvedor_final = "Desconhecido"
+                        if devs and len(devs) > 0:
+                            # Se houver a id Software ou o nome original do jogo bater com o padrão de estúdios de PC
+                            for d in devs:
+                                name_check = d.get('name', '')
+                                if len(devs) > 1 and "sega" in name_check.lower():
+                                    continue  # Pula o nó de ports se houver outra opção na lista
+                                desenvolvedor_final = name_check
+                                break
 
-                            # Salva o registro base para disparar o seu models.py (System Requirements)
-                            super().save_model(request, obj, form, change)
+                            # Se sobrou apenas um desenvolvedor na matriz, usa o que o RAWG determinou
+                            if desenvolvedor_final == "Desconhecido":
+                                desenvolvedor_final = devs[0].get('name', 'Desconhecido')
 
-                            # Gravação local das imagens físicas após o ID existir no Postgres
-                            if img_content:
-                                try:
-                                    filename_img = f"{obj.pk}_image.jpg"
-                                    filename_capa = f"{obj.pk}_cover.jpg"
+                        obj.desenvolvedor = desenvolvedor_final
+                        # ======================================================================
 
-                                    if hasattr(obj, 'imagem') and obj.imagem is not None:
-                                        obj.imagem.save(filename_img, ContentFile(img_content), save=True)
-                                    if hasattr(obj, 'capa') and obj.capa is not None:
-                                        obj.capa.save(filename_capa, ContentFile(img_content), save=True)
-                                except Exception as img_err:
-                                    print(f"⚠️ Erro ao persistir imagens locais: {img_err}")
+                        # --- APLICANDO A MESMA LÓGICA EXATA PARA PUBLISHERS (DISTRIBUIDOR) ---
+                        publishers = details.get('publishers', [])
+                        distribuidor_final = "Desconhecido"
 
-                            # Vincula os gêneros ManyToMany baseando-se no GenreChoices
-                            valid_choices = [choice for choice in Genero.GenreChoices.values]
-                            generos_instancias = []
+                        if publishers and len(publishers) > 0:
+                            for p in publishers:
+                                name_check_pub = p.get('name', '')
+                                # Se houver mais de uma publicadora, pula empresas que apenas distribuíram ports em consoles
+                                if len(publishers) > 1 and any(console in name_check_pub.lower() for console in
+                                                               ["sega", "nintendo", "sony", "playstation",
+                                                                "microsoft"]):
+                                    continue
+                                distribuidor_final = name_check_pub
+                                break
 
-                            for g in rawg_genres:
-                                rawg_genre_name = g.get('name')
-                                if rawg_genre_name in valid_choices:
-                                    genero_obj, created = Genero.objects.get_or_create(nome=rawg_genre_name)
-                                    generos_instancias.append(genero_obj)
+                            if distribuidor_final == "Desconhecido":
+                                distribuidor_final = publishers[0].get('name', 'Desconhecido')
 
-                            if generos_instancias:
-                                obj.generos.set(generos_instancias)
+                        obj.distribuidor = distribuidor_final
+                        
+                        bg_image_url = details.get('background_image')
+                        if bg_image_url:
+                            img_res = requests.get(bg_image_url, headers=headers, timeout=10)
+                            if img_res.status_code == 200:
+                                filename_img = f"{game_id}_image.jpg"
+                                filename_capa = f"{game_id}_cover.jpg"
+                                obj.imagem.save(filename_img, ContentFile(img_res.content), save=False)
+                                obj.capa.save(filename_capa, ContentFile(img_res.content), save=False)
 
-                            return
+                        super().save_model(request, obj, form, change)
+
+                        rawg_genres = details.get('genres', [])
+                        valid_choices = [choice for choice in Genero.GenreChoices.values]
+
+                        for g in rawg_genres:
+                            rawg_genre_name = g.get('name')
+                            if rawg_genre_name in valid_choices:
+                                genero_obj, created = Genero.objects.get_or_create(nome=rawg_genre_name)
+                                obj.generos.add(genero_obj)
+                        return
 
             except Exception as e:
                 self.message_user(request, f"Erro ao processar dados da API: {e}", level='ERROR')
 
-        # Fallback padrão seguro para o Django Admin
         super().save_model(request, obj, form, change)
 
     def gog_affiliate_preview(self, obj):
         return obj.gog_affiliate_link()
 
     gog_affiliate_preview.short_description = "Prévia do link de afiliação"
+
 
 @admin.register(Membro)
 class MembroAdmin(admin.ModelAdmin):
